@@ -72,6 +72,52 @@ $default_welcome_cards = array(
     array('card_icon' => 'book-open', 'card_title' => 'The Best Learning Methods', 'card_description' => 'Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society. MLZS create an excellent educational institution synthesizing the human values with the highest quality of teaching–learning using modern technology-driven tools for preparing a well-rounded personality for our society.', 'card_style' => 'primary'),
     array('card_icon' => 'award', 'card_title' => 'Awesome Results Of Our Students', 'card_description' => 'We believe that every child is born unique. Each child has a unique brain network that shapes how she absorbs and responds to stimuli. One way of teaching does not work for every child. We need to teach the way they learn, not force them to learn the way we teach. We help children make meaning of life and develop the muscle to lead life effectively.', 'card_style' => 'accent'),
 );
+
+// Approach Section: ACF with fallbacks
+$approach_badge       = function_exists('get_field') ? get_field('approach_badge', $hero_page_id) : null;
+$approach_heading     = function_exists('get_field') ? get_field('approach_heading', $hero_page_id) : null;
+$approach_description = function_exists('get_field') ? get_field('approach_description', $hero_page_id) : null;
+$approach_pillars_raw  = function_exists('get_field') ? get_field('approach_pillars', $hero_page_id) : null;
+$approach_badge       = ($approach_badge !== '' && $approach_badge !== null) ? $approach_badge : 'Our Philosophy';
+$approach_heading     = ($approach_heading !== '' && $approach_heading !== null) ? $approach_heading : 'The Litera Octave Approach';
+$approach_description = ($approach_description !== '' && $approach_description !== null) ? $approach_description : 'A holistic framework for world-class education, seamlessly integrating eight core pillars of excellence to nurture future leaders.';
+$default_approach_img  = 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80';
+$default_approach_pillars = array(
+    array('icon' => 'bar-chart-3', 'label' => 'Assessment', 'tag' => 'Litera Assessment', 'title_line1' => 'Litera', 'title_highlight' => 'Assessment', 'description' => 'Our assessments focus on identifying what students are good at instead of whether they are good or not. MLZS assessments take place on a continuous basis and at the child\'s pace rather than through only stressful periodic exams. Assessment patterns are based on feedback from various stakeholders including parents.', 'pills' => array('Continuous', 'Child\'s Pace', 'Holistic'), 'button' => array('url' => '#', 'title' => 'Explore Program', 'target' => ''), 'image' => $default_approach_img),
+);
+// Normalize ACF repeater into same shape as defaults for template
+$approach_pillars = array();
+if (is_array($approach_pillars_raw) && !empty($approach_pillars_raw)) {
+    foreach ($approach_pillars_raw as $row) {
+        $pills = array();
+        if (!empty($row['pills']) && is_array($row['pills'])) {
+            foreach ($row['pills'] as $p) {
+                $t = isset($p['pill_text']) ? trim((string) $p['pill_text']) : '';
+                if ($t !== '') $pills[] = $t;
+            }
+        }
+        $btn = isset($row['button']) && is_array($row['button']) && !empty($row['button']['url']) ? $row['button'] : array('url' => '#', 'title' => 'Explore Program', 'target' => '');
+        $img = '';
+        if (!empty($row['image'])) {
+            $img = is_array($row['image']) ? ($row['image']['url'] ?? '') : $row['image'];
+        }
+        if ($img === '') $img = $default_approach_img;
+        $approach_pillars[] = array(
+            'icon'          => (isset($row['icon']) && trim((string) $row['icon']) !== '') ? trim((string) $row['icon']) : 'bar-chart-3',
+            'label'         => (isset($row['label']) && trim((string) $row['label']) !== '') ? trim((string) $row['label']) : 'Pillar',
+            'tag'           => isset($row['tag']) ? (string) $row['tag'] : '',
+            'title_line1'   => isset($row['title_line1']) ? (string) $row['title_line1'] : 'Litera',
+            'title_highlight' => isset($row['title_highlight']) ? (string) $row['title_highlight'] : '',
+            'description'   => isset($row['description']) ? (string) $row['description'] : '',
+            'pills'         => $pills,
+            'button'        => $btn,
+            'image'         => $img,
+        );
+    }
+}
+if (empty($approach_pillars)) {
+    $approach_pillars = $default_approach_pillars;
+}
 ?>
 
 <!-- Hero Section (dynamic via ACF) -->
@@ -248,7 +294,7 @@ $default_welcome_cards = array(
 // Approach + Academics sections are long; load from a partial for readability, or inline.
 // Inlining Approach and Academics (shortened for response - will include full HTML).
 ?>
-<!-- Approach Section (static) -->
+<!-- Approach Section (dynamic via ACF) -->
 <section id="approach" class="w-full bg-slate-900 border-b border-primary/30 px-4 sm:px-6 lg:px-8 py-16 md:py-24">
     <div class="max-w-7xl mx-auto w-full">
         <div class="flex flex-col items-center justify-start relative z-10">
@@ -256,39 +302,25 @@ $default_welcome_cards = array(
             <div class="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-accent/10 blur-[120px] rounded-full pointer-events-none -z-10"></div>
             <div class="w-full flex flex-col gap-4">
                 <div class="flex flex-col items-center text-center gap-4">
-                    <span class="px-3 py-1 rounded-full bg-primary/30 border border-primary/50 text-accent text-xs font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(247,184,1,0.1)]">Our Philosophy</span>
-                    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">The Litera Octave Approach</h1>
+                    <span class="px-3 py-1 rounded-full bg-primary/30 border border-primary/50 text-accent text-xs font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(247,184,1,0.1)]"><?php echo esc_html( (string) $approach_badge ); ?></span>
+                    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight"><?php echo esc_html( (string) $approach_heading ); ?></h1>
                     <p class="text-slate-400 text-lg max-w-2xl font-light">
-                        A holistic framework for world-class education, seamlessly integrating eight core pillars of excellence to nurture future leaders.
+                        <?php echo esc_html( (string) $approach_description ); ?>
                     </p>
                 </div>
                 <div class="w-full relative lg:px-10 md:px-6 px-4">
                     <div class="swiper approach-thumbs-swiper py-6 px-2 no-scrollbar">
                         <div class="swiper-wrapper flex">
-                            <?php
-                            $approach_tabs = array(
-                                array('icon' => 'bar-chart-3', 'label' => 'Assessment'),
-                                array('icon' => 'graduation-cap', 'label' => 'Teacher'),
-                                array('icon' => 'book', 'label' => 'Content'),
-                                array('icon' => 'building-2', 'label' => 'Infra'),
-                                array('icon' => 'network', 'label' => 'Network'),
-                                array('icon' => 'brain', 'label' => 'Life Skills'),
-                                array('icon' => 'gem', 'label' => 'Enrichment'),
-                                array('icon' => 'users', 'label' => 'Parents'),
-                            );
-                            foreach ($approach_tabs as $tab) {
-                                ?>
+                            <?php foreach ($approach_pillars as $tab) : ?>
                                 <div class="swiper-slide inline-flex justify-center">
                                     <button type="button" class="group flex flex-col items-center gap-3 min-w-[50px] sm:min-w-[100px] cursor-pointer">
                                         <div class="size-12 sm:size-16 rounded-2xl bg-slate-800/80 border border-white/5 group-hover:border-accent/50 flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(247,184,1,0.15)] group-hover:-translate-y-1">
-                                            <i data-lucide="<?php echo esc_attr($tab['icon']); ?>" class="size-6 sm:size-8 text-white group-hover:text-accent transition-colors"></i>
+                                            <i data-lucide="<?php echo esc_attr( (string) $tab['icon'] ); ?>" class="size-6 sm:size-8 text-white group-hover:text-accent transition-colors"></i>
                                         </div>
-                                        <span class="text-xs sm:text-sm font-medium text-slate-400 group-hover:text-accent transition-colors"><?php echo esc_html($tab['label']); ?></span>
+                                        <span class="text-xs sm:text-sm font-medium text-slate-400 group-hover:text-accent transition-colors"><?php echo esc_html( (string) $tab['label'] ); ?></span>
                                     </button>
                                 </div>
-                                <?php
-                            }
-                            ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <div class="swiper-button-prev approach-nav-prev absolute left-0 top-1/2 -translate-y-1/2 -ml-4 z-20 hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 border border-slate-700 text-white hover:bg-accent hover:text-slate-900 cursor-pointer transition-all shadow-lg hover:shadow-accent/50">
@@ -302,7 +334,15 @@ $default_welcome_cards = array(
                     <div class="absolute inset-0 bg-gradient-to-r from-indigo-velvet/30 via-slate-blue/20 to-amber-flame/20 blur-2xl -z-10 rounded-[2rem]"></div>
                     <div class="swiper approach-main-swiper w-full">
                         <div class="swiper-wrapper">
-                            <!-- Slide 1: Assessment -->
+                            <?php foreach ($approach_pillars as $pillar) :
+                                $pillar_tag   = (string) ( $pillar['tag'] ?? '' );
+                                $pillar_t1    = (string) ( $pillar['title_line1'] ?? 'Litera' );
+                                $pillar_th    = (string) ( $pillar['title_highlight'] ?? '' );
+                                $pillar_desc  = (string) ( $pillar['description'] ?? '' );
+                                $pillar_pills = isset($pillar['pills']) && is_array($pillar['pills']) ? $pillar['pills'] : array();
+                                $pillar_btn   = isset($pillar['button']) && is_array($pillar['button']) ? $pillar['button'] : array( 'url' => '#', 'title' => 'Explore Program', 'target' => '' );
+                                $pillar_img   = (string) ( $pillar['image'] ?? $default_approach_img );
+                            ?>
                             <div class="swiper-slide">
                                 <div class="bg-primary/5 rounded-[2rem] p-1 md:p-1.5 w-full bg-slate-900/60 backdrop-blur-xl border border-accent/30 shadow-[0_0_30px_rgba(247,184,1,0.1)]">
                                     <div class="flex flex-col md:flex-row items-stretch bg-slate-900/90 rounded-[1.8rem] overflow-hidden relative">
@@ -310,23 +350,26 @@ $default_welcome_cards = array(
                                         <div class="flex-1 p-8 md:p-12 flex flex-col justify-center gap-6 order-2 md:order-1 z-10">
                                             <div class="flex items-center gap-3 mb-2">
                                                 <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30 shadow-[0_0_10px_rgba(61,52,139,0.3)]">
-                                                    <i data-lucide="bar-chart-3" class="size-5 text-accent"></i>
+                                                    <i data-lucide="<?php echo esc_attr( (string) $pillar['icon'] ); ?>" class="size-5 text-accent"></i>
                                                 </div>
-                                                <span class="text-accent font-bold tracking-wider text-sm uppercase">Litera Assessment</span>
+                                                <?php if ($pillar_tag !== '') : ?><span class="text-accent font-bold tracking-wider text-sm uppercase"><?php echo esc_html( $pillar_tag ); ?></span><?php endif; ?>
                                             </div>
-                                            <h3 class="text-3xl md:text-4xl font-bold text-white">Litera <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame to-tiger-orange">Assessment</span></h3>
-                                            <p class="text-slate-400 leading-relaxed text-lg">Our assessments focus on identifying what students are good at instead of whether they are good or not. MLZS assessments take place on a continuous basis and at the child's pace rather than through only stressful periodic exams. Assessment patterns are based on feedback from various stakeholders including parents.</p>
+                                            <h3 class="text-3xl md:text-4xl font-bold text-white">
+                                                <?php echo esc_html( $pillar_t1 ); ?>
+                                                <?php if ($pillar_th !== '') : ?><br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame to-tiger-orange"><?php echo esc_html( $pillar_th ); ?></span><?php endif; ?>
+                                            </h3>
+                                            <?php if ($pillar_desc !== '') : ?><p class="text-slate-400 leading-relaxed text-lg"><?php echo esc_html( $pillar_desc ); ?></p><?php endif; ?>
+                                            <?php if (!empty($pillar_pills)) : ?>
                                             <div class="flex flex-wrap gap-3 mt-4">
-                                                <span class="px-4 py-2 rounded-full bg-slate-800 text-accent-light text-sm font-medium border border-accent/30 shadow-sm">Continuous</span>
-                                                <span class="px-4 py-2 rounded-full bg-slate-800 text-accent-light text-sm font-medium border border-accent/30 shadow-sm">Child's Pace</span>
-                                                <span class="px-4 py-2 rounded-full bg-slate-800 text-accent-light text-sm font-medium border border-accent/30 shadow-sm">Holistic</span>
+                                                <?php foreach ($pillar_pills as $pill) : ?><span class="px-4 py-2 rounded-full bg-slate-800 text-accent-light text-sm font-medium border border-accent/30 shadow-sm"><?php echo esc_html( (string) $pill ); ?></span><?php endforeach; ?>
                                             </div>
+                                            <?php endif; ?>
                                             <div class="pt-4">
-                                                <button type="button" class="flex items-center gap-2 text-white font-bold group hover:text-accent transition-colors">Explore Program <i data-lucide="arrow-right" class="size-5 group-hover:translate-x-1 group-hover:text-accent transition-all"></i></button>
+                                                <a href="<?php echo esc_url( (string) ( $pillar_btn['url'] ?? '#' ) ); ?>"<?php echo !empty($pillar_btn['target']) ? ' target="' . esc_attr( (string) $pillar_btn['target'] ) . '"' : ''; ?> class="flex items-center gap-2 text-white font-bold group hover:text-accent transition-colors"><?php echo esc_html( (string) ( $pillar_btn['title'] ?? 'Explore Program' ) ); ?> <i data-lucide="arrow-right" class="size-5 group-hover:translate-x-1 group-hover:text-accent transition-all"></i></a>
                                             </div>
                                         </div>
                                         <div class="relative w-full md:w-[45%] h-64 md:h-auto order-1 md:order-2">
-                                            <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
+                                            <div class="w-full h-full bg-cover bg-center" style="background-image: url('<?php echo esc_url( $pillar_img ); ?>');">
                                                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent md:bg-gradient-to-l opacity-90"></div>
                                                 <div class="absolute inset-0 bg-primary/30 mix-blend-multiply"></div>
                                             </div>
@@ -334,47 +377,7 @@ $default_welcome_cards = array(
                                     </div>
                                 </div>
                             </div>
-                            <!-- Remaining approach slides: same structure - abbreviated for length; in production you'd repeat for Teacher, Content, Infra, Network, Life Skills, Enrichment, Parents -->
-                            <div class="swiper-slide">
-                                <div class="bg-primary/5 rounded-[2rem] p-1 md:p-1.5 w-full bg-slate-900/60 backdrop-blur-xl border border-accent/30 shadow-[0_0_30px_rgba(247,184,1,0.1)]">
-                                    <div class="flex flex-col md:flex-row items-stretch bg-slate-900/90 rounded-[1.8rem] overflow-hidden relative">
-                                        <div class="flex-1 p-8 md:p-12 flex flex-col justify-center gap-6 order-2 md:order-1 z-10">
-                                            <div class="flex items-center gap-3 mb-2">
-                                                <div class="size-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30"><i data-lucide="graduation-cap" class="size-5 text-accent"></i></div>
-                                                <span class="text-accent font-bold tracking-wider text-sm uppercase">Litera Teacher</span>
-                                            </div>
-                                            <h3 class="text-3xl md:text-4xl font-bold text-white">Litera <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame to-tiger-orange">Teacher</span></h3>
-                                            <p class="text-slate-400 leading-relaxed text-lg">Our rigorous hiring and comprehensive training of teachers keep them abreast with the best-in-class learning methodologies. Teachers get assessed to ensure that students get the best learning environment.</p>
-                                            <div class="pt-4"><button type="button" class="flex items-center gap-2 text-white font-bold group hover:text-accent transition-colors">Explore Program <i data-lucide="arrow-right" class="size-5 group-hover:translate-x-1"></i></button></div>
-                                        </div>
-                                        <div class="relative w-full md:w-[45%] h-64 md:h-auto order-1 md:order-2">
-                                            <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
-                                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent md:bg-gradient-to-l opacity-90"></div>
-                                                <div class="absolute inset-0 bg-primary/30 mix-blend-multiply"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php for ($i = 0; $i < 6; $i++) : ?>
-                            <div class="swiper-slide">
-                                <div class="bg-primary/5 rounded-[2rem] p-1 md:p-1.5 w-full bg-slate-900/60 backdrop-blur-xl border border-accent/30">
-                                    <div class="flex flex-col md:flex-row items-stretch bg-slate-900/90 rounded-[1.8rem] overflow-hidden relative p-8 md:p-12">
-                                        <div class="flex-1 flex flex-col justify-center gap-6 z-10">
-                                            <h3 class="text-3xl md:text-4xl font-bold text-white">Litera Octave</h3>
-                                            <p class="text-slate-400 leading-relaxed text-lg">A holistic framework for world-class education.</p>
-                                            <div class="pt-4"><button type="button" class="flex items-center gap-2 text-white font-bold group hover:text-accent transition-colors">Explore Program <i data-lucide="arrow-right" class="size-5 group-hover:translate-x-1"></i></button></div>
-                                        </div>
-                                        <div class="relative w-full md:w-[45%] h-64 md:h-auto">
-                                            <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');">
-                                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent md:bg-gradient-to-l opacity-90"></div>
-                                                <div class="absolute inset-0 bg-primary/30 mix-blend-multiply"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php endfor; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                     <div class="swiper-pagination approach-pagination flex justify-center gap-2 mt-4"></div>

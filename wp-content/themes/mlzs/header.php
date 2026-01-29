@@ -67,12 +67,104 @@ $home_url  = home_url('/');
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 w-full max-w-5xl">
             <div class="space-y-2">
                 <h3 class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 sm:mb-6 uppercase">Explore</h3>
-                <ul class="space-y-3 sm:space-y-4">
-                    <li class="overflow-hidden"><a href="<?php echo esc_url($home_url); ?>" class="block font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">Home</a></li>
-                    <li class="overflow-hidden"><a href="<?php echo esc_url($home_url); ?>#about" class="block font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">About</a></li>
-                    <li class="overflow-hidden"><a href="<?php echo esc_url($home_url); ?>#academics" class="block font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">Academics</a></li>
-                    <li class="overflow-hidden"><a href="<?php echo esc_url($home_url); ?>#admissions" class="block font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">Admissions</a></li>
-                    <li class="overflow-hidden"><a href="<?php echo esc_url($home_url); ?>#campus-life" class="block font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">Campus Life</a></li>
+                <ul class="space-y-3 sm:space-y-4 menu-root">
+                    <!-- Simple link: right arrow; hover = text right, arrow left -->
+                    <li class="overflow-hidden menu-item">
+                        <a href="<?php echo esc_url($home_url); ?>" class="menu-link flex items-center justify-between gap-4 w-full group/link font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all duration-300">
+                            <span class="block transition-transform duration-300 group-hover/link:translate-x-2 sm:group-hover/link:translate-x-4">Home</span>
+                            <span class="menu-arrow flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 opacity-70 group-hover/link:opacity-100 transition-all duration-300" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- With submenu: down arrow, toggle on click -->
+                    <li class="overflow-hidden menu-item has-submenu">
+                        <div class="menu-row flex items-center justify-between gap-4 w-full cursor-pointer font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all duration-300" data-toggle-submenu>
+                            <a href="<?php echo esc_url($home_url); ?>#about" class="flex-1 min-w-0 menu-link block hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">About</a>
+                            <button type="button" class="menu-arrow-btn flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false" aria-label="Toggle About submenu">
+                                <span class="menu-arrow down-arrow transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </button>
+                        </div>
+                        <ul class="menu-sub space-y-2 pl-4 sm:pl-6 mt-2 border-l border-white/20 ml-2">
+                            <li class="overflow-hidden">
+                                <a href="<?php echo esc_url($home_url); ?>#about" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300">
+                                    <span class="block transition-transform duration-300 group-hover/link:translate-x-2">Our Story</span>
+                                    <span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-all duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+                                </a>
+                            </li>
+                            <li class="overflow-hidden">
+                                <a href="<?php echo esc_url($home_url); ?>#about" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300">
+                                    <span class="block transition-transform duration-300 group-hover/link:translate-x-2">Team</span>
+                                    <span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-all duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+                                </a>
+                            </li>
+                            <li class="overflow-hidden has-submenu">
+                                <div class="menu-row flex items-center justify-between gap-3 w-full cursor-pointer font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300" data-toggle-submenu>
+                                    <a href="<?php echo esc_url($home_url); ?>#about" class="flex-1 min-w-0 menu-link block hover:text-accent transition-all transform hover:translate-x-2 duration-300">History</a>
+                                    <button type="button" class="menu-arrow-btn flex-shrink-0 w-7 h-7 flex items-center justify-center rounded bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false" aria-label="Toggle History submenu">
+                                        <span class="menu-arrow down-arrow transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                                    </button>
+                                </div>
+                                <ul class="menu-sub space-y-2 pl-4 mt-2 border-l border-white/20 ml-2">
+                                    <li class="overflow-hidden has-submenu">
+                                        <div class="menu-row flex items-center justify-between gap-2 w-full cursor-pointer font-['Playfair_Display',serif] text-lg sm:text-xl text-gray-400 hover:text-accent transition-all duration-300" data-toggle-submenu>
+                                            <a href="<?php echo esc_url($home_url); ?>#about" class="flex-1 min-w-0 menu-link block hover:text-accent transition-all transform hover:translate-x-2 duration-300">Founding</a>
+                                            <button type="button" class="menu-arrow-btn flex-shrink-0 w-6 h-6 flex items-center justify-center rounded bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false" aria-label="Toggle Founding submenu">
+                                                <span class="menu-arrow down-arrow transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+                                            </button>
+                                        </div>
+                                        <ul class="menu-sub space-y-2 pl-4 mt-2 border-l border-white/20 ml-2">
+                                            <li><a href="<?php echo esc_url($home_url); ?>#about" class="menu-link flex items-center justify-between gap-2 w-full group/link text-base sm:text-lg text-gray-500 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Early Years</span><span class="menu-arrow w-4 h-4 opacity-70 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                                            <li><a href="<?php echo esc_url($home_url); ?>#about" class="menu-link flex items-center justify-between gap-2 w-full group/link text-base sm:text-lg text-gray-500 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Growth</span><span class="menu-arrow w-4 h-4 opacity-70 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="<?php echo esc_url($home_url); ?>#about" class="menu-link flex items-center justify-between gap-2 w-full group/link text-lg sm:text-xl text-gray-400 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Milestones</span><span class="menu-arrow w-4 h-4 opacity-70 transition-transform duration-300"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Academics: down arrow, submenu -->
+                    <li class="overflow-hidden menu-item has-submenu">
+                        <div class="menu-row flex items-center justify-between gap-4 w-full cursor-pointer font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all duration-300" data-toggle-submenu>
+                            <a href="<?php echo esc_url($home_url); ?>#academics" class="flex-1 min-w-0 menu-link block hover:italic hover:text-accent transition-all transform hover:translate-x-2 sm:hover:translate-x-4 duration-300">Academics</a>
+                            <button type="button" class="menu-arrow-btn flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false" aria-label="Toggle Academics submenu">
+                                <span class="menu-arrow down-arrow transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </button>
+                        </div>
+                        <ul class="menu-sub space-y-2 pl-4 sm:pl-6 mt-2 border-l border-white/20 ml-2">
+                            <li><a href="<?php echo esc_url($home_url); ?>#academics" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Programs</span><span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-transform duration-300 group-hover/link:-translate-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                            <li><a href="<?php echo esc_url($home_url); ?>#academics" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Curriculum</span><span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-transform duration-300 group-hover/link:-translate-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                            <li><a href="<?php echo esc_url($home_url); ?>#academics" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Faculty</span><span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-transform duration-300 group-hover/link:-translate-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                        </ul>
+                    </li>
+                    <!-- Simple link: right arrow; hover = text right, arrow left -->
+                    <li class="overflow-hidden menu-item">
+                        <a href="<?php echo esc_url($home_url); ?>#admissions" class="menu-link flex items-center justify-between gap-4 w-full group/link font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all duration-300">
+                            <span class="block transition-transform duration-300 group-hover/link:translate-x-2 sm:group-hover/link:translate-x-4">Admissions</span>
+                            <span class="menu-arrow flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 opacity-70 group-hover/link:opacity-100 transition-all duration-300" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                            </span>
+                        </a>
+                    </li>
+                    <!-- Campus Life: down arrow, submenu -->
+                    <li class="overflow-hidden menu-item has-submenu">
+                        <div class="menu-row flex items-center justify-between gap-4 w-full cursor-pointer font-['Playfair_Display',serif] text-3xl sm:text-4xl md:text-5xl hover:italic hover:text-accent transition-all duration-300" data-toggle-submenu>
+                            <a href="<?php echo esc_url($home_url); ?>#campus-life" class="flex-1 min-w-0 menu-link block hover:italic hover:text-accent transition-all duration-300 hover:translate-x-2 sm:hover:translate-x-4">Campus Life</a>
+                            <button type="button" class="menu-arrow-btn flex-shrink-0 w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded bg-white/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent" aria-expanded="false" aria-label="Toggle Campus Life submenu">
+                                <span class="menu-arrow down-arrow transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                                </span>
+                            </button>
+                        </div>
+                        <ul class="menu-sub space-y-2 pl-4 sm:pl-6 mt-2 border-l border-white/20 ml-2">
+                            <li><a href="<?php echo esc_url($home_url); ?>#campus-life" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Facilities</span><span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-transform duration-300 group-hover/link:-translate-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                            <li><a href="<?php echo esc_url($home_url); ?>#campus-life" class="menu-link flex items-center justify-between gap-3 w-full group/link font-['Playfair_Display',serif] text-xl sm:text-2xl md:text-3xl text-gray-300 hover:text-accent transition-all duration-300"><span class="block transition-transform duration-300 group-hover/link:translate-x-2">Events</span><span class="menu-arrow flex-shrink-0 w-5 h-5 opacity-70 transition-transform duration-300 group-hover/link:-translate-x-2"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span></a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <div class="flex flex-col justify-between space-y-8 sm:space-y-10 mt-8 md:mt-0 md:pl-20 md:border-l border-white/10">

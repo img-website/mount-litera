@@ -76,3 +76,14 @@
     box-shadow: 0 0 8px rgba(247, 184, 1, 0.6);
     border-radius: 4px;
 }
+
+/* Full menu - submenu display none/block */
+#full-menu .menu-sub {
+    display: none;
+}
+#full-menu .menu-sub.is-open {
+    display: block;
+}
+#full-menu .has-submenu.is-open > .menu-row .down-arrow {
+    transform: rotate(180deg);
+}

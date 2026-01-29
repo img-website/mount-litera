@@ -43,11 +43,62 @@
                 var isOpen = !menuOverlay.classList.contains('-translate-y-full');
                 if (isOpen) {
                     menuOverlay.classList.add('-translate-y-full');
+                    closeAllSubmenus(menuOverlay);
                 } else {
                     menuOverlay.classList.remove('-translate-y-full');
                 }
             }
         };
+    }
+
+    function closeAllSubmenus(container) {
+        if (!container) container = document.getElementById('full-menu');
+        if (!container) return;
+        container.querySelectorAll('.menu-sub').forEach(function(sub) {
+            sub.classList.remove('is-open');
+        });
+        container.querySelectorAll('.has-submenu').forEach(function(item) {
+            item.classList.remove('is-open');
+        });
+        container.querySelectorAll('.menu-arrow-btn[aria-expanded="true"]').forEach(function(btn) {
+            btn.setAttribute('aria-expanded', 'false');
+        });
+    }
+
+    function initSubmenuToggle() {
+        var fullMenu = document.getElementById('full-menu');
+        if (!fullMenu) return;
+
+        fullMenu.addEventListener('click', function(e) {
+            var btn = e.target.closest('.menu-arrow-btn');
+            if (!btn) return;
+
+            var row = btn.closest('.menu-row');
+            if (!row) return;
+            var item = row.parentElement;
+            if (!item || !item.classList.contains('has-submenu')) return;
+
+            var sub = null;
+            for (var i = 0; i < item.children.length; i++) {
+                if (item.children[i].classList.contains('menu-sub')) {
+                    sub = item.children[i];
+                    break;
+                }
+            }
+            if (!sub) return;
+
+            e.preventDefault();
+            var isOpen = item.classList.contains('is-open');
+            if (isOpen) {
+                sub.classList.remove('is-open');
+                item.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            } else {
+                sub.classList.add('is-open');
+                item.classList.add('is-open');
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        });
     }
 
     function initHeroSwiper() {
@@ -155,6 +206,7 @@
         initLucide();
         initHeaderScroll();
         initMenuToggle();
+        initSubmenuToggle();
         initHeroSwiper();
         initApproachSwipers();
         initAcademicsTabs();

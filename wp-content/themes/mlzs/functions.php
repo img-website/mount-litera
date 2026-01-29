@@ -7,6 +7,24 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+/** IDE stubs for Imagick (never executed; removes "undefined type" in Cursor/Intelephense) */
+if (false) {
+    class Imagick {
+        public const ALPHACHANNEL_ACTIVATE = 1;
+        public function __construct($files = null) {}
+        public function setImageFormat($format) {}
+        public function setImageAlphaChannel($channel) {}
+        public function setBackgroundColor($background) {}
+        public function setImageCompressionQuality($quality) {}
+        public function writeImage($filename = null) {}
+        public function clear() {}
+        public function destroy() {}
+    }
+    class ImagickPixel {
+        public function __construct($color = null) {}
+    }
+}
+
 /**
  * Theme setup: title-tag, post-thumbnails, etc.
  */
@@ -16,6 +34,124 @@ function mlzs_theme_setup() {
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script'));
 }
 add_action('after_setup_theme', 'mlzs_theme_setup');
+
+/**
+ * Convert any uploaded image to WebP before saving to media library.
+ * Runs on wp_handle_upload – supports JPEG, PNG, GIF; saves as WebP.
+ */
+function mlzs_convert_upload_to_webp($upload) {
+    if (empty($upload['file']) || empty($upload['type']) || strpos($upload['type'], 'image/') !== 0) {
+        return $upload;
+    }
+    $mime = $upload['type'];
+    $allowed = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
+    if (!in_array($mime, $allowed, true)) {
+        return $upload;
+    }
+    $file_path = $upload['file'];
+    if (!is_file($file_path) || !is_readable($file_path)) {
+        return $upload;
+    }
+    $webp_path = preg_replace('/\.(jpe?g|png|gif|webp)$/i', '.webp', $file_path);
+    if ($webp_path === $file_path) {
+        return $upload;
+    }
+    $converted = mlzs_image_to_webp($file_path, $webp_path, $mime);
+    if (!$converted) {
+        return $upload;
+    }
+    @unlink($file_path);
+    $upload['file'] = $webp_path;
+    $upload['url'] = str_replace(wp_basename($file_path), wp_basename($webp_path), $upload['url']);
+    $upload['type'] = 'image/webp';
+    return $upload;
+}
+add_filter('wp_handle_upload', 'mlzs_convert_upload_to_webp', 10, 2);
+
+/**
+ * Convert image file to WebP using GD or Imagick.
+ *
+ * @param string $source_path Full path to source image.
+ * @param string $webp_path   Full path for WebP output.
+ * @param string $mime        Mime type of source (image/jpeg, image/png, etc.).
+ * @return bool True if conversion succeeded.
+ */
+function mlzs_image_to_webp($source_path, $webp_path, $mime) {
+    if (extension_loaded('imagick') && class_exists('Imagick')) {
+        try {
+            $img = new Imagick($source_path);
+            $img->setImageFormat('webp');
+            if ($mime === 'image/png' || $mime === 'image/gif') {
+                $img->setImageAlphaChannel(Imagick::ALPHACHANNEL_ACTIVATE);
+                $img->setBackgroundColor(new ImagickPixel('transparent'));
+            }
+            $img->setImageCompressionQuality(82);
+            $success = $img->writeImage($webp_path);
+            $img->clear();
+            $img->destroy();
+            return $success && is_file($webp_path);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    if (!function_exists('imagewebp')) {
+        return false;
+    }
+    switch ($mime) {
+        case 'image/jpeg':
+        case 'image/jpg':
+            $image = @imagecreatefromjpeg($source_path);
+            break;
+        case 'image/png':
+            $image = @imagecreatefrompng($source_path);
+            if ($image) {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
+            break;
+        case 'image/gif':
+            $image = @imagecreatefromgif($source_path);
+            if ($image) {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
+            break;
+        case 'image/webp':
+            $image = @imagecreatefromwebp($source_path);
+            break;
+        default:
+            return false;
+    }
+    if (!$image) {
+        return false;
+    }
+    if ($mime === 'image/png' || $mime === 'image/gif') {
+        imagepalettetotruecolor($image);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+    }
+    $result = imagewebp($image, $webp_path, 82);
+    imagedestroy($image);
+    return $result && is_file($webp_path);
+}
+
+/**
+ * Ensure attachment metadata and mime type are set to WebP when file was converted.
+ */
+function mlzs_attachment_webp_metadata($metadata, $attachment_id) {
+    $file = get_attached_file($attachment_id);
+    if ($file && is_file($file) && strtolower(pathinfo($file, PATHINFO_EXTENSION)) === 'webp') {
+        wp_update_post(array(
+            'ID'             => $attachment_id,
+            'post_mime_type' => 'image/webp',
+        ));
+        if (is_array($metadata) && !empty($metadata['file'])) {
+            $metadata['file'] = wp_basename($file);
+        }
+    }
+    return $metadata;
+}
+add_filter('wp_generate_attachment_metadata', 'mlzs_attachment_webp_metadata', 10, 2);
 
 /**
  * Enqueue styles and scripts the WordPress way.
@@ -240,7 +376,7 @@ function mlzs_acf_hero_field_group() {
                 'key'   => 'field_hero_cta_primary_url',
                 'label' => __('Primary Button URL', 'mlzs'),
                 'name'  => 'hero_cta_primary_url',
-                'type'  => 'url',
+                'type'  => 'page_link',
                 'default_value' => '#',
             ),
             array(
@@ -254,7 +390,7 @@ function mlzs_acf_hero_field_group() {
                 'key'   => 'field_hero_cta_secondary_url',
                 'label' => __('Secondary Button URL', 'mlzs'),
                 'name'  => 'hero_cta_secondary_url',
-                'type'  => 'url',
+                'type'  => 'page_link',
                 'default_value' => '#',
             ),
             array(

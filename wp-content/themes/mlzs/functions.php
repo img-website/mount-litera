@@ -1388,6 +1388,83 @@ function mlzs_acf_cbse_field_group() {
 add_action('acf/init', 'mlzs_acf_cbse_field_group');
 
 /**
+ * ACF Pro: Music & Dance Page – Hero, Intro, Gallery, Programs, Benefits, CTA
+ */
+function mlzs_acf_dance_field_group() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+    acf_add_local_field_group(array(
+        'key'                   => 'group_mlzs_dance',
+        'title'                 => __('Music & Dance Page Sections', 'mlzs'),
+        'fields'                => array(
+            array('key' => 'field_dance_tab_hero', 'label' => __('Hero Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_hero_badge', 'label' => __('Badge Text', 'mlzs'), 'name' => 'dance_hero_badge', 'type' => 'text', 'default_value' => 'Rhythmic Expression'),
+            array('key' => 'field_dance_hero_icon', 'label' => __('Badge Icon', 'mlzs'), 'name' => 'dance_hero_icon', 'type' => 'text', 'default_value' => 'music'),
+            array('key' => 'field_dance_hero_headline', 'label' => __('Headline (before highlight)', 'mlzs'), 'name' => 'dance_hero_headline', 'type' => 'text', 'default_value' => 'Music &'),
+            array('key' => 'field_dance_hero_highlight', 'label' => __('Headline (highlighted)', 'mlzs'), 'name' => 'dance_hero_highlight', 'type' => 'text', 'default_value' => 'Dance'),
+            array('key' => 'field_dance_hero_subheadline', 'label' => __('Subheadline', 'mlzs'), 'name' => 'dance_hero_subheadline', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Where rhythm meets expression, creating harmony in mind, body, and soul'),
+            array('key' => 'field_dance_tab_intro', 'label' => __('Introduction', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_intro_heading', 'label' => __('Intro Heading', 'mlzs'), 'name' => 'dance_intro_heading', 'type' => 'text', 'default_value' => 'The Healing Power of Music & Dance'),
+            array('key' => 'field_dance_intro_icon', 'label' => __('Intro Icon', 'mlzs'), 'name' => 'dance_intro_icon', 'type' => 'text', 'default_value' => 'heart'),
+            array('key' => 'field_dance_intro_para1', 'label' => __('Intro Paragraph', 'mlzs'), 'name' => 'dance_intro_para1', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_dance_intro_box_heading', 'label' => __('Box Heading (Music Program)', 'mlzs'), 'name' => 'dance_intro_box_heading', 'type' => 'text', 'default_value' => 'Comprehensive Music Program'),
+            array('key' => 'field_dance_intro_box_text', 'label' => __('Box Text', 'mlzs'), 'name' => 'dance_intro_box_text', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_dance_tab_gallery', 'label' => __('Gallery', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_gallery_heading', 'label' => __('Gallery Heading (before highlight)', 'mlzs'), 'name' => 'dance_gallery_heading', 'type' => 'text', 'default_value' => 'Our'),
+            array('key' => 'field_dance_gallery_highlight', 'label' => __('Gallery Heading (highlighted)', 'mlzs'), 'name' => 'dance_gallery_highlight', 'type' => 'text', 'default_value' => 'Performance Gallery'),
+            array('key' => 'field_dance_gallery_sub', 'label' => __('Gallery Subheading', 'mlzs'), 'name' => 'dance_gallery_sub', 'type' => 'text', 'default_value' => 'Capturing moments of musical excellence and rhythmic expression'),
+            array('key' => 'field_dance_gallery_images', 'label' => __('Gallery Images (first 4 = row 1, next 2 = row 2 large)', 'mlzs'), 'name' => 'dance_gallery_images', 'type' => 'repeater', 'layout' => 'block', 'button_label' => __('Add Image', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_dance_gallery_img', 'label' => __('Image', 'mlzs'), 'name' => 'image', 'type' => 'image', 'return_format' => 'array'),
+                array('key' => 'field_dance_gallery_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_dance_gallery_caption', 'label' => __('Caption', 'mlzs'), 'name' => 'caption', 'type' => 'text'),
+                array('key' => 'field_dance_gallery_large', 'label' => __('Large (second row)', 'mlzs'), 'name' => 'large', 'type' => 'true_false', 'ui' => 1, 'default_value' => 0),
+            )),
+            array('key' => 'field_dance_tab_programs', 'label' => __('Programs', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_programs_heading', 'label' => __('Programs Heading (before highlight)', 'mlzs'), 'name' => 'dance_programs_heading', 'type' => 'text', 'default_value' => 'Our'),
+            array('key' => 'field_dance_programs_highlight', 'label' => __('Programs Heading (highlighted)', 'mlzs'), 'name' => 'dance_programs_highlight', 'type' => 'text', 'default_value' => 'Programs'),
+            array('key' => 'field_dance_programs_sub', 'label' => __('Programs Subheading', 'mlzs'), 'name' => 'dance_programs_sub', 'type' => 'text', 'default_value' => 'Comprehensive music and dance education from 1st to 9th standard'),
+            array('key' => 'field_dance_music_heading', 'label' => __('Music Program Heading', 'mlzs'), 'name' => 'dance_music_heading', 'type' => 'text', 'default_value' => 'Music Program'),
+            array('key' => 'field_dance_music_icon', 'label' => __('Music Program Icon', 'mlzs'), 'name' => 'dance_music_icon', 'type' => 'text', 'default_value' => 'music-2'),
+            array('key' => 'field_dance_music_items', 'label' => __('Music Program Items', 'mlzs'), 'name' => 'dance_music_items', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_dance_music_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_dance_dance_heading', 'label' => __('Dance Program Heading', 'mlzs'), 'name' => 'dance_dance_heading', 'type' => 'text', 'default_value' => 'Dance Program'),
+            array('key' => 'field_dance_dance_icon', 'label' => __('Dance Program Icon', 'mlzs'), 'name' => 'dance_dance_icon', 'type' => 'text', 'default_value' => 'sparkles'),
+            array('key' => 'field_dance_dance_items', 'label' => __('Dance Program Items', 'mlzs'), 'name' => 'dance_dance_items', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_dance_dance_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_dance_tab_benefits', 'label' => __('Benefits', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_benefits_heading', 'label' => __('Benefits Heading', 'mlzs'), 'name' => 'dance_benefits_heading', 'type' => 'text', 'default_value' => 'Benefits of Music & Dance Education'),
+            array('key' => 'field_dance_benefits_icon', 'label' => __('Benefits Icon', 'mlzs'), 'name' => 'dance_benefits_icon', 'type' => 'text', 'default_value' => 'star'),
+            array('key' => 'field_dance_benefits_list', 'label' => __('Benefits (4 items)', 'mlzs'), 'name' => 'dance_benefits_list', 'type' => 'repeater', 'min' => 4, 'max' => 4, 'layout' => 'block', 'button_label' => __('Add Benefit', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_dance_benefit_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'brain'),
+                array('key' => 'field_dance_benefit_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_dance_benefit_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_dance_benefit_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
+            )),
+            array('key' => 'field_dance_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_dance_cta_heading', 'label' => __('CTA Heading', 'mlzs'), 'name' => 'dance_cta_heading', 'type' => 'text', 'default_value' => 'Join Our Rhythmic Journey'),
+            array('key' => 'field_dance_cta_description', 'label' => __('CTA Description', 'mlzs'), 'name' => 'dance_cta_description', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_dance_cta_btn_primary', 'label' => __('Primary Button', 'mlzs'), 'name' => 'dance_cta_btn_primary', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_dance_cta_btn_primary_icon', 'label' => __('Primary Button Icon', 'mlzs'), 'name' => 'dance_cta_btn_primary_icon', 'type' => 'text', 'default_value' => 'calendar'),
+            array('key' => 'field_dance_cta_btn_secondary', 'label' => __('Secondary Button', 'mlzs'), 'name' => 'dance_cta_btn_secondary', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_dance_cta_btn_secondary_icon', 'label' => __('Secondary Button Icon', 'mlzs'), 'name' => 'dance_cta_btn_secondary_icon', 'type' => 'text', 'default_value' => 'music'),
+            array('key' => 'field_dance_cta_stats', 'label' => __('Stats (4 boxes)', 'mlzs'), 'name' => 'dance_cta_stats', 'type' => 'repeater', 'min' => 4, 'max' => 4, 'layout' => 'table', 'button_label' => __('Add Stat', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_dance_cta_stat_number', 'label' => __('Number', 'mlzs'), 'name' => 'number', 'type' => 'text'),
+                array('key' => 'field_dance_cta_stat_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text'),
+            )),
+        ),
+        'location' => array(
+            array(
+                array('param' => 'page_template', 'operator' => '==', 'value' => 'dance.php'),
+            ),
+        ),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_dance_field_group');
+
+/**
  * ACF Pro: Admission Process Page – Hero, Process Steps, Entry Criteria, Documents, Form Section
  */
 function mlzs_acf_admission_process_field_group() {
@@ -1761,6 +1838,416 @@ function mlzs_acf_cafe_field_group() {
     ));
 }
 add_action('acf/init', 'mlzs_acf_cafe_field_group');
+
+/**
+ * ACF Pro: Classroom Page – Hero, Overview, Features, Details, Comparison, CTA
+ */
+function mlzs_acf_classroom_field_group() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+    acf_add_local_field_group(array(
+        'key'                   => 'group_mlzs_classroom',
+        'title'                 => __('Classroom Page Sections', 'mlzs'),
+        'fields'                => array(
+            array('key' => 'field_class_tab_hero', 'label' => __('Hero Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_hero_badge',
+                'label' => __('Badge Text', 'mlzs'),
+                'name' => 'classroom_hero_badge',
+                'type' => 'text',
+                'default_value' => 'Campus Infrastructure',
+            ),
+            array(
+                'key' => 'field_class_hero_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'classroom_hero_badge_icon',
+                'type' => 'text',
+                'default_value' => 'school',
+            ),
+            array(
+                'key' => 'field_class_hero_headline',
+                'label' => __('Headline (before highlight)', 'mlzs'),
+                'name' => 'classroom_hero_headline',
+                'type' => 'text',
+                'default_value' => 'World-Class',
+            ),
+            array(
+                'key' => 'field_class_hero_highlight',
+                'label' => __('Headline (highlighted)', 'mlzs'),
+                'name' => 'classroom_hero_highlight',
+                'type' => 'text',
+                'default_value' => 'Classrooms',
+            ),
+            array(
+                'key' => 'field_class_hero_subheadline',
+                'label' => __('Subheadline', 'mlzs'),
+                'name' => 'classroom_hero_subheadline',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'Designed to inspire learning and innovation, our classrooms set new standards in educational excellence with cutting-edge technology and spacious design.',
+            ),
+            array(
+                'key' => 'field_class_hero_bullets',
+                'label' => __('Hero Bullet Points (3)', 'mlzs'),
+                'name' => 'classroom_hero_bullets',
+                'type' => 'repeater',
+                'min' => 3,
+                'max' => 3,
+                'layout' => 'table',
+                'button_label' => __('Add Bullet', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_class_hero_bullet_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+                ),
+            ),
+            array('key' => 'field_class_tab_overview', 'label' => __('Overview Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_overview_badge',
+                'label' => __('Badge Text', 'mlzs'),
+                'name' => 'classroom_overview_badge',
+                'type' => 'text',
+                'default_value' => 'International Standards',
+            ),
+            array(
+                'key' => 'field_class_overview_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'classroom_overview_badge_icon',
+                'type' => 'text',
+                'default_value' => 'award',
+            ),
+            array(
+                'key' => 'field_class_overview_heading',
+                'label' => __('Heading (before highlight)', 'mlzs'),
+                'name' => 'classroom_overview_heading',
+                'type' => 'text',
+                'default_value' => 'Learning Spaces That',
+            ),
+            array(
+                'key' => 'field_class_overview_heading_highlight',
+                'label' => __('Heading (highlighted)', 'mlzs'),
+                'name' => 'classroom_overview_heading_highlight',
+                'type' => 'text',
+                'default_value' => 'Inspire Excellence',
+            ),
+            array(
+                'key' => 'field_class_overview_description',
+                'label' => __('Description Paragraphs', 'mlzs'),
+                'name' => 'classroom_overview_description',
+                'type' => 'textarea',
+                'rows' => 5,
+                'default_value' => "The classrooms of Mount Litera Zee School, Alwar are at par with international standards. All classrooms are replete with modular furniture and extensive display boards to ensure that students give their best to the process of learning and achievement.\n\nEach classroom spans an impressive area of 650 SQ FT which is 30% above the normal guidelines issued by CBSE, providing ample space for interactive learning and student movement.",
+            ),
+            array(
+                'key' => 'field_class_overview_card_icon',
+                'label' => __('Card Icon', 'mlzs'),
+                'name' => 'classroom_overview_card_icon',
+                'type' => 'text',
+                'default_value' => 'maximize-2',
+            ),
+            array(
+                'key' => 'field_class_overview_card_title',
+                'label' => __('Card Title', 'mlzs'),
+                'name' => 'classroom_overview_card_title',
+                'type' => 'text',
+                'default_value' => 'Spacious Design',
+            ),
+            array(
+                'key' => 'field_class_overview_card_description',
+                'label' => __('Card Description', 'mlzs'),
+                'name' => 'classroom_overview_card_description',
+                'type' => 'text',
+                'default_value' => '650 SQ FT per classroom, exceeding CBSE guidelines by 30%',
+            ),
+            array(
+                'key' => 'field_class_overview_right_heading',
+                'label' => __('Right Placeholder Heading', 'mlzs'),
+                'name' => 'classroom_overview_right_heading',
+                'type' => 'text',
+                'default_value' => 'Interactive Learning Environment',
+            ),
+            array(
+                'key' => 'field_class_overview_right_text',
+                'label' => __('Right Placeholder Text', 'mlzs'),
+                'name' => 'classroom_overview_right_text',
+                'type' => 'text',
+                'default_value' => 'Designed for collaborative and engaging education',
+            ),
+            array('key' => 'field_class_tab_features', 'label' => __('Features Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_features_badge',
+                'label' => __('Badge Text', 'mlzs'),
+                'name' => 'classroom_features_badge',
+                'type' => 'text',
+                'default_value' => 'Technology Features',
+            ),
+            array(
+                'key' => 'field_class_features_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'classroom_features_badge_icon',
+                'type' => 'text',
+                'default_value' => 'cpu',
+            ),
+            array(
+                'key' => 'field_class_features_heading',
+                'label' => __('Section Heading', 'mlzs'),
+                'name' => 'classroom_features_heading',
+                'type' => 'text',
+                'default_value' => 'Integrated Smart Classroom Technology',
+            ),
+            array(
+                'key' => 'field_class_features_intro',
+                'label' => __('Intro Paragraph', 'mlzs'),
+                'name' => 'classroom_features_intro',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'Equipped with state-of-the-art digital infrastructure to create immersive and interactive learning experiences',
+            ),
+            array(
+                'key' => 'field_class_features_cards',
+                'label' => __('Feature Cards (3)', 'mlzs'),
+                'name' => 'classroom_features_cards',
+                'type' => 'repeater',
+                'min' => 3,
+                'max' => 3,
+                'layout' => 'block',
+                'button_label' => __('Add Card', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_class_feature_icon', 'label' => __('Lucide Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'monitor'),
+                    array('key' => 'field_class_feature_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_class_feature_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'textarea', 'rows' => 3),
+                    array('key' => 'field_class_feature_link', 'label' => __('Link', 'mlzs'), 'name' => 'link', 'type' => 'link', 'return_format' => 'array'),
+                ),
+            ),
+            array('key' => 'field_class_tab_details', 'label' => __('Details Grid Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_details_left_cards',
+                'label' => __('Left Grid Cards (4)', 'mlzs'),
+                'name' => 'classroom_details_left_cards',
+                'type' => 'repeater',
+                'min' => 4,
+                'max' => 4,
+                'layout' => 'block',
+                'button_label' => __('Add Card', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_class_detail_icon', 'label' => __('Lucide Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'wifi'),
+                    array('key' => 'field_class_detail_icon_style', 'label' => __('Icon Style', 'mlzs'), 'name' => 'icon_style', 'type' => 'select', 'choices' => array('blue' => 'Blue', 'green' => 'Green', 'purple' => 'Purple', 'amber' => 'Amber'), 'default_value' => 'blue'),
+                    array('key' => 'field_class_detail_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_class_detail_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'text'),
+                ),
+            ),
+            array(
+                'key' => 'field_class_details_right_badge',
+                'label' => __('Right Badge', 'mlzs'),
+                'name' => 'classroom_details_right_badge',
+                'type' => 'text',
+                'default_value' => 'Complete Package',
+            ),
+            array(
+                'key' => 'field_class_details_right_badge_icon',
+                'label' => __('Right Badge Icon', 'mlzs'),
+                'name' => 'classroom_details_right_badge_icon',
+                'type' => 'text',
+                'default_value' => 'check-circle',
+            ),
+            array(
+                'key' => 'field_class_details_right_heading',
+                'label' => __('Right Heading', 'mlzs'),
+                'name' => 'classroom_details_right_heading',
+                'type' => 'text',
+                'default_value' => 'Everything for Optimal Learning',
+            ),
+            array(
+                'key' => 'field_class_details_right_items',
+                'label' => __('Right Check Items (5)', 'mlzs'),
+                'name' => 'classroom_details_right_items',
+                'type' => 'repeater',
+                'min' => 5,
+                'max' => 5,
+                'layout' => 'block',
+                'button_label' => __('Add Item', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_class_detail_item_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_class_detail_item_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'text'),
+                ),
+            ),
+            array(
+                'key' => 'field_class_details_bottom_title',
+                'label' => __('Bottom Box Title', 'mlzs'),
+                'name' => 'classroom_details_bottom_title',
+                'type' => 'text',
+                'default_value' => '650 SQ FT Classrooms',
+            ),
+            array(
+                'key' => 'field_class_details_bottom_text',
+                'label' => __('Bottom Box Text', 'mlzs'),
+                'name' => 'classroom_details_bottom_text',
+                'type' => 'text',
+                'default_value' => '30% above CBSE guidelines for optimal learning environment',
+            ),
+            array('key' => 'field_class_tab_comparison', 'label' => __('Comparison Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_comparison_badge',
+                'label' => __('Badge Text', 'mlzs'),
+                'name' => 'classroom_comparison_badge',
+                'type' => 'text',
+                'default_value' => 'Advantage',
+            ),
+            array(
+                'key' => 'field_class_comparison_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'classroom_comparison_badge_icon',
+                'type' => 'text',
+                'default_value' => 'trending-up',
+            ),
+            array(
+                'key' => 'field_class_comparison_heading',
+                'label' => __('Section Heading', 'mlzs'),
+                'name' => 'classroom_comparison_heading',
+                'type' => 'text',
+                'default_value' => 'Why Our Classrooms Stand Out',
+            ),
+            array(
+                'key' => 'field_class_comparison_intro',
+                'label' => __('Intro Paragraph', 'mlzs'),
+                'name' => 'classroom_comparison_intro',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'A comparative look at how our classroom infrastructure exceeds standard requirements',
+            ),
+            array(
+                'key' => 'field_class_comparison_bottom',
+                'label' => __('Bottom Paragraph', 'mlzs'),
+                'name' => 'classroom_comparison_bottom',
+                'type' => 'textarea',
+                'rows' => 3,
+                'default_value' => 'Our classrooms not only meet but exceed both national and international standards, providing students with an environment conducive to holistic development and academic excellence.',
+            ),
+            array(
+                'key' => 'field_class_comparison_columns',
+                'label' => __('Comparison Cards (3 columns)', 'mlzs'),
+                'name' => 'classroom_comparison_columns',
+                'type' => 'repeater',
+                'min' => 3,
+                'max' => 3,
+                'layout' => 'block',
+                'button_label' => __('Add Column', 'mlzs'),
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_class_comp_style',
+                        'label' => __('Card Style', 'mlzs'),
+                        'name' => 'style',
+                        'type' => 'select',
+                        'choices' => array(
+                            'standard' => __('Standard (left card)', 'mlzs'),
+                            'highlight' => __('Highlight (middle – MLZS)', 'mlzs'),
+                            'global' => __('Global (right card)', 'mlzs'),
+                        ),
+                        'default_value' => 'standard',
+                    ),
+                    array('key' => 'field_class_comp_icon', 'label' => __('Lucide Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'home'),
+                    array('key' => 'field_class_comp_title', 'label' => __('Card Title', 'mlzs'), 'name' => 'title', 'type' => 'text', 'default_value' => 'Standard Classroom'),
+                    array('key' => 'field_class_comp_subtitle', 'label' => __('Card Subtitle', 'mlzs'), 'name' => 'subtitle', 'type' => 'text', 'default_value' => 'CBSE Minimum Requirements'),
+                    array(
+                        'key' => 'field_class_comp_badge',
+                        'label' => __('Badge Text (highlight card only)', 'mlzs'),
+                        'name' => 'badge_text',
+                        'type' => 'text',
+                        'default_value' => 'Our Standard',
+                        'instructions' => __('Shown on middle card only.', 'mlzs'),
+                    ),
+                    array(
+                        'key' => 'field_class_comp_rows',
+                        'label' => __('Rows (label + value)', 'mlzs'),
+                        'name' => 'rows',
+                        'type' => 'repeater',
+                        'min' => 1,
+                        'layout' => 'table',
+                        'button_label' => __('Add Row', 'mlzs'),
+                        'sub_fields' => array(
+                            array('key' => 'field_class_comp_row_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text'),
+                            array('key' => 'field_class_comp_row_value', 'label' => __('Value', 'mlzs'), 'name' => 'value', 'type' => 'text'),
+                        ),
+                    ),
+                    array(
+                        'key' => 'field_class_comp_bottom_label',
+                        'label' => __('Bottom Box Label (highlight only)', 'mlzs'),
+                        'name' => 'bottom_label',
+                        'type' => 'text',
+                        'default_value' => '+30%',
+                    ),
+                    array(
+                        'key' => 'field_class_comp_bottom_text',
+                        'label' => __('Bottom Box Text (highlight only)', 'mlzs'),
+                        'name' => 'bottom_text',
+                        'type' => 'text',
+                        'default_value' => 'Above CBSE Guidelines',
+                    ),
+                ),
+            ),
+            array('key' => 'field_class_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_class_cta_icon',
+                'label' => __('CTA Icon', 'mlzs'),
+                'name' => 'classroom_cta_icon',
+                'type' => 'text',
+                'default_value' => 'eye',
+            ),
+            array(
+                'key' => 'field_class_cta_heading',
+                'label' => __('CTA Heading', 'mlzs'),
+                'name' => 'classroom_cta_heading',
+                'type' => 'text',
+                'default_value' => 'Experience Our Classrooms Firsthand',
+            ),
+            array(
+                'key' => 'field_class_cta_description',
+                'label' => __('CTA Description', 'mlzs'),
+                'name' => 'classroom_cta_description',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'See how our state-of-the-art classrooms create the perfect environment for learning, innovation, and growth.',
+            ),
+            array(
+                'key' => 'field_class_cta_primary',
+                'label' => __('Primary Button (Campus Tour)', 'mlzs'),
+                'name' => 'classroom_cta_primary',
+                'type' => 'link',
+                'return_format' => 'array',
+            ),
+            array(
+                'key' => 'field_class_cta_primary_icon',
+                'label' => __('Primary Button Icon', 'mlzs'),
+                'name' => 'classroom_cta_primary_icon',
+                'type' => 'text',
+                'default_value' => 'calendar',
+            ),
+            array(
+                'key' => 'field_class_cta_secondary',
+                'label' => __('Secondary Button (Virtual Tour)', 'mlzs'),
+                'name' => 'classroom_cta_secondary',
+                'type' => 'link',
+                'return_format' => 'array',
+            ),
+            array(
+                'key' => 'field_class_cta_secondary_icon',
+                'label' => __('Secondary Button Icon', 'mlzs'),
+                'name' => 'classroom_cta_secondary_icon',
+                'type' => 'text',
+                'default_value' => 'video',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'page_template',
+                    'operator' => '==',
+                    'value'    => 'classroom.php',
+                ),
+            ),
+        ),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_classroom_field_group');
 
 /**
  * ACF Options Pages: Header & Footer (site-wide)

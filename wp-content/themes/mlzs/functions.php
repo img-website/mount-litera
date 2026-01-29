@@ -1262,6 +1262,348 @@ function mlzs_acf_about_us_field_group() {
 add_action('acf/init', 'mlzs_acf_about_us_field_group');
 
 /**
+ * ACF Pro: Art & Craft Page – Hero, Main Content, Images, Curriculum, Benefits, CTA
+ */
+function mlzs_acf_art_field_group() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+    acf_add_local_field_group(array(
+        'key'                   => 'group_mlzs_art',
+        'title'                 => __('Art & Craft Page Sections', 'mlzs'),
+        'fields'                => array(
+            array('key' => 'field_art_tab_hero', 'label' => __('Hero Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_hero_badge', 'label' => __('Badge Text', 'mlzs'), 'name' => 'art_hero_badge', 'type' => 'text', 'default_value' => 'Creative Expression'),
+            array('key' => 'field_art_hero_icon', 'label' => __('Badge Icon', 'mlzs'), 'name' => 'art_hero_icon', 'type' => 'text', 'default_value' => 'palette'),
+            array('key' => 'field_art_hero_headline', 'label' => __('Headline (before highlight)', 'mlzs'), 'name' => 'art_hero_headline', 'type' => 'text', 'default_value' => 'Art &'),
+            array('key' => 'field_art_hero_highlight', 'label' => __('Headline (highlighted)', 'mlzs'), 'name' => 'art_hero_highlight', 'type' => 'text', 'default_value' => 'Craft'),
+            array('key' => 'field_art_hero_subheadline', 'label' => __('Subheadline', 'mlzs'), 'name' => 'art_hero_subheadline', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Nurturing imagination and creativity through hands-on artistic experiences'),
+            array('key' => 'field_art_tab_content', 'label' => __('Main Content', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_content_heading', 'label' => __('Content Card Heading', 'mlzs'), 'name' => 'art_content_heading', 'type' => 'text', 'default_value' => 'The Art of Creative Expression'),
+            array('key' => 'field_art_content_para1', 'label' => __('Paragraph 1', 'mlzs'), 'name' => 'art_content_para1', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_art_content_para2', 'label' => __('Paragraph 2 (highlight box)', 'mlzs'), 'name' => 'art_content_para2', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_art_content_para3', 'label' => __('Paragraph 3', 'mlzs'), 'name' => 'art_content_para3', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_art_content_labs_heading', 'label' => __('Art Labs Section Heading', 'mlzs'), 'name' => 'art_content_labs_heading', 'type' => 'text', 'default_value' => 'Our Art Labs'),
+            array('key' => 'field_art_content_junior_label', 'label' => __('Junior Lab Label', 'mlzs'), 'name' => 'art_content_junior_label', 'type' => 'text', 'default_value' => 'Junior Art Lab'),
+            array('key' => 'field_art_content_junior_classes', 'label' => __('Junior Lab Classes', 'mlzs'), 'name' => 'art_content_junior_classes', 'type' => 'text', 'default_value' => 'For Classes 1-4'),
+            array('key' => 'field_art_content_senior_label', 'label' => __('Senior Lab Label', 'mlzs'), 'name' => 'art_content_senior_label', 'type' => 'text', 'default_value' => 'Senior Art Lab'),
+            array('key' => 'field_art_content_senior_classes', 'label' => __('Senior Lab Classes', 'mlzs'), 'name' => 'art_content_senior_classes', 'type' => 'text', 'default_value' => 'For Classes 5-9'),
+            array('key' => 'field_art_tab_images', 'label' => __('Images', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_image_1', 'label' => __('Image 1 (Junior Art Lab)', 'mlzs'), 'name' => 'art_image_1', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_art_image_1_title', 'label' => __('Image 1 Title', 'mlzs'), 'name' => 'art_image_1_title', 'type' => 'text', 'default_value' => 'Junior Art Lab'),
+            array('key' => 'field_art_image_1_caption', 'label' => __('Image 1 Caption', 'mlzs'), 'name' => 'art_image_1_caption', 'type' => 'text', 'default_value' => 'Classes 1-4 students exploring creativity'),
+            array('key' => 'field_art_image_2', 'label' => __('Image 2 (Senior Craft Lab)', 'mlzs'), 'name' => 'art_image_2', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_art_image_2_title', 'label' => __('Image 2 Title', 'mlzs'), 'name' => 'art_image_2_title', 'type' => 'text', 'default_value' => 'Senior Craft Lab'),
+            array('key' => 'field_art_image_2_caption', 'label' => __('Image 2 Caption', 'mlzs'), 'name' => 'art_image_2_caption', 'type' => 'text', 'default_value' => 'Classes 5-9 developing advanced skills'),
+            array('key' => 'field_art_tab_curriculum', 'label' => __('Curriculum & Activities', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_curriculum_heading', 'label' => __('Curriculum Heading', 'mlzs'), 'name' => 'art_curriculum_heading', 'type' => 'text', 'default_value' => 'Our Art Curriculum'),
+            array('key' => 'field_art_curriculum_items', 'label' => __('Curriculum Items', 'mlzs'), 'name' => 'art_curriculum_items', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_art_curriculum_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_art_activities_heading', 'label' => __('Activities Heading', 'mlzs'), 'name' => 'art_activities_heading', 'type' => 'text', 'default_value' => 'Activities & Events'),
+            array('key' => 'field_art_activities_items', 'label' => __('Activities Items', 'mlzs'), 'name' => 'art_activities_items', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_art_activities_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_art_tab_benefits', 'label' => __('Benefits Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_benefits_heading', 'label' => __('Benefits Heading', 'mlzs'), 'name' => 'art_benefits_heading', 'type' => 'text', 'default_value' => 'Benefits of Art Education'),
+            array('key' => 'field_art_benefits_sub', 'label' => __('Benefits Subheading', 'mlzs'), 'name' => 'art_benefits_sub', 'type' => 'text', 'default_value' => 'Developing creativity, critical thinking, and emotional expression through art'),
+            array('key' => 'field_art_benefits_cards', 'label' => __('Benefit Cards (3)', 'mlzs'), 'name' => 'art_benefits_cards', 'type' => 'repeater', 'min' => 3, 'max' => 3, 'layout' => 'block', 'button_label' => __('Add Card', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_art_benefit_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'brain'),
+                array('key' => 'field_art_benefit_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_art_benefit_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_art_benefit_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
+            )),
+            array('key' => 'field_art_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_art_cta_heading', 'label' => __('CTA Heading', 'mlzs'), 'name' => 'art_cta_heading', 'type' => 'text', 'default_value' => 'Explore Your Creative Potential'),
+            array('key' => 'field_art_cta_description', 'label' => __('CTA Description', 'mlzs'), 'name' => 'art_cta_description', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Join our art programs and discover the joy of creative expression in our state-of-the-art art labs.'),
+            array('key' => 'field_art_cta_btn_primary', 'label' => __('Primary Button', 'mlzs'), 'name' => 'art_cta_btn_primary', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_art_cta_btn_primary_icon', 'label' => __('Primary Button Icon', 'mlzs'), 'name' => 'art_cta_btn_primary_icon', 'type' => 'text', 'default_value' => 'calendar'),
+            array('key' => 'field_art_cta_btn_secondary', 'label' => __('Secondary Button', 'mlzs'), 'name' => 'art_cta_btn_secondary', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_art_cta_btn_secondary_icon', 'label' => __('Secondary Button Icon', 'mlzs'), 'name' => 'art_cta_btn_secondary_icon', 'type' => 'text', 'default_value' => 'image'),
+            array('key' => 'field_art_cta_stats', 'label' => __('Stats (4 boxes)', 'mlzs'), 'name' => 'art_cta_stats', 'type' => 'repeater', 'min' => 4, 'max' => 4, 'layout' => 'table', 'button_label' => __('Add Stat', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_art_cta_stat_number', 'label' => __('Number', 'mlzs'), 'name' => 'number', 'type' => 'text'),
+                array('key' => 'field_art_cta_stat_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text'),
+            )),
+        ),
+        'location' => array(
+            array(
+                array('param' => 'page_template', 'operator' => '==', 'value' => 'art.php'),
+            ),
+        ),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_art_field_group');
+
+/**
+ * ACF Pro: Admission Process Page – Hero, Process Steps, Entry Criteria, Documents, Form Section
+ */
+function mlzs_acf_admission_process_field_group() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+    acf_add_local_field_group(array(
+        'key'                   => 'group_mlzs_admission_process',
+        'title'                 => __('Admission Process Page Sections', 'mlzs'),
+        'fields'                => array(
+            array('key' => 'field_adm_tab_hero', 'label' => __('Hero Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_adm_hero_badge',
+                'label' => __('Badge Text', 'mlzs'),
+                'name' => 'admission_hero_badge',
+                'type' => 'text',
+                'default_value' => 'Join Our Community',
+            ),
+            array(
+                'key' => 'field_adm_hero_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'admission_hero_badge_icon',
+                'type' => 'text',
+                'default_value' => 'user-plus',
+            ),
+            array(
+                'key' => 'field_adm_hero_headline',
+                'label' => __('Headline (before highlight)', 'mlzs'),
+                'name' => 'admission_hero_headline',
+                'type' => 'text',
+                'default_value' => 'Admission',
+            ),
+            array(
+                'key' => 'field_adm_hero_highlight',
+                'label' => __('Headline (highlighted)', 'mlzs'),
+                'name' => 'admission_hero_highlight',
+                'type' => 'text',
+                'default_value' => 'Process',
+            ),
+            array(
+                'key' => 'field_adm_hero_subheadline',
+                'label' => __('Subheadline', 'mlzs'),
+                'name' => 'admission_hero_subheadline',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'A seamless and transparent admission process to welcome your child into our learning community',
+            ),
+            array('key' => 'field_adm_tab_process', 'label' => __('Admission Process Steps', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_adm_process_heading',
+                'label' => __('Card Title', 'mlzs'),
+                'name' => 'admission_process_heading',
+                'type' => 'text',
+                'default_value' => 'Admission Process',
+            ),
+            array(
+                'key' => 'field_adm_process_icon',
+                'label' => __('Card Icon', 'mlzs'),
+                'name' => 'admission_process_icon',
+                'type' => 'text',
+                'default_value' => 'clipboard-list',
+            ),
+            array(
+                'key' => 'field_adm_process_steps',
+                'label' => __('Process Steps', 'mlzs'),
+                'name' => 'admission_process_steps',
+                'type' => 'repeater',
+                'min' => 1,
+                'layout' => 'block',
+                'button_label' => __('Add Step', 'mlzs'),
+                'sub_fields' => array(
+                    array(
+                        'key' => 'field_adm_process_step_text',
+                        'label' => __('Step Text', 'mlzs'),
+                        'name' => 'step_text',
+                        'type' => 'textarea',
+                        'rows' => 2,
+                    ),
+                ),
+            ),
+            array(
+                'key' => 'field_adm_process_cta',
+                'label' => __('CTA Button (e.g. Start Admission Process)', 'mlzs'),
+                'name' => 'admission_process_cta',
+                'type' => 'link',
+                'return_format' => 'array',
+            ),
+            array(
+                'key' => 'field_adm_process_cta_icon',
+                'label' => __('CTA Icon', 'mlzs'),
+                'name' => 'admission_process_cta_icon',
+                'type' => 'text',
+                'default_value' => 'arrow-down',
+            ),
+            array(
+                'key' => 'field_adm_process_image',
+                'label' => __('Right Side Image', 'mlzs'),
+                'name' => 'admission_process_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_adm_process_image_caption',
+                'label' => __('Image Overlay Caption', 'mlzs'),
+                'name' => 'admission_process_image_caption',
+                'type' => 'text',
+                'default_value' => 'Seamless Admission Journey',
+            ),
+            array('key' => 'field_adm_tab_entry', 'label' => __('Entry Criteria', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_adm_entry_heading',
+                'label' => __('Section Heading', 'mlzs'),
+                'name' => 'admission_entry_heading',
+                'type' => 'text',
+                'default_value' => 'Entry Criteria for Admission',
+            ),
+            array(
+                'key' => 'field_adm_entry_icon',
+                'label' => __('Section Icon', 'mlzs'),
+                'name' => 'admission_entry_icon',
+                'type' => 'text',
+                'default_value' => 'target',
+            ),
+            array(
+                'key' => 'field_adm_entry_intro',
+                'label' => __('Intro Paragraph', 'mlzs'),
+                'name' => 'admission_entry_intro',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'Admissions are granted to students on the basis of the following assessments:',
+            ),
+            array(
+                'key' => 'field_adm_entry_criteria',
+                'label' => __('Criteria Items', 'mlzs'),
+                'name' => 'admission_entry_criteria',
+                'type' => 'repeater',
+                'min' => 1,
+                'layout' => 'block',
+                'button_label' => __('Add Item', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_adm_entry_label', 'label' => __('Label (bold)', 'mlzs'), 'name' => 'label', 'type' => 'text', 'placeholder' => 'e.g. Grade 1:'),
+                    array('key' => 'field_adm_entry_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'text', 'placeholder' => 'e.g. age 5+ as on April 1'),
+                ),
+            ),
+            array(
+                'key' => 'field_adm_entry_image',
+                'label' => __('Left Side Image', 'mlzs'),
+                'name' => 'admission_entry_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_adm_entry_image_caption',
+                'label' => __('Image Overlay Caption', 'mlzs'),
+                'name' => 'admission_entry_image_caption',
+                'type' => 'text',
+                'default_value' => 'Clear Entry Guidelines',
+            ),
+            array('key' => 'field_adm_tab_docs', 'label' => __('Documents Required', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_adm_docs_heading',
+                'label' => __('Section Heading', 'mlzs'),
+                'name' => 'admission_docs_heading',
+                'type' => 'text',
+                'default_value' => 'Documents Required',
+            ),
+            array(
+                'key' => 'field_adm_docs_icon',
+                'label' => __('Section Icon', 'mlzs'),
+                'name' => 'admission_docs_icon',
+                'type' => 'text',
+                'default_value' => 'folder-open',
+            ),
+            array(
+                'key' => 'field_adm_docs_intro',
+                'label' => __('Intro Paragraph', 'mlzs'),
+                'name' => 'admission_docs_intro',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'Documents to be submitted at the time of admission:',
+            ),
+            array(
+                'key' => 'field_adm_docs_items',
+                'label' => __('Document Items', 'mlzs'),
+                'name' => 'admission_docs_items',
+                'type' => 'repeater',
+                'min' => 1,
+                'layout' => 'block',
+                'button_label' => __('Add Document', 'mlzs'),
+                'sub_fields' => array(
+                    array('key' => 'field_adm_docs_item_icon', 'label' => __('Lucide Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'file-text'),
+                    array('key' => 'field_adm_docs_item_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                    array('key' => 'field_adm_docs_item_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'text'),
+                ),
+            ),
+            array(
+                'key' => 'field_adm_docs_image',
+                'label' => __('Right Side Image', 'mlzs'),
+                'name' => 'admission_docs_image',
+                'type' => 'image',
+                'return_format' => 'url',
+            ),
+            array(
+                'key' => 'field_adm_docs_image_caption',
+                'label' => __('Image Overlay Caption', 'mlzs'),
+                'name' => 'admission_docs_image_caption',
+                'type' => 'text',
+                'default_value' => 'Required Documentation',
+            ),
+            array('key' => 'field_adm_tab_form', 'label' => __('Registration Form Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array(
+                'key' => 'field_adm_form_badge',
+                'label' => __('Form Section Badge', 'mlzs'),
+                'name' => 'admission_form_badge',
+                'type' => 'text',
+                'default_value' => 'Online Registration',
+            ),
+            array(
+                'key' => 'field_adm_form_badge_icon',
+                'label' => __('Badge Icon', 'mlzs'),
+                'name' => 'admission_form_badge_icon',
+                'type' => 'text',
+                'default_value' => 'edit-3',
+            ),
+            array(
+                'key' => 'field_adm_form_heading',
+                'label' => __('Form Heading', 'mlzs'),
+                'name' => 'admission_form_heading',
+                'type' => 'text',
+                'default_value' => 'Registration Form',
+            ),
+            array(
+                'key' => 'field_adm_form_description',
+                'label' => __('Form Description', 'mlzs'),
+                'name' => 'admission_form_description',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => "Fill in the details below to begin your child's admission journey with us",
+            ),
+            array(
+                'key' => 'field_adm_form_submit_text',
+                'label' => __('Submit Button Text', 'mlzs'),
+                'name' => 'admission_form_submit_text',
+                'type' => 'text',
+                'default_value' => 'Submit Registration Form',
+            ),
+            array(
+                'key' => 'field_adm_form_terms_text',
+                'label' => __('Terms Text (below button)', 'mlzs'),
+                'name' => 'admission_form_terms_text',
+                'type' => 'textarea',
+                'rows' => 2,
+                'default_value' => 'By submitting this form, you agree to our terms and conditions.',
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'page_template',
+                    'operator' => '==',
+                    'value'    => 'admission-process.php',
+                ),
+            ),
+        ),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_admission_process_field_group');
+
+/**
  * ACF Options Pages: Header & Footer (site-wide)
  */
 function mlzs_acf_options_pages() {

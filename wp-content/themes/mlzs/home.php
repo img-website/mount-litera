@@ -17,30 +17,31 @@ $hero_badge       = function_exists('get_field') ? get_field('hero_badge_text', 
 $hero_line1       = function_exists('get_field') ? get_field('hero_headline_line1', $hero_page_id) : null;
 $hero_highlight   = function_exists('get_field') ? get_field('hero_headline_highlight', $hero_page_id) : null;
 $hero_subheadline = function_exists('get_field') ? get_field('hero_subheadline', $hero_page_id) : null;
-$cta_primary_text = function_exists('get_field') ? get_field('hero_cta_primary_text', $hero_page_id) : null;
-$cta_primary_url  = function_exists('get_field') ? get_field('hero_cta_primary_url', $hero_page_id) : null;
-$cta_secondary_text = function_exists('get_field') ? get_field('hero_cta_secondary_text', $hero_page_id) : null;
-$cta_secondary_url  = function_exists('get_field') ? get_field('hero_cta_secondary_url', $hero_page_id) : null;
+$cta_primary_link   = function_exists('get_field') ? get_field('hero_cta_primary', $hero_page_id) : null;
+$cta_secondary_link = function_exists('get_field') ? get_field('hero_cta_secondary', $hero_page_id) : null;
+$cta_primary_icon   = function_exists('get_field') ? get_field('hero_cta_primary_icon', $hero_page_id) : null;
+$cta_secondary_icon = function_exists('get_field') ? get_field('hero_cta_secondary_icon', $hero_page_id) : null;
 // If no page context (e.g. 0), also try option for backwards compatibility
 if (!$hero_page_id && function_exists('get_field')) {
     if ($hero_badge === null) $hero_badge = get_field('hero_badge_text', 'option');
     if ($hero_line1 === null) $hero_line1 = get_field('hero_headline_line1', 'option');
     if ($hero_highlight === null) $hero_highlight = get_field('hero_headline_highlight', 'option');
     if ($hero_subheadline === null) $hero_subheadline = get_field('hero_subheadline', 'option');
-    if ($cta_primary_text === null) $cta_primary_text = get_field('hero_cta_primary_text', 'option');
-    if ($cta_primary_url === null) $cta_primary_url = get_field('hero_cta_primary_url', 'option');
-    if ($cta_secondary_text === null) $cta_secondary_text = get_field('hero_cta_secondary_text', 'option');
-    if ($cta_secondary_url === null) $cta_secondary_url = get_field('hero_cta_secondary_url', 'option');
+    if ($cta_primary_link === null) $cta_primary_link = get_field('hero_cta_primary', 'option');
+    if ($cta_secondary_link === null) $cta_secondary_link = get_field('hero_cta_secondary', 'option');
+    if ($cta_primary_icon === null) $cta_primary_icon = get_field('hero_cta_primary_icon', 'option');
+    if ($cta_secondary_icon === null) $cta_secondary_icon = get_field('hero_cta_secondary_icon', 'option');
 }
 
 $hero_badge       = $hero_badge !== '' && $hero_badge !== null ? $hero_badge : 'Admissions Open for 2025-26';
 $hero_line1       = $hero_line1 !== '' && $hero_line1 !== null ? $hero_line1 : 'Fun. Study. Research.';
 $hero_highlight   = $hero_highlight !== '' && $hero_highlight !== null ? $hero_highlight : 'Innovate. Play';
 $hero_subheadline = $hero_subheadline !== '' && $hero_subheadline !== null ? $hero_subheadline : 'A Great School For A Great Future Of Your Child. Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society.';
-$cta_primary_text = $cta_primary_text !== '' && $cta_primary_text !== null ? $cta_primary_text : 'Start Application';
-$cta_primary_url  = $cta_primary_url !== '' && $cta_primary_url !== null ? $cta_primary_url : '#';
-$cta_secondary_text = $cta_secondary_text !== '' && $cta_secondary_text !== null ? $cta_secondary_text : 'Virtual Tour';
-$cta_secondary_url  = $cta_secondary_url !== '' && $cta_secondary_url !== null ? $cta_secondary_url : '#';
+// ACF link: array( 'url' => '', 'title' => '', 'target' => '' ) or null
+$cta_primary_link   = (is_array($cta_primary_link) && !empty($cta_primary_link['url'])) ? $cta_primary_link : array( 'url' => '#', 'title' => 'Start Application', 'target' => '' );
+$cta_secondary_link = (is_array($cta_secondary_link) && !empty($cta_secondary_link['url'])) ? $cta_secondary_link : array( 'url' => '#', 'title' => 'Virtual Tour', 'target' => '' );
+$cta_primary_icon   = (is_string($cta_primary_icon) && trim($cta_primary_icon) !== '') ? trim($cta_primary_icon) : 'arrow-up-right';
+$cta_secondary_icon = (is_string($cta_secondary_icon) && trim($cta_secondary_icon) !== '') ? trim($cta_secondary_icon) : 'play-circle';
 
 $default_slide_url = 'https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80';
 $default_stats = array(
@@ -48,6 +49,28 @@ $default_stats = array(
     array('stat_number' => '45+', 'stat_label' => 'Nationalities'),
     array('stat_number' => '12:1', 'stat_label' => 'Student-Teacher Ratio'),
     array('stat_number' => 'A+', 'stat_label' => 'Global Accreditation'),
+);
+
+// Welcome Section: ACF with fallbacks
+$welcome_badge     = function_exists('get_field') ? get_field('welcome_badge', $hero_page_id) : null;
+$welcome_heading1  = function_exists('get_field') ? get_field('welcome_heading_line1', $hero_page_id) : null;
+$welcome_highlight = function_exists('get_field') ? get_field('welcome_heading_highlight', $hero_page_id) : null;
+$welcome_desc      = function_exists('get_field') ? get_field('welcome_description', $hero_page_id) : null;
+$welcome_cta1 = function_exists('get_field') ? get_field('welcome_cta_primary', $hero_page_id) : null;
+$welcome_cta2 = function_exists('get_field') ? get_field('welcome_cta_secondary', $hero_page_id) : null;
+$welcome_cta1_icon = function_exists('get_field') ? get_field('welcome_cta_primary_icon', $hero_page_id) : null;
+$welcome_cta2_icon = function_exists('get_field') ? get_field('welcome_cta_secondary_icon', $hero_page_id) : null;
+$welcome_badge     = $welcome_badge !== '' && $welcome_badge !== null ? $welcome_badge : 'Welcome to Our Campus';
+$welcome_heading1  = $welcome_heading1 !== '' && $welcome_heading1 !== null ? $welcome_heading1 : 'Mount Litera Zee School, Alwar';
+$welcome_highlight = $welcome_highlight !== '' && $welcome_highlight !== null ? $welcome_highlight : 'A Great School For A Great Future';
+$welcome_desc      = $welcome_desc !== '' && $welcome_desc !== null ? $welcome_desc : 'Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society. MLZS create an excellent educational institution synthesizing the human values with the highest quality of teaching–learning using modern technology-driven tools.';
+$welcome_cta1 = (is_array($welcome_cta1) && !empty($welcome_cta1['url'])) ? $welcome_cta1 : array( 'url' => (string) $home_url . '#approach', 'title' => 'Discover Our Approach', 'target' => '' );
+$welcome_cta2 = (is_array($welcome_cta2) && !empty($welcome_cta2['url'])) ? $welcome_cta2 : array( 'url' => (string) $home_url . '#virtual-tour', 'title' => 'Virtual Tour', 'target' => '' );
+$welcome_cta1_icon = (is_string($welcome_cta1_icon) && trim($welcome_cta1_icon) !== '') ? trim($welcome_cta1_icon) : 'arrow-right';
+$welcome_cta2_icon = (is_string($welcome_cta2_icon) && trim($welcome_cta2_icon) !== '') ? trim($welcome_cta2_icon) : '';
+$default_welcome_cards = array(
+    array('card_icon' => 'book-open', 'card_title' => 'The Best Learning Methods', 'card_description' => 'Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society. MLZS create an excellent educational institution synthesizing the human values with the highest quality of teaching–learning using modern technology-driven tools for preparing a well-rounded personality for our society.', 'card_style' => 'primary'),
+    array('card_icon' => 'award', 'card_title' => 'Awesome Results Of Our Students', 'card_description' => 'We believe that every child is born unique. Each child has a unique brain network that shapes how she absorbs and responds to stimuli. One way of teaching does not work for every child. We need to teach the way they learn, not force them to learn the way we teach. We help children make meaning of life and develop the muscle to lead life effectively.', 'card_style' => 'accent'),
 );
 ?>
 
@@ -68,7 +91,7 @@ $default_stats = array(
                             if ($img_url) {
                                 ?>
                                 <div class="swiper-slide">
-                                    <div class="w-full h-full bg-cover bg-center scale-110 animate-hero-zoom" style="background-image: url('<?php echo esc_url($img_url); ?>');"></div>
+                                    <div class="w-full h-full bg-cover bg-center scale-110 animate-hero-zoom" style="background-image: url('<?php echo esc_url( (string) $img_url ); ?>');"></div>
                                 </div>
                                 <?php
                             }
@@ -94,23 +117,23 @@ $default_stats = array(
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
             </span>
-            <span class="text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html($hero_badge); ?></span>
+            <span class="text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html( (string) $hero_badge ); ?></span>
         </div>
         <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
-            <?php echo esc_html($hero_line1); ?> <br class="hidden md:block"/>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame via-tiger-orange to-cayenne-red"><?php echo esc_html($hero_highlight); ?></span>
+            <?php echo esc_html( (string) $hero_line1 ); ?> <br class="hidden md:block"/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame via-tiger-orange to-cayenne-red"><?php echo esc_html( (string) $hero_highlight ); ?></span>
         </h1>
         <p class="text-lg md:text-xl text-slate-200 mb-4 max-w-2xl leading-relaxed font-light opacity-95">
-            <?php echo esc_html($hero_subheadline); ?>
+            <?php echo esc_html( (string) $hero_subheadline ); ?>
         </p>
         <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <a href="<?php echo esc_url($cta_primary_url); ?>" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-full font-bold text-lg hover:shadow-[0_0_20px_rgba(61,52,139,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group ring-1 ring-white/20">
-                <?php echo esc_html($cta_primary_text); ?>
-                <i data-lucide="arrow-up-right" class="size-5 group-hover:translate-x-1 transition-transform"></i>
+            <a href="<?php echo esc_url( (string) ( $cta_primary_link['url'] ?? '#' ) ); ?>"<?php echo !empty($cta_primary_link['target']) ? ' target="' . esc_attr( (string) $cta_primary_link['target'] ) . '"' : ''; ?> class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-full font-bold text-lg hover:shadow-[0_0_20px_rgba(61,52,139,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group ring-1 ring-white/20">
+                <?php echo esc_html( (string) ( $cta_primary_link['title'] ?? 'Start Application' ) ); ?>
+                <i data-lucide="<?php echo esc_attr( (string) $cta_primary_icon ); ?>" class="size-5 group-hover:translate-x-1 transition-transform"></i>
             </a>
-            <a href="<?php echo esc_url($cta_secondary_url); ?>" class="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-bold text-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2 group">
-                <i data-lucide="play-circle" class="size-5"></i>
-                <?php echo esc_html($cta_secondary_text); ?>
+            <a href="<?php echo esc_url( (string) ( $cta_secondary_link['url'] ?? '#' ) ); ?>"<?php echo !empty($cta_secondary_link['target']) ? ' target="' . esc_attr( (string) $cta_secondary_link['target'] ) . '"' : ''; ?> class="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-bold text-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2 group">
+                <i data-lucide="<?php echo esc_attr( (string) $cta_secondary_icon ); ?>" class="size-5"></i>
+                <?php echo esc_html( (string) ( $cta_secondary_link['title'] ?? 'Virtual Tour' ) ); ?>
             </a>
         </div>
         <div class="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 border-t border-white/10 py-4 w-full">
@@ -134,8 +157,8 @@ $default_stats = array(
             foreach ($stats as $stat) {
                 ?>
                 <div class="flex flex-col gap-1">
-                    <span class="text-3xl font-bold text-white"><?php echo esc_html($stat['stat_number']); ?></span>
-                    <span class="text-sm text-slate-300 font-medium uppercase tracking-wide"><?php echo esc_html($stat['stat_label']); ?></span>
+                    <span class="text-3xl font-bold text-white"><?php echo esc_html( (string) ( $stat['stat_number'] ?? '' ) ); ?></span>
+                    <span class="text-sm text-slate-300 font-medium uppercase tracking-wide"><?php echo esc_html( (string) ( $stat['stat_label'] ?? '' ) ); ?></span>
                 </div>
                 <?php
             }
@@ -144,7 +167,7 @@ $default_stats = array(
     </div>
 </div>
 
-<!-- Welcome Section (static) -->
+<!-- Welcome Section (dynamic via ACF) -->
 <section class="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 bg-background-light dark:bg-background-dark" id="about">
     <div class="absolute top-0 left-0 -z-10 h-full w-full overflow-hidden">
         <div class="absolute -top-40 -right-40 h-[500px] w-[500px] rounded-full bg-indigo-velvet/5 blur-[100px]"></div>
@@ -155,51 +178,67 @@ $default_stats = array(
             <div class="flex flex-col gap-8">
                 <div class="flex flex-col gap-6">
                     <span class="w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary dark:text-primary-dark ring-1 ring-primary/20">
-                        Welcome to Our Campus
+                        <?php echo esc_html( (string) $welcome_badge ); ?>
                     </span>
                     <h1 class="font-display text-4xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark sm:text-5xl lg:text-6xl">
-                        Mount Litera Zee School, Alwar<br/>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-velvet via-slate-blue to-amber-flame">A Great School For A Great Future</span>
+                        <?php echo esc_html( (string) $welcome_heading1 ); ?><br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-velvet via-slate-blue to-amber-flame"><?php echo esc_html( (string) $welcome_highlight ); ?></span>
                     </h1>
                     <p class="max-w-xl text-lg leading-relaxed text-text-secondary-light dark:text-text-secondary-dark">
-                        Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society. MLZS create an excellent educational institution synthesizing the human values with the highest quality of teaching–learning using modern technology-driven tools.
+                        <?php echo esc_html( (string) $welcome_desc ); ?>
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-4">
-                    <a href="<?php echo esc_url($home_url); ?>#approach" class="group flex h-12 items-center justify-center rounded-full bg-primary px-8 text-base font-bold text-white shadow-glow transition-all hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5">
-                        <span>Discover Our Approach</span>
-                        <i data-lucide="arrow-right" class="ml-2 size-5 transition-transform group-hover:translate-x-1"></i>
+                    <a href="<?php echo esc_url( (string) ( $welcome_cta1['url'] ?? '#' ) ); ?>"<?php echo !empty($welcome_cta1['target']) ? ' target="' . esc_attr( (string) $welcome_cta1['target'] ) . '"' : ''; ?> class="group flex h-12 items-center justify-center rounded-full bg-primary px-8 text-base font-bold text-white shadow-glow transition-all hover:bg-primary-dark hover:shadow-lg hover:-translate-y-0.5">
+                        <span><?php echo esc_html( (string) ( $welcome_cta1['title'] ?? 'Discover Our Approach' ) ); ?></span>
+                        <?php if ( $welcome_cta1_icon !== '' ) : ?><i data-lucide="<?php echo esc_attr( (string) $welcome_cta1_icon ); ?>" class="ml-2 size-5 transition-transform group-hover:translate-x-1"></i><?php endif; ?>
                     </a>
-                    <a href="<?php echo esc_url($home_url); ?>#virtual-tour" class="flex h-12 items-center justify-center rounded-full border border-border-light dark:border-border-dark bg-transparent px-8 text-base font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:bg-surface-light hover:text-primary hover:border-primary/30 hover:shadow-sm hover:dark:bg-surface-dark">
-                        Virtual Tour
+                    <a href="<?php echo esc_url( (string) ( $welcome_cta2['url'] ?? '#' ) ); ?>"<?php echo !empty($welcome_cta2['target']) ? ' target="' . esc_attr( (string) $welcome_cta2['target'] ) . '"' : ''; ?> class="flex h-12 items-center justify-center rounded-full border border-border-light dark:border-border-dark bg-transparent px-8 text-base font-medium text-text-main-light dark:text-text-main-dark transition-colors hover:bg-surface-light hover:text-primary hover:border-primary/30 hover:shadow-sm hover:dark:bg-surface-dark">
+                        <?php if ( $welcome_cta2_icon !== '' ) : ?><i data-lucide="<?php echo esc_attr( (string) $welcome_cta2_icon ); ?>" class="mr-2 size-5"></i><?php endif; ?>
+                        <?php echo esc_html( (string) ( $welcome_cta2['title'] ?? 'Virtual Tour' ) ); ?>
                     </a>
                 </div>
             </div>
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                <div class="group relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-transparent hover:border-primary/20 dark:border-border-dark dark:hover:border-primary/20">
-                    <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-primary/10 to-transparent transition-transform group-hover:scale-150"></div>
-                    <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 dark:bg-primary/20 text-primary shadow-sm group-hover:bg-primary group-hover:text-white transition-colors">
-                        <i data-lucide="book-open" class="w-7 h-7"></i>
+                <?php
+                $welcome_cards = $default_welcome_cards;
+                if (function_exists('have_rows') && have_rows('welcome_cards', $hero_page_id)) {
+                    $welcome_cards = array();
+                    while (have_rows('welcome_cards', $hero_page_id)) {
+                        the_row();
+                        $welcome_cards[] = array(
+                            'card_icon'        => get_sub_field('card_icon') ?: 'book-open',
+                            'card_title'       => get_sub_field('card_title') ?: '',
+                            'card_description' => get_sub_field('card_description') ?: '',
+                            'card_style'       => get_sub_field('card_style') ?: 'primary',
+                        );
+                    }
+                }
+                foreach ($welcome_cards as $idx => $card) {
+                    $is_accent = isset($card['card_style']) && $card['card_style'] === 'accent';
+                    $card_classes = $is_accent
+                        ? 'border-transparent hover:border-accent/20 dark:border-border-dark dark:hover:border-accent/20 xl:mt-12'
+                        : 'border-transparent hover:border-primary/20 dark:border-border-dark dark:hover:border-primary/20';
+                    $gradient = $is_accent ? 'from-accent/10' : 'from-primary/10';
+                    $icon_bg = $is_accent ? 'bg-accent/10 dark:bg-accent/20 text-accent-dark shadow-glow-accent group-hover:bg-accent' : 'bg-primary/10 dark:bg-primary/20 text-primary shadow-sm group-hover:bg-primary';
+                    $title_hover = $is_accent ? 'group-hover:text-accent-dark' : 'group-hover:text-primary';
+                    $icon_name = isset($card['card_icon']) && $card['card_icon'] !== '' ? $card['card_icon'] : 'book-open';
+                    ?>
+                    <div class="group relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border <?php echo esc_attr($card_classes); ?>">
+                        <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br <?php echo esc_attr($gradient); ?> to-transparent transition-transform group-hover:scale-150"></div>
+                        <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl <?php echo esc_attr($icon_bg); ?> group-hover:text-white transition-colors">
+                            <i data-lucide="<?php echo esc_attr($icon_name); ?>" class="w-7 h-7"></i>
+                        </div>
+                        <div class="relative z-10 flex flex-col gap-2">
+                            <h3 class="text-xl font-bold text-text-main-light dark:text-text-main-dark <?php echo esc_attr($title_hover); ?> transition-colors"><?php echo esc_html( (string) ( $card['card_title'] ?? '' ) ); ?></h3>
+                            <p class="text-sm leading-relaxed text-text-secondary-light dark:text-text-secondary-dark">
+                                <?php echo esc_html( (string) ( $card['card_description'] ?? '' ) ); ?>
+                            </p>
+                        </div>
                     </div>
-                    <div class="relative z-10 flex flex-col gap-2">
-                        <h3 class="text-xl font-bold text-text-main-light dark:text-text-main-dark group-hover:text-primary transition-colors">The Best Learning Methods</h3>
-                        <p class="text-sm leading-relaxed text-text-secondary-light dark:text-text-secondary-dark">
-                            Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society. MLZS create an excellent educational institution synthesizing the human values with the highest quality of teaching–learning using modern technology-driven tools for preparing a well-rounded personality for our society.
-                        </p>
-                    </div>
-                </div>
-                <div class="group relative overflow-hidden rounded-2xl bg-surface-light dark:bg-surface-dark p-6 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border border-transparent hover:border-accent/20 dark:border-border-dark dark:hover:border-accent/20 xl:mt-12">
-                    <div class="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-accent/10 to-transparent transition-transform group-hover:scale-150"></div>
-                    <div class="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 dark:bg-accent/20 text-accent-dark shadow-sm group-hover:bg-accent group-hover:text-white transition-colors shadow-glow-accent">
-                        <i data-lucide="award" class="w-7 h-7"></i>
-                    </div>
-                    <div class="relative z-10 flex flex-col gap-2">
-                        <h3 class="text-xl font-bold text-text-main-light dark:text-text-main-dark group-hover:text-accent-dark transition-colors">Awesome Results Of Our Students</h3>
-                        <p class="text-sm leading-relaxed text-text-secondary-light dark:text-text-secondary-dark">
-                            We believe that every child is born unique. Each child has a unique brain network that shapes how she absorbs and responds to stimuli. One way of teaching does not work for every child. We need to teach the way they learn, not force them to learn the way we teach. We help children make meaning of life and develop the muscle to lead life effectively.
-                        </p>
-                    </div>
-                </div>
+                    <?php
+                }
+                ?>
             </div>
         </div>
     </div>

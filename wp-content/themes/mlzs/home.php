@@ -118,6 +118,77 @@ if (is_array($approach_pillars_raw) && !empty($approach_pillars_raw)) {
 if (empty($approach_pillars)) {
     $approach_pillars = $default_approach_pillars;
 }
+
+// Academics Section: ACF with fallbacks
+$academics_badge_text   = function_exists('get_field') ? get_field('academics_badge_text', $hero_page_id) : null;
+$academics_badge_icon   = function_exists('get_field') ? get_field('academics_badge_icon', $hero_page_id) : null;
+$academics_heading      = function_exists('get_field') ? get_field('academics_heading', $hero_page_id) : null;
+$academics_description  = function_exists('get_field') ? get_field('academics_description', $hero_page_id) : null;
+$academics_tabs_raw     = function_exists('get_field') ? get_field('academics_tabs', $hero_page_id) : null;
+$academics_cta_raw      = function_exists('get_field') ? get_field('academics_cta', $hero_page_id) : null;
+$academics_badge_text   = ($academics_badge_text !== '' && $academics_badge_text !== null) ? $academics_badge_text : 'Student Life';
+$academics_badge_icon   = (is_string($academics_badge_icon) && trim($academics_badge_icon) !== '') ? trim($academics_badge_icon) : 'graduation-cap';
+$academics_heading      = ($academics_heading !== '' && $academics_heading !== null) ? $academics_heading : 'Academics & Beyond';
+$academics_description = ($academics_description !== '' && $academics_description !== null) ? $academics_description : 'We believe education extends far beyond the classroom walls. Explore the diverse opportunities that shape our students into well-rounded global leaders through arts, sports, and community engagement.';
+$academics_cta         = (is_array($academics_cta_raw) && !empty($academics_cta_raw['url'])) ? $academics_cta_raw : array( 'url' => (string) $home_url . '#', 'title' => 'View All Activities', 'target' => '' );
+$default_academics_img  = 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+$default_academics_tabs = array(
+    array(
+        'tab_icon' => 'palette', 'tab_label' => 'Fun & Art', 'tab_slug' => 'fun',
+        'cards' => array(
+            array( 'image' => $default_academics_img, 'tag' => 'Clubs', 'tag_style' => 'primary', 'title' => 'Litera Clubs', 'description' => 'Mount Litera Zee School encourages students to participate in a wide-range of clubs in schools including clubs like Literary Club, STEM Club, Health and Wellness Club etc.', 'link' => array( 'url' => '#', 'title' => 'Explore Clubs', 'target' => '' ) ),
+            array( 'image' => $default_academics_img, 'tag' => 'Excursions', 'tag_style' => 'accent', 'title' => 'Field Trips', 'description' => 'Field trips are a popular activity for all students. Kids love to explore new places with their friends. We understand that any trip cannot qualify as a field trip.', 'link' => array( 'url' => '#', 'title' => 'View Gallery', 'target' => '' ) ),
+        ),
+    ),
+    array(
+        'tab_icon' => 'trophy', 'tab_label' => 'Sports', 'tab_slug' => 'sports',
+        'cards' => array(
+            array( 'image' => 'https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80', 'tag' => '', 'tag_style' => 'primary', 'title' => 'Sports', 'description' => 'Swami Vivekananda famously said, "Be strong, my young friends; that is my advice to you. You will be nearer to Heaven through football than through the study of the Gita."', 'link' => array( 'url' => '#', 'title' => 'Explore Sports', 'target' => '' ) ),
+            array( 'image' => 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80', 'tag' => '', 'tag_style' => 'primary', 'title' => 'Fitness & Wellness', 'description' => 'Track and field, yoga, and fitness sessions help students build stamina, discipline, and lifelong healthy habits.', 'link' => array( 'url' => '#', 'title' => 'View Programs', 'target' => '' ) ),
+        ),
+    ),
+    array(
+        'tab_icon' => 'party-popper', 'tab_label' => 'Events', 'tab_slug' => 'events',
+        'cards' => array(
+            array( 'image' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80', 'tag' => '', 'tag_style' => 'primary', 'title' => 'Mount Litera Olympiad', 'description' => 'The Mount Litera Olympiad is an inter-MLZS competition in which students from all MLZS participate to showcase their talent in various fields.', 'link' => array( 'url' => '#', 'title' => 'View Highlights', 'target' => '' ) ),
+            array( 'image' => $default_academics_img, 'tag' => '', 'tag_style' => 'primary', 'title' => 'Events and Celebrations', 'description' => 'Mount Litera Zee Schools organise various events and celebrations throughout the year. The chief of them is the Annual Function.', 'link' => array( 'url' => '#', 'title' => 'Explore Gallery', 'target' => '' ) ),
+        ),
+    ),
+);
+$academics_tabs = array();
+if (is_array($academics_tabs_raw) && !empty($academics_tabs_raw)) {
+    foreach ($academics_tabs_raw as $row) {
+        $slug = isset($row['tab_slug']) ? preg_replace('/[^a-z0-9_-]/i', '', (string) $row['tab_slug']) : 'tab-' . count($academics_tabs);
+        if ($slug === '') $slug = 'tab-' . count($academics_tabs);
+        $cards = array();
+        if (!empty($row['cards']) && is_array($row['cards'])) {
+            foreach ($row['cards'] as $c) {
+                $img = isset($c['image']) ? (is_array($c['image']) ? ($c['image']['url'] ?? '') : $c['image']) : $default_academics_img;
+                if ($img === '') $img = $default_academics_img;
+                $lnk = isset($c['link']) && is_array($c['link']) && !empty($c['link']['url']) ? $c['link'] : array( 'url' => '#', 'title' => 'Explore', 'target' => '' );
+                $cards[] = array(
+                    'image' => $img,
+                    'tag' => isset($c['tag']) ? (string) $c['tag'] : '',
+                    'tag_style' => (isset($c['tag_style']) && $c['tag_style'] === 'accent') ? 'accent' : 'primary',
+                    'title' => isset($c['title']) ? (string) $c['title'] : '',
+                    'description' => isset($c['description']) ? (string) $c['description'] : '',
+                    'link' => $lnk,
+                );
+            }
+        }
+        if (!empty($cards)) {
+            $academics_tabs[] = array(
+                'tab_icon' => (isset($row['tab_icon']) && trim((string) $row['tab_icon']) !== '') ? trim((string) $row['tab_icon']) : 'circle',
+                'tab_label' => isset($row['tab_label']) ? (string) $row['tab_label'] : 'Tab',
+                'tab_slug' => $slug,
+                'cards' => $cards,
+            );
+        }
+    }
+}
+if (empty($academics_tabs)) {
+    $academics_tabs = $default_academics_tabs;
+}
 ?>
 
 <!-- Hero Section (dynamic via ACF) -->
@@ -387,115 +458,63 @@ if (empty($approach_pillars)) {
     </div>
 </section>
 
-<!-- Academics Section (static) -->
+<!-- Academics Section (dynamic via ACF) -->
 <section id="academics" class="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative bg-gradient-to-b from-background-light to-white overflow-hidden">
     <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none opacity-60"></div>
     <div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[100px] pointer-events-none opacity-60"></div>
     <div class="w-full max-w-7xl mx-auto z-10">
         <div class="mb-14 text-center md:text-left relative">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm text-primary text-xs font-bold uppercase tracking-wider mb-6 transform hover:scale-105 transition-transform">
-                <i data-lucide="graduation-cap" class="w-4 h-4"></i>
-                Student Life
+                <i data-lucide="<?php echo esc_attr( (string) $academics_badge_icon ); ?>" class="w-4 h-4"></i>
+                <?php echo esc_html( (string) $academics_badge_text ); ?>
             </div>
             <h1 class="text-5xl md:text-6xl font-medium tracking-tight text-gray-900 mb-6">
-                Academics <span class="text-primary font-serif italic font-normal">&amp;</span> Beyond
+                <?php echo esc_html( (string) $academics_heading ); ?>
             </h1>
             <p class="text-gray-500 max-w-2xl text-lg leading-relaxed font-light">
-                We believe education extends far beyond the classroom walls. Explore the diverse opportunities that shape our students into well-rounded global leaders through arts, sports, and community engagement.
+                <?php echo esc_html( (string) $academics_description ); ?>
             </p>
         </div>
         <div class="flex flex-col gap-10">
             <div class="flex overflow-x-auto pb-4 md:pb-0 no-scrollbar">
                 <div class="sm:inline-flex flex max-sm:w-full p-1.5 bg-white rounded-full border border-gray-200 shadow-sm">
-                    <button type="button" class="academics-tab px-8 py-3 rounded-full text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-2.5 group max-sm:w-full justify-center" data-academics-tab="fun">
-                        <i data-lucide="palette" class="size-5 md:block hidden group-hover:text-primary transition-colors"></i>
-                        Fun &amp; Art
+                    <?php foreach ($academics_tabs as $idx => $atab) : ?>
+                    <button type="button" class="academics-tab px-8 py-3 rounded-full text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-2.5 group max-sm:w-full justify-center" data-academics-tab="<?php echo esc_attr( (string) $atab['tab_slug'] ); ?>">
+                        <i data-lucide="<?php echo esc_attr( (string) $atab['tab_icon'] ); ?>" class="size-5 md:block hidden group-hover:text-primary transition-colors"></i>
+                        <?php echo esc_html( (string) $atab['tab_label'] ); ?>
                     </button>
-                    <button type="button" class="academics-tab px-8 py-3 rounded-full text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-2.5 group max-sm:w-full justify-center" data-academics-tab="sports">
-                        <i data-lucide="trophy" class="size-5 md:block hidden group-hover:text-primary transition-colors"></i>
-                        Sports
-                    </button>
-                    <button type="button" class="academics-tab px-8 py-3 rounded-full text-sm font-medium text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all flex items-center gap-2.5 group max-sm:w-full justify-center" data-academics-tab="events">
-                        <i data-lucide="party-popper" class="size-5 md:block hidden group-hover:text-primary transition-colors"></i>
-                        Events
-                    </button>
+                    <?php endforeach; ?>
                 </div>
             </div>
-            <div class="academics-panel grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in" data-academics-panel="fun">
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full pointer-events-none transition-opacity duration-300 opacity-50 group-hover:opacity-100"></div>
+            <?php foreach ($academics_tabs as $idx => $atab) : ?>
+            <div class="academics-panel grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in <?php echo $idx > 0 ? 'hidden' : ''; ?>" data-academics-panel="<?php echo esc_attr( (string) $atab['tab_slug'] ); ?>">
+                <?php foreach ($atab['cards'] as $card) :
+                    $card_img = (string) ( $card['image'] ?? $default_academics_img );
+                    $card_tag = (string) ( $card['tag'] ?? '' );
+                    $is_accent = isset($card['tag_style']) && $card['tag_style'] === 'accent';
+                    $gradient_class = $is_accent ? 'from-accent/10' : 'from-primary/5';
+                    $tag_class = $is_accent ? 'bg-accent/10 text-accent' : 'bg-primary/10 text-primary';
+                    $card_link = isset($card['link']) && is_array($card['link']) ? $card['link'] : array( 'url' => '#', 'title' => 'Explore', 'target' => '' );
+                ?>
+                <a href="<?php echo esc_url( (string) ( $card_link['url'] ?? '#' ) ); ?>"<?php echo !empty($card_link['target']) ? ' target="' . esc_attr( (string) $card_link['target'] ) . '"' : ''; ?> class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl <?php echo esc_attr( $gradient_class ); ?> to-transparent rounded-bl-full pointer-events-none transition-opacity duration-300 opacity-50 group-hover:opacity-100"></div>
                     <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('<?php echo esc_url( $card_img ); ?>');"></div>
                         <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
                     </div>
                     <div class="flex flex-col justify-center h-full flex-1 w-full text-center sm:text-left z-10">
-                        <span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wide mb-2 inline-block w-fit mx-auto sm:mx-0">Clubs</span>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Litera Clubs</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Mount Litera Zee School encourages students to participate in a wide-range of clubs in schools including clubs like Literary Club, STEM Club, Health and Wellness Club etc.</p>
-                        <div class="flex items-center justify-center sm:justify-start text-xs font-bold text-primary uppercase tracking-wider group/link">Explore Clubs <i data-lucide="arrow-right" class="w-3 h-3 ml-1 transition-transform group-hover/link:translate-x-1"></i></div>
+                        <?php if ($card_tag !== '') : ?><span class="px-2 py-0.5 rounded <?php echo esc_attr( $tag_class ); ?> text-[10px] font-bold uppercase tracking-wide mb-2 inline-block w-fit mx-auto sm:mx-0"><?php echo esc_html( $card_tag ); ?></span><?php endif; ?>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors"><?php echo esc_html( (string) ( $card['title'] ?? '' ) ); ?></h3>
+                        <?php if ( (string) ( $card['description'] ?? '' ) !== '' ) : ?><p class="text-sm text-gray-500 leading-relaxed mb-4"><?php echo esc_html( (string) $card['description'] ); ?></p><?php endif; ?>
+                        <div class="flex items-center justify-center sm:justify-start text-xs font-bold text-primary uppercase tracking-wider group/link"><?php echo esc_html( (string) ( $card_link['title'] ?? 'Explore' ) ); ?> <i data-lucide="arrow-right" class="w-3 h-3 ml-1 transition-transform group-hover/link:translate-x-1"></i></div>
                     </div>
-                </div>
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent/10 to-transparent rounded-bl-full pointer-events-none transition-opacity duration-300 opacity-50 group-hover:opacity-100"></div>
-                    <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
-                    </div>
-                    <div class="flex flex-col justify-center h-full flex-1 w-full text-center sm:text-left z-10">
-                        <span class="px-2 py-0.5 rounded bg-accent/10 text-accent text-[10px] font-bold uppercase tracking-wide mb-2 inline-block w-fit mx-auto sm:mx-0">Excursions</span>
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Field Trips</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Field trips are a popular activity for all students. Kids love to explore new places with their friends. We understand that any trip cannot qualify as a field trip.</p>
-                        <div class="flex items-center justify-center sm:justify-start text-xs font-bold text-primary uppercase tracking-wider group/link">View Gallery <i data-lucide="arrow-right" class="w-3 h-3 ml-1 transition-transform group-hover/link:translate-x-1"></i></div>
-                    </div>
-                </div>
+                </a>
+                <?php endforeach; ?>
             </div>
-            <div class="academics-panel grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in hidden" data-academics-panel="sports">
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1576678927484-cc907957088c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-1 w-full text-center sm:text-left z-10">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Sports</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Swami Vivekananda famously said, &quot;Be strong, my young friends; that is my advice to you. You will be nearer to Heaven through football than through the study of the Gita.&quot;</p>
-                        <div class="text-xs font-bold text-primary uppercase tracking-wider">Explore Sports <i data-lucide="arrow-right" class="w-3 h-3 ml-1 inline"></i></div>
-                    </div>
-                </div>
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-1 w-full text-center sm:text-left z-10">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Fitness &amp; Wellness</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Track and field, yoga, and fitness sessions help students build stamina, discipline, and lifelong healthy habits.</p>
-                        <div class="text-xs font-bold text-primary uppercase tracking-wider">View Programs <i data-lucide="arrow-right" class="w-3 h-3 ml-1 inline"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="academics-panel grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-in hidden" data-academics-panel="events">
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-1 w-full text-center sm:text-left z-10">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Mount Litera Olympiad</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">The Mount Litera Olympiad is an inter-MLZS competition in which students from all MLZS participate to showcase their talent in various fields.</p>
-                        <div class="text-xs font-bold text-primary uppercase tracking-wider">View Highlights <i data-lucide="arrow-right" class="w-3 h-3 ml-1 inline"></i></div>
-                    </div>
-                </div>
-                <div class="group relative flex flex-col sm:flex-row items-center sm:items-start gap-6 p-6 rounded-2xl bg-white border border-gray-100 shadow-soft hover:shadow-xl hover:border-primary/20 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer overflow-hidden">
-                    <div class="relative shrink-0 overflow-hidden rounded-xl w-full sm:w-40 h-48 sm:h-40 shadow-inner">
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-110" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"></div>
-                    </div>
-                    <div class="flex flex-col justify-center flex-1 w-full text-center sm:text-left z-10">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">Events and Celebrations</h3>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-4">Mount Litera Zee Schools organise various events and celebrations throughout the year. The chief of them is the Annual Function.</p>
-                        <div class="text-xs font-bold text-primary uppercase tracking-wider">Explore Gallery <i data-lucide="arrow-right" class="w-3 h-3 ml-1 inline"></i></div>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
             <div class="flex justify-center md:justify-start pt-4">
-                <a class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-800 hover:text-primary hover:border-primary/30 hover:shadow-md transition-all group" href="<?php echo esc_url($home_url); ?>#">
-                    View All Activities
+                <a class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-gray-200 text-sm font-semibold text-gray-800 hover:text-primary hover:border-primary/30 hover:shadow-md transition-all group" href="<?php echo esc_url( (string) ( $academics_cta['url'] ?? '#' ) ); ?>"<?php echo !empty($academics_cta['target']) ? ' target="' . esc_attr( (string) $academics_cta['target'] ) . '"' : ''; ?>>
+                    <?php echo esc_html( (string) ( $academics_cta['title'] ?? 'View All Activities' ) ); ?>
                     <i data-lucide="arrow-right" class="size-5 group-hover:translate-x-1 transition-transform"></i>
                 </a>
             </div>

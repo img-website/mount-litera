@@ -1,0 +1,78 @@
+/**
+ * MLZS Theme - Custom styles (scrollbar, Swiper overrides)
+ */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3D348B;
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Swiper Custom Styles - Approach section */
+.approach-thumbs-swiper .swiper-slide-thumb-active button > div:first-child {
+    background: linear-gradient(to bottom right, #3D348B, #2d2566);
+    border-color: rgba(247, 184, 1, 0.5);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(61, 52, 139, 0.5);
+}
+.approach-thumbs-swiper .swiper-slide-thumb-active button > div:first-child i {
+    color: white;
+}
+.approach-thumbs-swiper .swiper-slide-thumb-active button > span {
+    color: white;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(247, 184, 1, 0.5);
+}
+.approach-thumbs-swiper .swiper-slide-thumb-active button::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #F7B801;
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 10px #F7B801;
+}
+.approach-nav-prev::after,
+.approach-nav-next::after {
+    display: none;
+}
+.approach-pagination {
+    position: relative !important;
+    bottom: auto !important;
+}
+.approach-pagination .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #475569;
+    opacity: 1;
+    transition: all 0.3s;
+}
+.approach-pagination .swiper-pagination-bullet:hover {
+    background: #64748b;
+}
+.approach-pagination .swiper-pagination-bullet-active {
+    width: 32px;
+    background: #F7B801;
+    box-shadow: 0 0 8px rgba(247, 184, 1, 0.6);
+    border-radius: 4px;
+}

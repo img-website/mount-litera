@@ -1,5 +1,5 @@
 /**
- * MLZS Theme - Header, menu, Lucide icons, optional Hero Swiper
+ * MLZS Theme - Header, menu, Lucide, Hero Swiper, Approach Swiper, Academics tabs
  */
 (function() {
     'use strict';
@@ -50,9 +50,113 @@
         };
     }
 
+    function initHeroSwiper() {
+        var heroEl = document.querySelector('.hero-swiper-container .swiper.w-full.h-full');
+        if (!heroEl || typeof Swiper === 'undefined') return;
+        new Swiper('.hero-swiper-container .swiper.w-full.h-full', {
+            spaceBetween: 0,
+            slidesPerView: 1,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            effect: 'fade',
+            fadeEffect: { crossFade: true },
+            speed: 1500,
+            allowTouchMove: false,
+        });
+    }
+
+    function initApproachSwipers() {
+        var thumbsEl = document.querySelector('.approach-thumbs-swiper');
+        if (!thumbsEl || typeof Swiper === 'undefined') return;
+
+        var thumbsSwiper = new Swiper('.approach-thumbs-swiper', {
+            spaceBetween: 16,
+            slidesPerView: 4.5,
+            watchSlidesProgress: true,
+            scrollbar: { hide: false },
+            breakpoints: {
+                640: { slidesPerView: 6 },
+                768: { slidesPerView: 7, scrollbar: { hide: true } },
+                1024: { slidesPerView: 8, scrollbar: { hide: true } }
+            },
+        });
+
+        var mainSwiper = new Swiper('.approach-main-swiper', {
+            spaceBetween: 0,
+            slidesPerView: 1,
+            navigation: {
+                nextEl: '.approach-nav-next',
+                prevEl: '.approach-nav-prev',
+            },
+            pagination: {
+                el: '.approach-pagination',
+                clickable: true,
+                renderBullet: function(index, className) {
+                    return '<span class="' + className + '"></span>';
+                },
+            },
+            thumbs: { swiper: thumbsSwiper },
+            on: {
+                slideChange: function() { initLucide(); },
+                init: function() { initLucide(); }
+            }
+        });
+
+        document.querySelectorAll('.approach-nav-prev, .approach-nav-next').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                setTimeout(initLucide, 100);
+            });
+        });
+
+        document.querySelectorAll('.approach-thumbs-swiper button').forEach(function(button, index) {
+            button.addEventListener('click', function() {
+                mainSwiper.slideTo(index);
+            });
+        });
+    }
+
+    function initAcademicsTabs() {
+        var tabs = document.querySelectorAll('.academics-tab');
+        var panels = document.querySelectorAll('.academics-panel');
+        if (!tabs.length || !panels.length) return;
+
+        function setAcademicsTab(activeKey) {
+            tabs.forEach(function(tab) {
+                var key = tab.getAttribute('data-academics-tab');
+                var isActive = key === activeKey;
+                tab.classList.toggle('!bg-gray-900', isActive);
+                tab.classList.toggle('!text-white', isActive);
+                tab.classList.toggle('!shadow-md', isActive);
+                tab.classList.toggle('!font-bold', isActive);
+                tab.classList.toggle('!text-gray-500', !isActive);
+                tab.classList.toggle('!hover:bg-gray-50', !isActive);
+            });
+            panels.forEach(function(panel) {
+                var key = panel.getAttribute('data-academics-panel');
+                panel.classList.toggle('hidden', key !== activeKey);
+            });
+            initLucide();
+        }
+
+        tabs.forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                setAcademicsTab(tab.getAttribute('data-academics-tab'));
+            });
+        });
+
+        var defaultTab = document.querySelector('.academics-tab[data-academics-tab]');
+        setAcademicsTab(defaultTab ? defaultTab.getAttribute('data-academics-tab') : 'fun');
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         initLucide();
         initHeaderScroll();
         initMenuToggle();
+        initHeroSwiper();
+        initApproachSwipers();
+        initAcademicsTabs();
     });
 })();

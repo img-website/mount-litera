@@ -157,13 +157,140 @@ function mlzs_enqueue_assets() {
         true
     );
 
-    // Theme main JS (header scroll, menu toggle, Lucide init, optional Swiper)
+    // Theme main JS (header scroll, menu toggle, Lucide, Hero/Approach Swiper, Academics tabs)
     wp_enqueue_script(
         'mlzs-main',
-        $theme_uri . '/assets/js/main.js',
+        $theme_uri . '/assets/Js/main.js',
         array('swiper-bundle', 'lucide-icons'),
         $theme_version,
         true
     );
 }
 add_action('wp_enqueue_scripts', 'mlzs_enqueue_assets');
+
+/**
+ * ACF Pro: Hero Section field group (shows on Page when Template = Home Page)
+ */
+function mlzs_acf_hero_field_group() {
+    if (!function_exists('acf_add_local_field_group')) {
+        return;
+    }
+    acf_add_local_field_group(array(
+        'key'                   => 'group_mlzs_hero',
+        'title'                 => 'Hero Section',
+        'fields'                => array(
+            array(
+                'key'   => 'field_hero_slides',
+                'label' => __('Hero Slides', 'mlzs'),
+                'name'  => 'hero_slides',
+                'type'  => 'repeater',
+                'instructions' => __('Background images for the hero carousel. Add at least one.', 'mlzs'),
+                'min'   => 1,
+                'layout' => 'block',
+                'button_label' => __('Add Slide', 'mlzs'),
+                'sub_fields' => array(
+                    array(
+                        'key'   => 'field_hero_slide_image',
+                        'label' => __('Slide Image', 'mlzs'),
+                        'name'  => 'slide_image',
+                        'type'  => 'image',
+                        'required' => 1,
+                        'return_format' => 'url',
+                        'preview_size' => 'medium',
+                    ),
+                ),
+            ),
+            array(
+                'key'   => 'field_hero_badge_text',
+                'label' => __('Badge Text', 'mlzs'),
+                'name'  => 'hero_badge_text',
+                'type'  => 'text',
+                'default_value' => 'Admissions Open for 2025-26',
+            ),
+            array(
+                'key'   => 'field_hero_headline_line1',
+                'label' => __('Headline (First Line)', 'mlzs'),
+                'name'  => 'hero_headline_line1',
+                'type'  => 'text',
+                'default_value' => 'Fun. Study. Research.',
+            ),
+            array(
+                'key'   => 'field_hero_headline_highlight',
+                'label' => __('Headline (Highlighted Part)', 'mlzs'),
+                'name'  => 'hero_headline_highlight',
+                'type'  => 'text',
+                'default_value' => 'Innovate. Play',
+            ),
+            array(
+                'key'   => 'field_hero_subheadline',
+                'label' => __('Subheadline', 'mlzs'),
+                'name'  => 'hero_subheadline',
+                'type'  => 'textarea',
+                'default_value' => 'A Great School For A Great Future Of Your Child. Mount Litera Zee School will provide a complete and unique educational experience for the child, preparing the child for a successful life in the contemporary society.',
+                'rows'  => 3,
+            ),
+            array(
+                'key'   => 'field_hero_cta_primary_text',
+                'label' => __('Primary Button Text', 'mlzs'),
+                'name'  => 'hero_cta_primary_text',
+                'type'  => 'text',
+                'default_value' => 'Start Application',
+            ),
+            array(
+                'key'   => 'field_hero_cta_primary_url',
+                'label' => __('Primary Button URL', 'mlzs'),
+                'name'  => 'hero_cta_primary_url',
+                'type'  => 'url',
+                'default_value' => '#',
+            ),
+            array(
+                'key'   => 'field_hero_cta_secondary_text',
+                'label' => __('Secondary Button Text', 'mlzs'),
+                'name'  => 'hero_cta_secondary_text',
+                'type'  => 'text',
+                'default_value' => 'Virtual Tour',
+            ),
+            array(
+                'key'   => 'field_hero_cta_secondary_url',
+                'label' => __('Secondary Button URL', 'mlzs'),
+                'name'  => 'hero_cta_secondary_url',
+                'type'  => 'url',
+                'default_value' => '#',
+            ),
+            array(
+                'key'   => 'field_hero_stats',
+                'label' => __('Stats Row', 'mlzs'),
+                'name'  => 'hero_stats',
+                'type'  => 'repeater',
+                'layout' => 'table',
+                'button_label' => __('Add Stat', 'mlzs'),
+                'sub_fields' => array(
+                    array(
+                        'key'   => 'field_hero_stat_number',
+                        'label' => __('Number / Value', 'mlzs'),
+                        'name'  => 'stat_number',
+                        'type'  => 'text',
+                        'placeholder' => 'e.g. 100%',
+                    ),
+                    array(
+                        'key'   => 'field_hero_stat_label',
+                        'label' => __('Label', 'mlzs'),
+                        'name'  => 'stat_label',
+                        'type'  => 'text',
+                        'placeholder' => 'e.g. University Acceptance',
+                    ),
+                ),
+            ),
+        ),
+        'location' => array(
+            array(
+                array(
+                    'param'    => 'page_template',
+                    'operator' => '==',
+                    'value'    => 'home.php',
+                ),
+            ),
+        ),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_hero_field_group');

@@ -194,13 +194,13 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                     </div>
 
                     <div class="space-y-4">
-                        <div class="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-[1rem] p-6 border border-primary/20">
+                        <div class="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-2xl p-6 border border-primary/20">
                             <p class="text-base sm:text-lg text-slate-700 leading-relaxed">
                                 <?php echo esc_html($wellness_para1); ?>
                             </p>
                         </div>
 
-                        <div class="bg-white rounded-[1rem] p-6 shadow-soft border border-slate-100">
+                        <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100">
                             <p class="text-base sm:text-lg text-slate-700 leading-relaxed">
                                 <?php echo esc_html($wellness_para2); ?>
                             </p>
@@ -209,7 +209,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                 </div>
 
                 <div class="relative">
-                    <div class="rounded-[1rem] overflow-hidden shadow-xl border-4 border-white">
+                    <div class="rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                         <img src="<?php echo esc_url($wellness_image_url); ?>" alt="<?php echo esc_attr($wellness_badge_title); ?>" class="w-full h-[350px] md:h-[400px] object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
                     </div>
@@ -232,7 +232,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 bg-gradient-to-br from-white to-primary/5 rounded-[1rem] p-6 md:p-8 shadow-soft border border-primary/20 relative overflow-hidden">
+                    <div class="lg:col-span-2 bg-gradient-to-br from-white to-primary/5 rounded-2xl p-6 md:p-8 shadow-soft border border-primary/20 relative overflow-hidden">
                         <div class="absolute -right-10 -top-10 w-40 h-40 bg-gradient-to-br from-primary/10 to-transparent rounded-full"></div>
                         <div class="relative z-10">
                             <div class="flex items-center gap-3 mb-6">
@@ -265,7 +265,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                     </div>
 
                     <div class="space-y-6">
-                        <div class="bg-white rounded-[1rem] p-6 shadow-soft border border-slate-100 hover:border-primary/30 transition-all duration-300 hover:-translate-y-2">
+                        <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 hover:border-primary/30 transition-all duration-300 hover:-translate-y-2">
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-light/10 to-accent/10 flex items-center justify-center mb-4">
                                 <i data-lucide="<?php echo esc_attr($feat_nurse_icon); ?>" class="w-6 h-6 text-primary-light"></i>
                             </div>
@@ -275,7 +275,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                             </p>
                         </div>
 
-                        <div class="bg-white rounded-[1rem] p-6 shadow-soft border border-slate-100 hover:border-accent/30 transition-all duration-300 hover:-translate-y-2">
+                        <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 hover:border-accent/30 transition-all duration-300 hover:-translate-y-2">
                             <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-accent/10 to-accent-dark/10 flex items-center justify-center mb-4">
                                 <i data-lucide="<?php echo esc_attr($feat_capacity_icon); ?>" class="w-6 h-6 text-accent"></i>
                             </div>
@@ -290,7 +290,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
 
             <!-- Hygiene & Wellness Section -->
             <div class="mb-16">
-                <div class="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-[1.5rem] p-8 md:p-12 border border-primary/20">
+                <div class="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-3xl p-8 md:p-12 border border-primary/20">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div>
                             <div class="flex items-center gap-3 mb-6">
@@ -353,7 +353,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
                         $gbadge = isset($gitem['badge']) ? (string) $gitem['badge'] : '';
                         $ggrad = isset($gitem['gradient']) && $gitem['gradient'] === 'primary-light' ? 'from-primary-light/50' : 'from-primary/50';
                     ?>
-                    <div class="group relative rounded-[1rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
                         <div class="h-64">
                             <img src="<?php echo esc_url($gimg); ?>" alt="<?php echo esc_attr($gtitle); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                             <div class="absolute inset-0 bg-gradient-to-t <?php echo esc_attr($ggrad); ?> to-transparent"></div>
@@ -371,7 +371,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
             </div>
 
             <!-- Health Protocol CTA -->
-            <div class="bg-gradient-to-r from-primary to-primary-light rounded-[1.5rem] p-6 md:p-8 lg:p-12 text-white">
+            <div class="bg-gradient-to-r from-primary to-primary-light rounded-3xl p-6 md:p-8 lg:p-12 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
                     <div>
                         <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>

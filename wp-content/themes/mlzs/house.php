@@ -192,7 +192,7 @@ if (!function_exists('mlzs_house_block_img_url')) {
                 </div>
 
                 <div class="relative">
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-2xl">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                         <div class="aspect-video relative overflow-hidden">
                             <img src="<?php echo esc_url($intro_image_url); ?>" alt="<?php echo esc_attr($intro_overlay_title); ?>" class="w-full h-full object-cover">
                         </div>
@@ -242,7 +242,7 @@ if (!function_exists('mlzs_house_block_img_url')) {
             ?>
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center <?php echo esc_attr($mb_class); ?>">
                 <div class="<?php echo esc_attr($img_col . ' ' . $order_img); ?>">
-                    <div class="rounded-[1rem] overflow-hidden shadow-xl">
+                    <div class="rounded-2xl overflow-hidden shadow-xl">
                         <div class="aspect-square relative overflow-hidden">
                             <img src="<?php echo esc_url($bimg); ?>" alt="<?php echo esc_attr($bname); ?>" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -324,7 +324,7 @@ if (!function_exists('mlzs_house_block_img_url')) {
                     $ccult   = isset($card['cultural']) ? (string) $card['cultural'] : '0';
                     $pc      = $house_color_classes[$ccolor];
                 ?>
-                <div class="bg-white rounded-[1rem] p-4 sm:p-6 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4 sm:mb-6">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg <?php echo esc_attr($pc['bg']); ?> flex items-center justify-center">

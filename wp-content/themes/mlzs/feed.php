@@ -172,7 +172,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                         <a href="<?php echo esc_url($img_src); ?>"
                            data-fancybox="alumni-gallery"
                            data-caption="<?php echo esc_attr($cap_title . ($cap_sub ? ' - ' . $cap_sub : '')); ?>"
-                           class="group relative overflow-hidden rounded-[1rem] border-2 border-primary/30 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-2<?php echo esc_attr($col_span_class); ?> block">
+                           class="group relative overflow-hidden rounded-2xl border-2 border-primary/30 hover:border-primary/60 transition-all duration-300 hover:shadow-xl hover:-translate-y-2<?php echo esc_attr($col_span_class); ?> block">
                             <div class="aspect-[4/3] overflow-hidden">
                                 <img src="<?php echo esc_url($img_src); ?>"
                                      alt="<?php echo esc_attr($gal_alt); ?>"
@@ -196,7 +196,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                 <!-- Suggestions Form - Right Side -->
                 <div class="lg:col-span-1">
                     <div class="sticky top-24">
-                        <div class="bg-gradient-to-br from-primary via-primary-dark to-slate-900 rounded-[1rem] p-6 md:p-8 border border-primary/40 shadow-2xl">
+                        <div class="bg-gradient-to-br from-primary via-primary-dark to-slate-900 rounded-2xl p-6 md:p-8 border border-primary/40 shadow-2xl">
                             <div class="mb-6 md:mb-8">
                                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 mb-4">
                                     <i data-lucide="<?php echo esc_attr($form_icon); ?>" class="w-4 h-4 <?php echo esc_attr($form_badge_color); ?>"></i>
@@ -217,7 +217,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                                            name="name"
                                            placeholder="Your Name..."
                                            required
-                                           class="w-full bg-white/10 border border-white/20 rounded-[0.75rem] pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
+                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
                                            aria-required="true">
                                 </div>
                                 <!-- Email Field -->
@@ -228,7 +228,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                                            name="email"
                                            placeholder="Your email..."
                                            required
-                                           class="w-full bg-white/10 border border-white/20 rounded-[0.75rem] pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
+                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
                                            aria-required="true">
                                 </div>
                                 <!-- Class Field -->
@@ -239,7 +239,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                                            name="phone"
                                            placeholder="Class..."
                                            required
-                                           class="w-full bg-white/10 border border-white/20 rounded-[0.75rem] pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
+                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
                                            aria-required="true">
                                 </div>
                                 <!-- Message Field -->
@@ -249,14 +249,14 @@ if (!function_exists('mlzs_feed_img_url')) {
                                               name="message"
                                               placeholder="Your suggestions..."
                                               required
-                                              class="w-full bg-white/10 border border-white/20 rounded-[0.75rem] pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm resize-none"
+                                              class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm resize-none"
                                               aria-required="true"></textarea>
                                 </div>
                                 <!-- Submit Button -->
                                 <div class="pt-2">
                                     <button type="submit"
                                             name="submit"
-                                            class="w-full bg-gradient-to-r from-accent to-accent-dark text-white font-bold px-6 py-3 md:px-8 md:py-4 rounded-[0.75rem] hover:shadow-[0_0_30px_rgba(247,184,1,0.4)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+                                            class="w-full bg-gradient-to-r from-accent to-accent-dark text-white font-bold px-6 py-3 md:px-8 md:py-4 rounded-xl hover:shadow-[0_0_30px_rgba(247,184,1,0.4)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group/btn">
                                         <span><?php echo esc_html($form_submit_text); ?></span>
                                         <i data-lucide="<?php echo esc_attr($form_submit_icon); ?>" class="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform"></i>
                                     </button>
@@ -280,7 +280,7 @@ if (!function_exists('mlzs_feed_img_url')) {
                                 $num_color = isset($stat['number_color']) && trim((string) $stat['number_color']) !== '' ? trim($stat['number_color']) : (isset($default_stat_number_colors[$idx]) ? $default_stat_number_colors[$idx] : 'text-primary');
                                 $lbl_color = isset($stat['label_color']) && trim((string) $stat['label_color']) !== '' ? trim($stat['label_color']) : $default_stat_label_color;
                             ?>
-                            <div class="bg-white rounded-[0.75rem] p-3 sm:p-4 text-center shadow-soft border border-slate-100">
+                            <div class="bg-white rounded-xl p-3 sm:p-4 text-center shadow-soft border border-slate-100">
                                 <div class="text-base sm:text-lg md:text-xl font-bold <?php echo esc_attr($num_color); ?> mb-1"><?php echo esc_html($num); ?></div>
                                 <div class="text-xs font-medium <?php echo esc_attr($lbl_color); ?>"><?php echo esc_html($lbl); ?></div>
                             </div>

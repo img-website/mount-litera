@@ -182,7 +182,7 @@ function mlzs_library_gallery_img_url($row) {
                     </p>
                 </div>
                 <div class="relative">
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-2xl">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
                         <img src="<?php echo esc_url($overview_image_url); ?>"
                              alt="School Library Interior"
                              class="w-full h-[350px] md:h-[400px] object-cover">
@@ -217,7 +217,7 @@ function mlzs_library_gallery_img_url($row) {
                         $icon_text = $f_style === 'accent' ? 'text-accent' : ($f_style === 'primary-light' ? 'text-primary-light' : 'text-primary');
                         $icon_hover = $f_style === 'accent' ? 'group-hover:bg-accent group-hover:text-white' : ($f_style === 'primary-light' ? 'group-hover:bg-primary-light group-hover:text-white' : 'group-hover:bg-primary group-hover:text-white');
                     ?>
-                    <div class="group bg-white rounded-[1rem] p-6 shadow-soft hover:shadow-xl border border-border-light <?php echo esc_attr($hover_border); ?> transition-all duration-300 hover:-translate-y-2">
+                    <div class="group bg-white rounded-2xl p-6 shadow-soft hover:shadow-xl border border-border-light <?php echo esc_attr($hover_border); ?> transition-all duration-300 hover:-translate-y-2">
                         <div class="w-12 h-12 rounded-xl <?php echo esc_attr($icon_bg); ?> flex items-center justify-center mb-4 <?php echo esc_attr($icon_hover); ?> transition-colors">
                             <i data-lucide="<?php echo esc_attr($f_icon); ?>" class="w-6 h-6 <?php echo esc_attr($icon_text); ?> group-hover:text-white"></i>
                         </div>
@@ -247,7 +247,7 @@ function mlzs_library_gallery_img_url($row) {
                         if ($gimg === '') $gimg = 'https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
                         $galt = (isset($gitem['image']) && is_array($gitem['image']) && isset($gitem['image']['alt']) && trim((string) $gitem['image']['alt']) !== '') ? trim((string) $gitem['image']['alt']) : 'Library';
                     ?>
-                    <div class="group relative rounded-[1rem] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
                         <div class="h-64">
                             <img src="<?php echo esc_url($gimg); ?>"
                                  alt="<?php echo esc_attr($galt); ?>"
@@ -259,7 +259,7 @@ function mlzs_library_gallery_img_url($row) {
             </div>
 
             <!-- CTA Section -->
-            <div class="mt-16 bg-gradient-to-r from-primary/10 to-accent/10 rounded-[1.5rem] p-8 md:p-12 border border-primary/20">
+            <div class="mt-16 bg-gradient-to-r from-primary/10 to-accent/10 rounded-3xl p-8 md:p-12 border border-primary/20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div>
                         <h3 class="text-2xl sm:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($cta_heading); ?></h3>

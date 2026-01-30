@@ -291,7 +291,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12">
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100">
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100">
                         <div class="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
                             <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($overview_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary"></i>
@@ -326,11 +326,11 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                 </div>
                 <div class="space-y-6 sm:space-y-8">
                     <?php if ($overview_img_url) : ?>
-                    <div class="rounded-[1rem] overflow-hidden shadow-soft border border-gray-100 bg-gray-100">
+                    <div class="rounded-2xl overflow-hidden shadow-soft border border-gray-100 bg-gray-100">
                         <img src="<?php echo esc_url($overview_img_url); ?>" alt="<?php echo esc_attr($overview_img_alt); ?>" class="w-full h-auto object-cover aspect-[4/3] sm:aspect-video">
                     </div>
                     <?php endif; ?>
-                    <div class="bg-white rounded-[1rem] p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
                         <div class="mb-3 sm:mb-4 flex items-center justify-between">
                             <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($video1_title); ?></h3>
                             <i data-lucide="<?php echo esc_attr($video1_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
@@ -359,7 +359,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-[1rem] p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
+                    <div class="bg-white rounded-2xl p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
                         <div class="mb-3 sm:mb-4 flex items-center justify-between">
                             <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($video2_title); ?></h3>
                             <i data-lucide="<?php echo esc_attr($video2_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
@@ -417,7 +417,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                     $g_label = isset($g['label']) ? (string) $g['label'] : '';
                     $g_caption = isset($g['caption']) ? (string) $g['caption'] : '';
                 ?>
-                <div class="group relative overflow-hidden rounded-[1rem] bg-white shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="group relative overflow-hidden rounded-2xl bg-white shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div class="aspect-[4/3] overflow-hidden bg-gray-100">
                         <img src="<?php echo esc_url($g_url); ?>" alt="<?php echo esc_attr($g_alt); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
@@ -479,7 +479,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                     $f_icon_text = $f_style === 'accent' ? 'text-accent' : ($f_style === 'primary-light' ? 'text-primary-light' : ($f_style === 'accent-dark' ? 'text-accent-dark' : 'text-primary'));
                     $f_hover = $f_style === 'accent' ? 'group-hover:bg-accent' : ($f_style === 'primary-light' ? 'group-hover:bg-primary-light' : ($f_style === 'accent-dark' ? 'group-hover:bg-accent-dark' : 'group-hover:bg-primary'));
                 ?>
-                <div class="bg-gradient-to-br <?php echo esc_attr($f_from); ?> rounded-[1rem] p-4 sm:p-5 md:p-6 border <?php echo esc_attr($f_border); ?> transition-all group">
+                <div class="bg-gradient-to-br <?php echo esc_attr($f_from); ?> rounded-2xl p-4 sm:p-5 md:p-6 border <?php echo esc_attr($f_border); ?> transition-all group">
                     <div class="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl <?php echo esc_attr($f_icon_bg); ?> flex items-center justify-center mb-3 sm:mb-4 <?php echo esc_attr($f_hover); ?> group-hover:text-white transition-colors">
                         <i data-lucide="<?php echo esc_attr($f_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 <?php echo esc_attr($f_icon_text); ?> group-hover:text-white"></i>
                     </div>

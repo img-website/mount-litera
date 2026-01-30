@@ -187,7 +187,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                 <div class="lg:w-1/2">
                     <div class="relative">
                         <div class="absolute -top-6 -right-6 w-72 h-72 bg-secondary/20 rounded-full blur-2xl"></div>
-                        <div class="relative bg-white/10 backdrop-blur-md rounded-[1rem] p-8 border border-white/20 shadow-2xl">
+                        <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
                             <div class="grid grid-cols-2 gap-6">
                                 <?php foreach ($hero_cards as $card) :
                                     $c_icon = isset($card['icon']) ? trim((string) $card['icon']) : 'brain';
@@ -223,7 +223,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="relative bg-gradient-to-br from-primary-light/10 to-secondary/10 rounded-[1rem] p-8 border border-primary/20 shadow-soft">
+                    <div class="relative bg-gradient-to-br from-primary-light/10 to-secondary/10 rounded-2xl p-8 border border-primary/20 shadow-soft">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($intro_mantra_icon); ?>" class="w-7 h-7 text-primary"></i>
@@ -264,7 +264,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     $k_text = $k_style === 'secondary' ? 'text-secondary' : ($k_style === 'accent' ? 'text-accent' : ($k_style === 'primary-light' ? 'text-primary-light' : 'text-primary'));
                     $k_hover = $k_style === 'secondary' ? 'group-hover:bg-secondary' : ($k_style === 'accent' ? 'group-hover:bg-accent' : ($k_style === 'primary-light' ? 'group-hover:bg-primary-light' : 'group-hover:bg-primary'));
                 ?>
-                <div class="group bg-white rounded-[1rem] p-8 border border-slate-200 shadow-soft hover:shadow-xl hover:border-primary/30 transition-all duration-300">
+                <div class="group bg-white rounded-2xl p-8 border border-slate-200 shadow-soft hover:shadow-xl hover:border-primary/30 transition-all duration-300">
                     <div class="w-16 h-16 rounded-xl <?php echo esc_attr($k_bg); ?> flex items-center justify-center mb-6 <?php echo esc_attr($k_hover); ?> group-hover:text-white transition-colors">
                         <i data-lucide="<?php echo esc_attr($k_icon); ?>" class="w-8 h-8 <?php echo esc_attr($k_text); ?> group-hover:text-white"></i>
                     </div>
@@ -303,7 +303,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     $s_tags = isset($item['tags']) ? (string) $item['tags'] : '';
                     $s_tags_arr = $s_tags !== '' ? array_map('trim', explode(',', $s_tags)) : array();
                 ?>
-                <div class="group bg-white/10 backdrop-blur-md rounded-[1rem] p-8 border border-white/20 hover:border-white/40 transition-all duration-300">
+                <div class="group bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:border-white/40 transition-all duration-300">
                     <div class="flex items-start gap-6">
                         <div class="w-14 h-14 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
                             <i data-lucide="<?php echo esc_attr($s_icon); ?>" class="w-7 h-7 text-white"></i>
@@ -361,7 +361,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-[1rem] p-8 text-white shadow-xl">
+                    <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 text-white shadow-xl">
                         <div class="text-center mb-8">
                             <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-4">
                                 <i data-lucide="<?php echo esc_attr($risk_leader_icon); ?>" class="w-10 h-10 text-secondary"></i>

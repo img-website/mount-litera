@@ -261,7 +261,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
                 <div class="space-y-8">
-                    <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
                         <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($intro_left_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
@@ -273,7 +273,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             <p><?php echo esc_html($intro_left_para2); ?></p>
                         </div>
                     </div>
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-xl group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl group">
                         <div class="aspect-[4/3] relative overflow-hidden">
                             <img src="<?php echo esc_url($intro_left_img_url); ?>" alt="<?php echo esc_attr($intro_left_alt); ?>" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -289,7 +289,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     </div>
                 </div>
                 <div class="space-y-8">
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-xl group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl group">
                         <div class="aspect-[4/3] relative overflow-hidden">
                             <img src="<?php echo esc_url($intro_right_img_url); ?>" alt="<?php echo esc_attr($intro_right_alt); ?>" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -303,7 +303,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
                         <div class="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-accent/10 flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($intro_right_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-accent"></i>
@@ -344,7 +344,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     $f_border = $f_style === 'accent' ? 'hover:border-accent/30' : ($f_style === 'primary-light' ? 'hover:border-primary-light/30' : 'hover:border-primary/30');
                     $f_grad = $f_style === 'accent' ? 'from-accent to-accent-dark' : ($f_style === 'primary-light' ? 'from-primary-light to-slate-blue' : 'from-primary to-primary-dark');
                 ?>
-                <div class="group relative bg-gradient-to-b from-white to-slate-50 rounded-[1rem] p-4 sm:p-6 md:p-8 border border-slate-200 <?php echo esc_attr($f_border); ?> transition-all duration-300 hover:-translate-y-2 hover:shadow-xl overflow-hidden">
+                <div class="group relative bg-gradient-to-b from-white to-slate-50 rounded-2xl p-4 sm:p-6 md:p-8 border border-slate-200 <?php echo esc_attr($f_border); ?> transition-all duration-300 hover:-translate-y-2 hover:shadow-xl overflow-hidden">
                     <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-primary/5 group-hover:bg-primary/10 transition-colors duration-300"></div>
                     <div class="relative z-10">
                         <div class="w-12 h-12 sm:w-14 sm:h-16 rounded-xl bg-gradient-to-br <?php echo esc_attr($f_grad); ?> flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -380,7 +380,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             $u_bg = $u_style === 'blue' ? 'bg-blue-100' : ($u_style === 'purple' ? 'bg-purple-100' : 'bg-green-100');
                             $u_text = $u_style === 'blue' ? 'text-blue-600' : ($u_style === 'purple' ? 'text-purple-600' : 'text-green-600');
                         ?>
-                        <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-[1rem] border border-slate-200 shadow-soft hover:shadow-md transition-all">
+                        <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-white rounded-2xl border border-slate-200 shadow-soft hover:shadow-md transition-all">
                             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg <?php echo esc_attr($u_bg); ?> flex items-center justify-center flex-shrink-0">
                                 <i data-lucide="<?php echo esc_attr($u_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 <?php echo esc_attr($u_text); ?>"></i>
                             </div>
@@ -393,7 +393,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     </div>
                 </div>
                 <div class="relative">
-                    <div class="bg-gradient-to-br from-primary to-primary-dark rounded-[1rem] p-4 sm:p-6 md:p-8 text-white relative overflow-hidden">
+                    <div class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-4 sm:p-6 md:p-8 text-white relative overflow-hidden">
                         <div class="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
                         <div class="relative z-10">
                             <div class="size-16 shrink-0 sm:w-20 sm:h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6 sm:mb-8">
@@ -462,7 +462,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                 </div>
                 <?php endforeach; ?>
             </div>
-            <div class="mt-8 sm:mt-12 bg-gradient-to-r from-primary/5 to-accent/5 rounded-[1rem] p-4 sm:p-6 md:p-8 border border-primary/10">
+            <div class="mt-8 sm:mt-12 bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-4 sm:p-6 md:p-8 border border-primary/10">
                 <div class="flex flex-col md:flex-row items-center gap-4 sm:gap-6">
                     <div class="size-16 shrink-0 sm:w-20 sm:h-20 rounded-full bg-white flex items-center justify-center shadow-lg">
                         <i data-lucide="refresh-cw" class="size-8 sm:size-10 text-primary"></i>

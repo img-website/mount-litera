@@ -159,9 +159,9 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
         <div class="max-w-7xl mx-auto">
             <!-- First Row -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12 md:mb-16">
-                <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <h3 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
-                        <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-[0.5rem] bg-primary/10 flex items-center justify-center">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($student_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
                         </div>
                         <?php echo esc_html($student_title); ?>
@@ -170,7 +170,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                         <?php echo wp_kses_post($student_content); ?>
                     </div>
                 </div>
-                <div class="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-gray-100 to-gray-200 shadow-soft border border-gray-100 group">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-soft border border-gray-100 group">
                     <img src="<?php echo esc_url($center_image_url); ?>" alt="<?php echo esc_attr($center_caption); ?>" class="size-full object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-4 sm:p-6">
                         <div class="text-white">
@@ -178,9 +178,9 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <h3 class="text-xl sm:text-2xl font-bold text-primary-light mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
-                        <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-[0.5rem] bg-primary-light/10 flex items-center justify-center">
+                        <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg bg-primary-light/10 flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($academic_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 text-primary-light"></i>
                         </div>
                         <?php echo esc_html($academic_title); ?>
@@ -194,7 +194,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
 
             <!-- Second Row -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4 sm:mb-6">
                         <h3 class="text-xl sm:text-2xl font-bold text-accent"><?php echo esc_html($talents_title); ?></h3>
                         <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
@@ -205,7 +205,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                         <?php echo wp_kses_post($talents_content); ?>
                     </div>
                 </div>
-                <div class="bg-white rounded-[1rem] p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4 sm:mb-6">
                         <h3 class="text-xl sm:text-2xl font-bold text-accent-dark"><?php echo esc_html($leadership_title); ?></h3>
                         <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-accent-dark/10 flex items-center justify-center shrink-0">
@@ -216,7 +216,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                         <?php echo wp_kses_post($leadership_content); ?>
                     </div>
                 </div>
-                <div class="relative overflow-hidden rounded-[1rem] bg-gradient-to-br from-gray-100 to-gray-200 shadow-soft border border-gray-100 group">
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 shadow-soft border border-gray-100 group">
                     <img src="<?php echo esc_url($life_image_url); ?>" alt="<?php echo esc_attr($life_title); ?>" class="w-full h-full min-h-[250px] sm:min-h-[300px] object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex flex-col justify-end p-4 sm:p-6">
                         <h3 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2"><?php echo esc_html($life_title); ?></h3>
@@ -250,20 +250,20 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                         $c_title = isset($card['title']) ? (string) $card['title'] : '';
                         $c_desc = isset($card['description']) ? (string) $card['description'] : '';
                         $c_style = isset($card['style']) && trim((string) $card['style']) !== '' ? trim($card['style']) : 'primary';
-                        $card_wrapper = 'bg-gradient-to-br from-primary/5 to-primary/10 rounded-[1rem] p-4 sm:p-5 md:p-6 border border-primary/20 hover:border-primary/40 transition-all group';
-                        $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-[0.75rem] bg-primary/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary group-hover:text-white transition-colors';
+                        $card_wrapper = 'bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-4 sm:p-5 md:p-6 border border-primary/20 hover:border-primary/40 transition-all group';
+                        $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary group-hover:text-white transition-colors';
                         $icon_class = 'w-5 h-5 sm:w-6 sm:h-6 text-primary group-hover:text-white';
                         if ($c_style === 'accent') {
-                            $card_wrapper = 'bg-gradient-to-br from-accent/5 to-accent/10 rounded-[1rem] p-4 sm:p-5 md:p-6 border border-accent/20 hover:border-accent/40 transition-all group';
-                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-[0.75rem] bg-accent/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent group-hover:text-white transition-colors';
+                            $card_wrapper = 'bg-gradient-to-br from-accent/5 to-accent/10 rounded-2xl p-4 sm:p-5 md:p-6 border border-accent/20 hover:border-accent/40 transition-all group';
+                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl bg-accent/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent group-hover:text-white transition-colors';
                             $icon_class = 'w-5 h-5 sm:w-6 sm:h-6 text-accent group-hover:text-white';
                         } elseif ($c_style === 'primary-light') {
-                            $card_wrapper = 'bg-gradient-to-br from-primary-light/5 to-primary-light/10 rounded-[1rem] p-4 sm:p-5 md:p-6 border border-primary-light/20 hover:border-primary-light/40 transition-all group';
-                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-[0.75rem] bg-primary-light/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary-light group-hover:text-white transition-colors';
+                            $card_wrapper = 'bg-gradient-to-br from-primary-light/5 to-primary-light/10 rounded-2xl p-4 sm:p-5 md:p-6 border border-primary-light/20 hover:border-primary-light/40 transition-all group';
+                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl bg-primary-light/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-primary-light group-hover:text-white transition-colors';
                             $icon_class = 'w-5 h-5 sm:w-6 sm:h-6 text-primary-light group-hover:text-white';
                         } elseif ($c_style === 'accent-dark') {
-                            $card_wrapper = 'bg-gradient-to-br from-accent-dark/5 to-accent-dark/10 rounded-[1rem] p-4 sm:p-5 md:p-6 border border-accent-dark/20 hover:border-accent-dark/40 transition-all group';
-                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-[0.75rem] bg-accent-dark/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent-dark group-hover:text-white transition-colors';
+                            $card_wrapper = 'bg-gradient-to-br from-accent-dark/5 to-accent-dark/10 rounded-2xl p-4 sm:p-5 md:p-6 border border-accent-dark/20 hover:border-accent-dark/40 transition-all group';
+                            $icon_wrapper = 'w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-xl bg-accent-dark/20 flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-accent-dark group-hover:text-white transition-colors';
                             $icon_class = 'w-5 h-5 sm:w-6 sm:h-6 text-accent-dark group-hover:text-white';
                         }
                     ?>

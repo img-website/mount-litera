@@ -225,7 +225,7 @@ if (!function_exists('mlzs_lab_img_url')) {
             <!-- Computer Lab -->
             <div id="computer-lab" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-20 scroll-mt-24">
                 <div class="lg:col-span-5 order-1 lg:order-1">
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-2xl group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl group">
                         <div class="aspect-[4/3] relative">
                             <img src="<?php echo esc_url($computer_image_url); ?>" alt="<?php echo esc_attr($computer_title); ?>" class="w-full h-full object-cover">
                         </div>
@@ -261,7 +261,7 @@ if (!function_exists('mlzs_lab_img_url')) {
                 </div>
 
                 <div class="lg:col-span-5 order-1 lg:order-2">
-                    <div class="relative rounded-[1rem] overflow-hidden shadow-2xl group">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl group">
                         <div class="aspect-[4/3] relative">
                             <img src="<?php echo esc_url($science_image_url); ?>" alt="<?php echo esc_attr($science_title); ?>" class="w-full h-full object-cover">
                         </div>
@@ -279,7 +279,7 @@ if (!function_exists('mlzs_lab_img_url')) {
                     $q_para  = isset($card['paragraph']) ? (string) $card['paragraph'] : '';
                     $q_foot  = isset($card['footer_label']) ? (string) $card['footer_label'] : '';
                 ?>
-                <div class="bg-white rounded-[1rem] overflow-hidden border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
+                <div class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300 hover:-translate-y-2">
                     <div class="h-48 relative overflow-hidden">
                         <img src="<?php echo esc_url($q_img); ?>" alt="<?php echo esc_attr($q_title); ?>" class="w-full h-full object-cover">
                     </div>
@@ -319,7 +319,7 @@ if (!function_exists('mlzs_lab_img_url')) {
                         $s_sub   = isset($card['subtitle']) ? (string) $card['subtitle'] : '';
                         $s_para  = isset($card['paragraph']) ? (string) $card['paragraph'] : '';
                     ?>
-                    <div class="group relative bg-white rounded-[1rem] overflow-hidden border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
+                    <div class="group relative bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-soft hover:shadow-lg transition-all duration-300">
                         <div class="h-48 relative overflow-hidden">
                             <img src="<?php echo esc_url($s_img); ?>" alt="<?php echo esc_attr($s_title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         </div>

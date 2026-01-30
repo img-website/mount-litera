@@ -102,12 +102,12 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
         <div class="absolute top-0 right-0 w-48 h-48 bg-accent/10 rounded-full blur-3xl"></div>
         <div class="relative z-10 max-w-7xl mx-auto">
             <div class="text-center text-white">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-6">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-6 animate-fade-in-up">
                     <i data-lucide="shield-check" class="w-5 h-5 text-accent"></i>
                     <span class="text-sm font-semibold uppercase tracking-wider"><?php echo esc_html($hero_badge); ?></span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-                    <?php echo esc_html($hero_headline); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-dark"><?php echo esc_html($hero_highlight); ?></span>
+                    <?php echo esc_html($hero_headline); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame to-tiger-orange"><?php echo esc_html($hero_highlight); ?></span>
                 </h1>
                 <p class="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed"><?php echo esc_html($hero_subtext); ?></p>
             </div>
@@ -115,10 +115,19 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
     </section>
 
     <!-- Safety Philosophy -->
-    <section class="px-4 sm:px-6 lg:px-8 py-12 md:py-16 bg-white">
+    <section class="px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-text-main-light mb-4"><?php echo esc_html($philo_heading); ?></h2>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-text-main-light mb-4">
+                    <?php
+                    $philo_trim = trim($philo_heading);
+                    if (preg_match('/^(.+)\s+Philosophy\s*$/i', $philo_trim, $pm)) {
+                        echo esc_html(trim($pm[1])) . ' <span class="text-primary">Philosophy</span>';
+                    } else {
+                        echo esc_html($philo_trim);
+                    }
+                    ?>
+                </h2>
                 <div class="w-20 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mb-6"></div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start mb-16">
@@ -128,11 +137,11 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         $pc_title = isset($pc['title']) ? (string) $pc['title'] : '';
                         $pc_para = isset($pc['paragraph']) ? (string) $pc['paragraph'] : '';
                         $pc_style = isset($pc['style']) ? $pc['style'] : 'primary';
-                        $pc_bg = $pc_style === 'accent' ? 'from-primary/5 to-accent/5 border-primary/20' : 'shadow-soft border-gray-200';
                         $pc_icon_bg = $pc_style === 'accent' ? 'bg-accent/10' : 'bg-primary/10';
                         $pc_icon_text = $pc_style === 'accent' ? 'text-accent' : 'text-primary';
+                        $pc_card_class = $pc_style === 'accent' ? 'bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-6 md:p-8 border border-primary/20' : 'bg-white rounded-2xl p-6 md:p-8 shadow-soft border border-border-light';
                     ?>
-                    <div class="bg-white rounded-2xl p-6 md:p-8 border <?php echo $pc_style === 'accent' ? 'bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20' : 'shadow-soft border-border-light'; ?>">
+                    <div class="<?php echo esc_attr($pc_card_class); ?>">
                         <div class="flex items-center gap-3 mb-4">
                             <div class="w-12 h-12 rounded-xl <?php echo esc_attr($pc_icon_bg); ?> flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($pc_icon); ?>" class="w-6 h-6 <?php echo esc_attr($pc_icon_text); ?>"></i>
@@ -159,11 +168,20 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <!-- Security Features -->
             <div class="mb-16">
                 <div class="text-center mb-12">
-                    <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($feat_heading); ?></h3>
+                    <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-text-main-light mb-4">
+                        <?php
+                        $feat_trim = trim($feat_heading);
+                        if (preg_match('/^(.+)\s+Features\s*$/i', $feat_trim, $fm)) {
+                            echo esc_html(trim($fm[1])) . ' <span class="text-primary">Features</span>';
+                        } else {
+                            echo esc_html($feat_trim);
+                        }
+                        ?>
+                    </h3>
                     <p class="text-base sm:text-lg text-text-secondary-light max-w-2xl mx-auto"><?php echo esc_html($feat_subtext); ?></p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <?php foreach ($feat_list as $f) :
+                    <?php foreach ($feat_list as $fi => $f) :
                         $f_icon = isset($f['icon']) ? trim((string) $f['icon']) : 'clock';
                         $f_title = isset($f['title']) ? (string) $f['title'] : '';
                         $f_para = isset($f['paragraph']) ? (string) $f['paragraph'] : '';
@@ -171,10 +189,12 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         $f_bg = $f_style === 'accent' ? 'bg-accent/10' : ($f_style === 'primary-light' ? 'bg-primary-light/10' : 'bg-primary/10');
                         $f_text = $f_style === 'accent' ? 'text-accent' : ($f_style === 'primary-light' ? 'text-primary-light' : 'text-primary');
                         $f_border = $f_style === 'accent' ? 'hover:border-accent/30' : ($f_style === 'primary-light' ? 'hover:border-primary-light/30' : 'hover:border-primary/30');
+                        $f_hover_bg = $f_style === 'accent' ? 'group-hover:bg-accent' : ($f_style === 'primary-light' ? 'group-hover:bg-primary-light' : 'group-hover:bg-primary');
+                        $f_col_span = ($fi === 6) ? ' md:col-span-2 lg:col-span-1' : '';
                     ?>
-                    <div class="group bg-white rounded-2xl p-6 shadow-soft hover:shadow-xl border border-border-light <?php echo esc_attr($f_border); ?> transition-all duration-300 hover:-translate-y-2">
-                        <div class="w-12 h-12 rounded-xl <?php echo esc_attr($f_bg); ?> flex items-center justify-center mb-4 group-hover:bg-opacity-100 transition-colors">
-                            <i data-lucide="<?php echo esc_attr($f_icon); ?>" class="w-6 h-6 <?php echo esc_attr($f_text); ?>"></i>
+                    <div class="group bg-white rounded-2xl p-6 shadow-soft hover:shadow-xl border border-border-light <?php echo esc_attr($f_border . $f_col_span); ?> transition-all duration-300 hover:-translate-y-2">
+                        <div class="w-12 h-12 rounded-xl <?php echo esc_attr($f_bg); ?> flex items-center justify-center mb-4 <?php echo esc_attr($f_hover_bg); ?> group-hover:text-white transition-colors">
+                            <i data-lucide="<?php echo esc_attr($f_icon); ?>" class="w-6 h-6 <?php echo esc_attr($f_text); ?> group-hover:text-white"></i>
                         </div>
                         <h4 class="text-lg sm:text-xl font-bold text-text-main-light mb-3"><?php echo esc_html($f_title); ?></h4>
                         <p class="text-sm sm:text-base text-text-secondary-light"><?php echo esc_html($f_para); ?></p>

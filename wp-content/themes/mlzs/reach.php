@@ -79,12 +79,12 @@ $transport = (is_array($transport) && count($transport) >= 3) ? $transport : $de
         <div class="absolute bottom-0 left-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
         <div class="relative z-10 max-w-7xl mx-auto">
             <div class="text-center text-white">
-                <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-4 sm:mb-6">
+                <div class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white/20 backdrop-blur-md border border-white/30 mb-4 sm:mb-6 animate-fade-in-up">
                     <i data-lucide="map-pin" class="w-4 h-4 sm:w-5 sm:h-5 text-accent"></i>
                     <span class="text-xs sm:text-sm font-semibold uppercase tracking-wider"><?php echo esc_html($hero_badge); ?></span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-                    <?php echo esc_html($hero_headline); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-dark"><?php echo esc_html($hero_highlight); ?></span>
+                    <?php echo esc_html($hero_headline); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame to-tiger-orange"><?php echo esc_html($hero_highlight); ?></span>
                 </h1>
                 <p class="text-sm sm:text-base md:text-lg lg:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed"><?php echo esc_html($hero_subtext); ?></p>
             </div>
@@ -164,12 +164,16 @@ $transport = (is_array($transport) && count($transport) >= 3) ? $transport : $de
                                     <h2 class="text-base sm:text-lg md:text-xl font-bold <?php echo esc_attr($oicontext); ?>"><?php echo esc_html($ot); ?></h2>
                                 </div>
                                 <div class="space-y-4">
-                                    <?php if ($oa !== '') : ?>
+                                    <?php
+                                    $o_text = $os === 'primary-light' ? 'text-xs sm:text-sm' : 'text-sm sm:text-base';
+                                    if ($oa !== '') : ?>
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-full <?php echo esc_attr($oicon); ?> flex items-center justify-center shrink-0">
                                             <i data-lucide="map-pin" class="w-4 h-4 <?php echo esc_attr($oicontext); ?>"></i>
                                         </div>
-                                        <p class="text-sm sm:text-base text-text-secondary-light"><?php echo nl2br(esc_html($oa)); ?></p>
+                                        <div>
+                                            <p class="<?php echo esc_attr($o_text); ?> text-text-secondary-light"><?php echo nl2br(esc_html($oa)); ?></p>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
                                     <?php if ($op !== '') : ?>
@@ -177,17 +181,25 @@ $transport = (is_array($transport) && count($transport) >= 3) ? $transport : $de
                                         <div class="w-8 h-8 rounded-full <?php echo esc_attr($oicon); ?> flex items-center justify-center shrink-0">
                                             <i data-lucide="phone" class="w-4 h-4 <?php echo esc_attr($oicontext); ?>"></i>
                                         </div>
-                                        <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $op)); ?>" class="text-sm sm:text-base text-text-secondary-light hover:<?php echo esc_attr($oicontext); ?> transition-colors"><?php echo esc_html($op); ?></a>
+                                        <div>
+                                            <a href="tel:<?php echo esc_attr(preg_replace('/\s+/', '', $op)); ?>" class="<?php echo esc_attr($o_text); ?> text-text-secondary-light hover:<?php echo esc_attr($oicontext); ?> transition-colors"><?php echo esc_html($op); ?></a>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
-                                    <?php if ($oe !== '') : foreach (array_filter(array_map('trim', explode("\n", $oe))) as $em) : ?>
+                                    <?php if ($oe !== '') : $o_emails = array_filter(array_map('trim', explode("\n", $oe))); ?>
                                     <div class="flex items-start gap-3">
                                         <div class="w-8 h-8 rounded-full <?php echo esc_attr($oicon); ?> flex items-center justify-center shrink-0">
                                             <i data-lucide="mail" class="w-4 h-4 <?php echo esc_attr($oicontext); ?>"></i>
                                         </div>
-                                        <a href="mailto:<?php echo esc_attr($em); ?>" class="text-xs sm:text-sm text-text-secondary-light hover:<?php echo esc_attr($oicontext); ?> transition-colors"><?php echo esc_html($em); ?></a>
+                                        <div>
+                                            <div class="space-y-1">
+                                                <?php foreach ($o_emails as $em) : ?>
+                                                <a href="mailto:<?php echo esc_attr($em); ?>" class="block <?php echo esc_attr($o_text); ?> text-text-secondary-light hover:<?php echo esc_attr($oicontext); ?> transition-colors"><?php echo esc_html($em); ?></a>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <?php endforeach; endif; ?>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <?php endforeach; ?>

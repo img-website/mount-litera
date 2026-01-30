@@ -332,6 +332,16 @@ function mlzs_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'mlzs_enqueue_assets');
 
 /**
+ * Set ACF Google Maps API key from wp-config constant (for Reach page map field and any Google Map fields).
+ */
+function mlzs_acf_google_maps_api_key() {
+    if (defined('MLZS_GOOGLE_MAPS_API_KEY') && function_exists('acf_update_setting')) {
+        acf_update_setting('google_api_key', constant('MLZS_GOOGLE_MAPS_API_KEY'));
+    }
+}
+add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);
+
+/**
  * ACF Pro: Home Page Sections – Hero, Welcome, etc. (section-wise tabs when editing Home page)
  */
 function mlzs_acf_hero_field_group() {
@@ -2797,6 +2807,112 @@ function mlzs_acf_principal_field_group() {
     ));
 }
 add_action('acf/init', 'mlzs_acf_principal_field_group');
+
+/**
+ * ACF Pro: Reach Us Page – Hero, Contact & Location, Quick Actions, Map, Transportation
+ */
+function mlzs_acf_reach_field_group() {
+    if (!function_exists('acf_add_local_field_group')) return;
+    acf_add_local_field_group(array(
+        'key' => 'group_mlzs_reach',
+        'title' => __('Reach Us Page Sections', 'mlzs'),
+        'fields' => array(
+            array('key' => 'field_reach_tab_hero', 'label' => __('Hero', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_reach_hero_badge', 'label' => __('Badge Text', 'mlzs'), 'name' => 'reach_hero_badge', 'type' => 'text', 'default_value' => 'Get in Touch'),
+            array('key' => 'field_reach_hero_headline', 'label' => __('Headline', 'mlzs'), 'name' => 'reach_hero_headline', 'type' => 'text', 'default_value' => 'Reach'),
+            array('key' => 'field_reach_hero_highlight', 'label' => __('Headline (highlighted)', 'mlzs'), 'name' => 'reach_hero_highlight', 'type' => 'text', 'default_value' => 'Us'),
+            array('key' => 'field_reach_hero_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'reach_hero_subtext', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Connect with us at our campus or city offices. We\'re here to assist you with admissions, queries, and more.'),
+            array('key' => 'field_reach_tab_contact', 'label' => __('Contact & Location', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_reach_bg_image', 'label' => __('Section Background Image', 'mlzs'), 'name' => 'reach_bg_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_reach_campus_title', 'label' => __('Main Campus Title', 'mlzs'), 'name' => 'reach_campus_title', 'type' => 'text', 'default_value' => 'Main Campus'),
+            array('key' => 'field_reach_campus_address', 'label' => __('Campus Address', 'mlzs'), 'name' => 'reach_campus_address', 'type' => 'textarea', 'rows' => 4),
+            array('key' => 'field_reach_campus_phone', 'label' => __('Campus Phone', 'mlzs'), 'name' => 'reach_campus_phone', 'type' => 'text'),
+            array('key' => 'field_reach_campus_emails', 'label' => __('Campus Emails (one per line)', 'mlzs'), 'name' => 'reach_campus_emails', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_reach_city_offices', 'label' => __('City Offices (2)', 'mlzs'), 'name' => 'reach_city_offices', 'type' => 'repeater', 'layout' => 'block', 'min' => 2, 'max' => 2, 'button_label' => __('Add Office', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_reach_office_title', 'label' => __('Office Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_reach_office_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'building'),
+                array('key' => 'field_reach_office_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'accent'),
+                array('key' => 'field_reach_office_address', 'label' => __('Address', 'mlzs'), 'name' => 'address', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_reach_office_phone', 'label' => __('Phone', 'mlzs'), 'name' => 'phone', 'type' => 'text'),
+                array('key' => 'field_reach_office_emails', 'label' => __('Emails (one per line)', 'mlzs'), 'name' => 'emails', 'type' => 'textarea', 'rows' => 2),
+            )),
+            array('key' => 'field_reach_quick_cards', 'label' => __('Quick Action Cards (4)', 'mlzs'), 'name' => 'reach_quick_cards', 'type' => 'repeater', 'layout' => 'row', 'min' => 4, 'max' => 4, 'button_label' => __('Add Card', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_reach_qc_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'phone-call'),
+                array('key' => 'field_reach_qc_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_reach_qc_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'subtext', 'type' => 'text'),
+                array('key' => 'field_reach_qc_link', 'label' => __('Link or Text', 'mlzs'), 'name' => 'link', 'type' => 'link', 'return_format' => 'array'),
+                array('key' => 'field_reach_qc_style', 'label' => __('Color Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light', 'accent-dark' => 'Accent Dark'), 'default_value' => 'primary'),
+            )),
+            array('key' => 'field_reach_map_heading', 'label' => __('Map Section Heading', 'mlzs'), 'name' => 'reach_map_heading', 'type' => 'text', 'default_value' => 'View on Map'),
+            array('key' => 'field_reach_map_subtext', 'label' => __('Map Subtext', 'mlzs'), 'name' => 'reach_map_subtext', 'type' => 'text', 'default_value' => 'Find our campus location easily. Click for directions.'),
+            array('key' => 'field_reach_map', 'label' => __('Campus Location (Map)', 'mlzs'), 'name' => 'reach_map', 'type' => 'google_map', 'instructions' => __('Search and select the campus location. Address will be used for the map bar and copy; embed and Get Directions link are generated automatically.', 'mlzs'), 'center_lat' => '27.6371647', 'center_lng' => '76.6359878', 'zoom' => 15, 'height' => 400),
+            array('key' => 'field_reach_transport', 'label' => __('Transportation (3)', 'mlzs'), 'name' => 'reach_transport', 'type' => 'repeater', 'layout' => 'row', 'min' => 3, 'max' => 3, 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_reach_trans_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'car'),
+                array('key' => 'field_reach_trans_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_reach_trans_para', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_reach_trans_style', 'label' => __('Color Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'reach.php'))),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_reach_field_group');
+
+/**
+ * ACF Pro: Safety & Security Page – Hero, Philosophy, Features, CTA
+ */
+function mlzs_acf_security_field_group() {
+    if (!function_exists('acf_add_local_field_group')) return;
+    acf_add_local_field_group(array(
+        'key' => 'group_mlzs_security',
+        'title' => __('Safety & Security Page Sections', 'mlzs'),
+        'fields' => array(
+            array('key' => 'field_sec_tab_hero', 'label' => __('Hero', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_sec_hero_badge', 'label' => __('Badge Text', 'mlzs'), 'name' => 'security_hero_badge', 'type' => 'text', 'default_value' => 'Priority #1'),
+            array('key' => 'field_sec_hero_headline', 'label' => __('Headline', 'mlzs'), 'name' => 'security_hero_headline', 'type' => 'text', 'default_value' => 'Safety &'),
+            array('key' => 'field_sec_hero_highlight', 'label' => __('Headline (highlighted)', 'mlzs'), 'name' => 'security_hero_highlight', 'type' => 'text', 'default_value' => 'Security'),
+            array('key' => 'field_sec_hero_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'security_hero_subtext', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Ensuring a protected environment where every child feels secure to learn, grow, and thrive'),
+            array('key' => 'field_sec_tab_philosophy', 'label' => __('Safety Philosophy', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_sec_philo_heading', 'label' => __('Section Heading', 'mlzs'), 'name' => 'security_philo_heading', 'type' => 'text', 'default_value' => 'Our Safety Philosophy'),
+            array('key' => 'field_sec_philo_cards', 'label' => __('Philosophy Cards (2)', 'mlzs'), 'name' => 'security_philo_cards', 'type' => 'repeater', 'layout' => 'block', 'min' => 2, 'max' => 2, 'button_label' => __('Add Card', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_sec_philo_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'heart'),
+                array('key' => 'field_sec_philo_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_sec_philo_para', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 4),
+                array('key' => 'field_sec_philo_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent'), 'default_value' => 'primary'),
+            )),
+            array('key' => 'field_sec_philo_image', 'label' => __('Side Image', 'mlzs'), 'name' => 'security_philo_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_sec_stat_number', 'label' => __('Stat Number (e.g. 100%)', 'mlzs'), 'name' => 'security_stat_number', 'type' => 'text', 'default_value' => '100%'),
+            array('key' => 'field_sec_stat_label', 'label' => __('Stat Label', 'mlzs'), 'name' => 'security_stat_label', 'type' => 'text', 'default_value' => 'Safety Commitment'),
+            array('key' => 'field_sec_stat_sub', 'label' => __('Stat Subtext', 'mlzs'), 'name' => 'security_stat_sub', 'type' => 'text', 'default_value' => 'Round-the-clock protection'),
+            array('key' => 'field_sec_tab_features', 'label' => __('Security Features', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_sec_features_heading', 'label' => __('Features Heading', 'mlzs'), 'name' => 'security_features_heading', 'type' => 'text', 'default_value' => 'Security Features'),
+            array('key' => 'field_sec_features_subtext', 'label' => __('Features Subtext', 'mlzs'), 'name' => 'security_features_subtext', 'type' => 'text', 'default_value' => 'Multi-layered security systems and protocols ensuring complete protection'),
+            array('key' => 'field_sec_features', 'label' => __('Feature Cards (7)', 'mlzs'), 'name' => 'security_features', 'type' => 'repeater', 'layout' => 'block', 'min' => 7, 'max' => 7, 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_sec_feat_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'clock'),
+                array('key' => 'field_sec_feat_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_sec_feat_para', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 2),
+                array('key' => 'field_sec_feat_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
+            )),
+            array('key' => 'field_sec_tab_layers', 'label' => __('Multi-Layered Protection', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_sec_layers_heading', 'label' => __('Section Heading', 'mlzs'), 'name' => 'security_layers_heading', 'type' => 'text', 'default_value' => 'Multi-Layered Protection'),
+            array('key' => 'field_sec_layers_items', 'label' => __('Bullet Points (6)', 'mlzs'), 'name' => 'security_layers_items', 'type' => 'repeater', 'layout' => 'row', 'min' => 6, 'max' => 6, 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_sec_layer_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_sec_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_sec_cta_heading', 'label' => __('CTA Heading', 'mlzs'), 'name' => 'security_cta_heading', 'type' => 'text', 'default_value' => 'Your Child\'s Safety is Our Priority'),
+            array('key' => 'field_sec_cta_para', 'label' => __('CTA Paragraph', 'mlzs'), 'name' => 'security_cta_para', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_sec_cta_btn1', 'label' => __('Button 1 (e.g. Download Manual)', 'mlzs'), 'name' => 'security_cta_btn1', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_sec_cta_btn2', 'label' => __('Button 2 (e.g. Contact Officer)', 'mlzs'), 'name' => 'security_cta_btn2', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_sec_cta_stats', 'label' => __('CTA Stat Boxes (4)', 'mlzs'), 'name' => 'security_cta_stats', 'type' => 'repeater', 'layout' => 'row', 'min' => 4, 'max' => 4, 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_sec_stat_num', 'label' => __('Number', 'mlzs'), 'name' => 'number', 'type' => 'text'),
+                array('key' => 'field_sec_stat_lab', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text'),
+                array('key' => 'field_sec_stat_color', 'label' => __('Color', 'mlzs'), 'name' => 'color', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light', 'accent-dark' => 'Accent Dark'), 'default_value' => 'primary'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'security.php'))),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_security_field_group');
 
 /**
  * ACF Pro: Admission Process Page – Hero, Process Steps, Entry Criteria, Documents, Form Section

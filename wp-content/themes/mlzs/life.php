@@ -38,6 +38,7 @@ $intro_para1 = $opt ? get_field('life_intro_para1', $page_id) : null;
 $intro_para2 = $opt ? get_field('life_intro_para2', $page_id) : null;
 $intro_para3 = $opt ? get_field('life_intro_para3', $page_id) : null;
 $intro_mantra_heading = $opt ? get_field('life_intro_mantra_heading', $page_id) : null;
+$intro_mantra_icon   = $opt ? get_field('life_intro_mantra_icon', $page_id) : null;
 $intro_mantra_quote  = $opt ? get_field('life_intro_mantra_quote', $page_id) : null;
 $intro_life_heading  = $opt ? get_field('life_intro_life_skills_heading', $page_id) : null;
 $intro_life_para     = $opt ? get_field('life_intro_life_skills_para', $page_id) : null;
@@ -48,6 +49,7 @@ $intro_para1 = ($intro_para1 !== '' && $intro_para1 !== null) ? (string) $intro_
 $intro_para2 = ($intro_para2 !== '' && $intro_para2 !== null) ? (string) $intro_para2 : 'Value education does not form a separate dimension of the curriculum but is integrally interwoven into the entire fabric of the curriculum. Stress is laid on developing a methodical & disciplined approach to life, to have discriminating mind, the courage to tread new paths & to follow the dictates of one\'s own conscience even if it means being different.';
 $intro_para3 = ($intro_para3 !== '' && $intro_para3 !== null) ? (string) $intro_para3 : 'Core values are the fundamental beliefs for a person or organization. A principle that guides an organization\'s internal conduct as well as its relationship with the external world. Core value is usually summarized in the mission statement or in a statement of the value. Core value can help school to know what\'s right for the child (WRFC).';
 $intro_mantra_heading = ($intro_mantra_heading !== '' && $intro_mantra_heading !== null) ? (string) $intro_mantra_heading : 'Our Mantra';
+$intro_mantra_icon   = (is_string($intro_mantra_icon) && trim($intro_mantra_icon) !== '') ? trim($intro_mantra_icon) : 'star';
 $intro_mantra_quote  = ($intro_mantra_quote !== '' && $intro_mantra_quote !== null) ? (string) $intro_mantra_quote : '"This is the mantra through which we place the child at the centre of everything that we do & ensures single-minded devotion to the growth & development."';
 $intro_life_heading  = ($intro_life_heading !== '' && $intro_life_heading !== null) ? (string) $intro_life_heading : 'Life Skills Education';
 $intro_life_para     = ($intro_life_para !== '' && $intro_life_para !== null) ? (string) $intro_life_para : 'Life skills education is the study of abilities for adaptive & positive behavior that enable individuals to deal effectively with the demands & the challenges of everyday life.';
@@ -63,10 +65,10 @@ $know_heading = ($know_heading !== '' && $know_heading !== null) ? (string) $kno
 $know_subtext = ($know_subtext !== '' && $know_subtext !== null) ? (string) $know_subtext : 'Our students will gain comprehensive knowledge across multiple domains to become well-rounded individuals';
 
 $default_know_cards = array(
-    array('icon' => 'brain', 'style' => 'primary', 'title' => 'Higher Order Thinking Skills', 'paragraph' => 'Students gain real understanding of each subject they take. This enables them to not only retain and apply but also create new knowledge and ideas from this understanding.'),
-    array('icon' => 'trophy', 'style' => 'secondary', 'title' => 'Sports & Fitness', 'paragraph' => 'Students are encouraged to take up sports, not only for fitness and health but to ingrain the values of sportsmanship and teamwork.'),
-    array('icon' => 'briefcase', 'style' => 'accent', 'title' => 'Entrepreneurship', 'paragraph' => 'Students will see the world as an owner. They\'ll develop an ability to reach a goal by making choices and sequencing actions.'),
-    array('icon' => 'dollar-sign', 'style' => 'primary-light', 'title' => 'Financial Literacy', 'paragraph' => 'Students will develop a strong and empowering relationship with money and managing it responsibly.'),
+    array('icon' => 'brain', 'style' => 'primary', 'title' => 'Higher Order Thinking Skills', 'paragraph' => 'Students gain real understanding of each subject they take. This enables them to not only retain and apply but also create new knowledge and ideas from this understanding.', 'link' => array(), 'link_icon' => 'arrow-right'),
+    array('icon' => 'trophy', 'style' => 'secondary', 'title' => 'Sports & Fitness', 'paragraph' => 'Students are encouraged to take up sports, not only for fitness and health but to ingrain the values of sportsmanship and teamwork.', 'link' => array(), 'link_icon' => 'arrow-right'),
+    array('icon' => 'briefcase', 'style' => 'accent', 'title' => 'Entrepreneurship', 'paragraph' => 'Students will see the world as an owner. They\'ll develop an ability to reach a goal by making choices and sequencing actions.', 'link' => array(), 'link_icon' => 'arrow-right'),
+    array('icon' => 'dollar-sign', 'style' => 'primary-light', 'title' => 'Financial Literacy', 'paragraph' => 'Students will develop a strong and empowering relationship with money and managing it responsibly.', 'link' => array(), 'link_icon' => 'arrow-right'),
 );
 $know_cards = (is_array($know_cards) && count($know_cards) >= 4) ? $know_cards : $default_know_cards;
 
@@ -92,11 +94,14 @@ $skill_items = (is_array($skill_items) && count($skill_items) >= 4) ? $skill_ite
 $risk_badge   = $opt ? get_field('life_risk_badge', $page_id) : null;
 $risk_heading = $opt ? get_field('life_risk_heading', $page_id) : null;
 $risk_box1_title = $opt ? get_field('life_risk_box1_title', $page_id) : null;
+$risk_box1_icon  = $opt ? get_field('life_risk_box1_icon', $page_id) : null;
 $risk_box1_para = $opt ? get_field('life_risk_box1_para', $page_id) : null;
 $risk_box2_title = $opt ? get_field('life_risk_box2_title', $page_id) : null;
+$risk_box2_icon  = $opt ? get_field('life_risk_box2_icon', $page_id) : null;
 $risk_box2_para = $opt ? get_field('life_risk_box2_para', $page_id) : null;
 $risk_box2_tags = $opt ? get_field('life_risk_box2_tags', $page_id) : null;
 $risk_leader_title   = $opt ? get_field('life_risk_leader_title', $page_id) : null;
+$risk_leader_icon    = $opt ? get_field('life_risk_leader_icon', $page_id) : null;
 $risk_leader_subtitle = $opt ? get_field('life_risk_leader_subtitle', $page_id) : null;
 $risk_leader_items   = $opt ? get_field('life_risk_leader_items', $page_id) : null;
 
@@ -108,6 +113,7 @@ $risk_box2_title = ($risk_box2_title !== '' && $risk_box2_title !== null) ? (str
 $risk_box2_para = ($risk_box2_para !== '' && $risk_box2_para !== null) ? (string) $risk_box2_para : 'Self-management plans are used to teach students to independently complete tasks and take an active role in monitoring and reinforcing their own behaviour. An important goal in education is to foster self-reliance and independence.';
 $risk_box2_tags = ($risk_box2_tags !== '' && $risk_box2_tags !== null) ? (string) $risk_box2_tags : 'Goal Setting, Self-Monitoring, Responsibility';
 $risk_leader_title   = ($risk_leader_title !== '' && $risk_leader_title !== null) ? (string) $risk_leader_title : 'The 21st Century Leader';
+$risk_leader_icon    = (is_string($risk_leader_icon) && trim($risk_leader_icon) !== '') ? trim($risk_leader_icon) : 'target';
 $risk_leader_subtitle = ($risk_leader_subtitle !== '' && $risk_leader_subtitle !== null) ? (string) $risk_leader_subtitle : 'Our Emergent Student Profile';
 
 $default_leader_items = array(
@@ -220,7 +226,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     <div class="relative bg-gradient-to-br from-primary-light/10 to-secondary/10 rounded-[1rem] p-8 border border-primary/20 shadow-soft">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-                                <i data-lucide="star" class="w-7 h-7 text-primary"></i>
+                                <i data-lucide="<?php echo esc_attr($intro_mantra_icon); ?>" class="w-7 h-7 text-primary"></i>
                             </div>
                             <h3 class="text-2xl font-bold text-slate-900"><?php echo esc_html($intro_mantra_heading); ?></h3>
                         </div>
@@ -249,6 +255,11 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     $k_style = isset($card['style']) && in_array($card['style'], array('primary', 'secondary', 'accent', 'primary-light'), true) ? $card['style'] : 'primary';
                     $k_title = isset($card['title']) ? (string) $card['title'] : '';
                     $k_para = isset($card['paragraph']) ? (string) $card['paragraph'] : '';
+                    $k_link = isset($card['link']) && is_array($card['link']) ? $card['link'] : array();
+                    $k_link_icon = isset($card['link_icon']) && trim((string) $card['link_icon']) !== '' ? trim($card['link_icon']) : 'arrow-right';
+                    $k_link_url = !empty($k_link['url']) ? esc_url($k_link['url']) : '';
+                    $k_link_target = !empty($k_link['target']) ? $k_link['target'] : '_self';
+                    $k_link_text = (!empty($k_link['title']) && trim((string) $k_link['title']) !== '') ? (string) $k_link['title'] : 'Learn More';
                     $k_bg = $k_style === 'secondary' ? 'bg-secondary/10' : ($k_style === 'accent' ? 'bg-accent/10' : ($k_style === 'primary-light' ? 'bg-primary-light/10' : 'bg-primary/10'));
                     $k_text = $k_style === 'secondary' ? 'text-secondary' : ($k_style === 'accent' ? 'text-accent' : ($k_style === 'primary-light' ? 'text-primary-light' : 'text-primary'));
                     $k_hover = $k_style === 'secondary' ? 'group-hover:bg-secondary' : ($k_style === 'accent' ? 'group-hover:bg-accent' : ($k_style === 'primary-light' ? 'group-hover:bg-primary-light' : 'group-hover:bg-primary'));
@@ -260,8 +271,15 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     <h3 class="text-xl font-bold text-slate-900 mb-4"><?php echo esc_html($k_title); ?></h3>
                     <p class="text-slate-600 mb-4"><?php echo esc_html($k_para); ?></p>
                     <div class="flex items-center text-primary font-medium group-hover:translate-x-2 transition-transform">
-                        <span>Learn More</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        <?php if ($k_link_url !== '') : ?>
+                        <a href="<?php echo $k_link_url; ?>" target="<?php echo esc_attr($k_link_target); ?>" class="inline-flex items-center gap-2">
+                            <span><?php echo esc_html($k_link_text); ?></span>
+                            <i data-lucide="<?php echo esc_attr($k_link_icon); ?>" class="w-4 h-4"></i>
+                        </a>
+                        <?php else : ?>
+                        <span><?php echo esc_html($k_link_text); ?></span>
+                        <i data-lucide="<?php echo esc_attr($k_link_icon); ?>" class="w-4 h-4 ml-2"></i>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -318,14 +336,14 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     <div class="space-y-6">
                         <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                             <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-3">
-                                <i data-lucide="shield-alert" class="w-6 h-6 text-accent"></i>
+                                <i data-lucide="<?php echo esc_attr($risk_box1_icon); ?>" class="w-6 h-6 text-accent"></i>
                                 <?php echo esc_html($risk_box1_title); ?>
                             </h3>
                             <p class="text-slate-600"><?php echo esc_html($risk_box1_para); ?></p>
                         </div>
                         <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                             <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-3">
-                                <i data-lucide="user-cog" class="w-6 h-6 text-primary"></i>
+                                <i data-lucide="<?php echo esc_attr($risk_box2_icon); ?>" class="w-6 h-6 text-primary"></i>
                                 <?php echo esc_html($risk_box2_title); ?>
                             </h3>
                             <p class="text-slate-600"><?php echo esc_html($risk_box2_para); ?></p>
@@ -346,7 +364,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                     <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-[1rem] p-8 text-white shadow-xl">
                         <div class="text-center mb-8">
                             <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-4">
-                                <i data-lucide="target" class="w-10 h-10 text-secondary"></i>
+                                <i data-lucide="<?php echo esc_attr($risk_leader_icon); ?>" class="w-10 h-10 text-secondary"></i>
                             </div>
                             <h3 class="text-2xl font-bold mb-2"><?php echo esc_html($risk_leader_title); ?></h3>
                             <p class="text-slate-300"><?php echo esc_html($risk_leader_subtitle); ?></p>

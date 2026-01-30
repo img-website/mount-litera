@@ -19,12 +19,17 @@ function mlzs_origin_img_url($img) {
 }
 
 // ——— Hero ———
+$hero_bg_image = $opt ? get_field('origin_hero_bg_image', $page_id) : null;
 $hero_badge   = $opt ? get_field('origin_hero_badge', $page_id) : null;
 $hero_icon    = $opt ? get_field('origin_hero_icon', $page_id) : null;
 $hero_before  = $opt ? get_field('origin_hero_headline_before', $page_id) : null;
 $hero_highlight = $opt ? get_field('origin_hero_headline_highlight', $page_id) : null;
 $hero_subtext = $opt ? get_field('origin_hero_subtext', $page_id) : null;
 
+$hero_bg_url = '';
+if (!empty($hero_bg_image) && is_array($hero_bg_image) && !empty($hero_bg_image['url'])) {
+    $hero_bg_url = $hero_bg_image['url'];
+}
 $hero_badge   = ($hero_badge !== '' && $hero_badge !== null) ? (string) $hero_badge : 'Campus Tour';
 $hero_icon    = (is_string($hero_icon) && trim($hero_icon) !== '') ? trim($hero_icon) : 'map-pin';
 $hero_before  = ($hero_before !== '' && $hero_before !== null) ? (string) $hero_before : 'Our';
@@ -32,10 +37,17 @@ $hero_highlight = ($hero_highlight !== '' && $hero_highlight !== null) ? (string
 $hero_subtext = ($hero_subtext !== '' && $hero_subtext !== null) ? (string) $hero_subtext : 'Discover the vibrant learning environment at Mount Litera Zee School, Alwar - 5 acres of inspiring spaces designed for holistic education.';
 
 // ——— Campus Overview ———
+$overview_section_image = $opt ? get_field('origin_overview_section_image', $page_id) : null;
 $overview_heading = $opt ? get_field('origin_overview_heading', $page_id) : null;
 $overview_location = $opt ? get_field('origin_overview_location', $page_id) : null;
 $overview_icon   = $opt ? get_field('origin_overview_icon', $page_id) : null;
 $overview_items  = $opt ? get_field('origin_overview_items', $page_id) : null;
+
+$overview_img_url = '';
+if (!empty($overview_section_image) && is_array($overview_section_image) && !empty($overview_section_image['url'])) {
+    $overview_img_url = $overview_section_image['url'];
+}
+$overview_img_alt = (is_array($overview_section_image) && !empty($overview_section_image['alt']) && is_string($overview_section_image['alt'])) ? trim($overview_section_image['alt']) : 'Campus';
 
 $overview_heading = ($overview_heading !== '' && $overview_heading !== null) ? (string) $overview_heading : 'Campus Overview';
 $overview_location = ($overview_location !== '' && $overview_location !== null) ? (string) $overview_location : 'Sirmoli Village, Alwar';
@@ -50,23 +62,125 @@ $default_overview = array(
 $overview_items = (is_array($overview_items) && count($overview_items) >= 4) ? $overview_items : $default_overview;
 
 // ——— Videos ———
+$video1_icon  = $opt ? get_field('origin_video1_icon', $page_id) : null;
 $video1_title = $opt ? get_field('origin_video1_title', $page_id) : null;
 $video1_url   = $opt ? get_field('origin_video1_url', $page_id) : null;
-$video1_label = $opt ? get_field('origin_video1_label', $page_id) : null;
-$video1_duration = $opt ? get_field('origin_video1_duration', $page_id) : null;
+$video2_icon  = $opt ? get_field('origin_video2_icon', $page_id) : null;
 $video2_title = $opt ? get_field('origin_video2_title', $page_id) : null;
 $video2_url   = $opt ? get_field('origin_video2_url', $page_id) : null;
-$video2_label = $opt ? get_field('origin_video2_label', $page_id) : null;
-$video2_duration = $opt ? get_field('origin_video2_duration', $page_id) : null;
 
+$video1_icon  = (is_string($video1_icon) && trim($video1_icon) !== '') ? trim($video1_icon) : 'play-circle';
 $video1_title = ($video1_title !== '' && $video1_title !== null) ? (string) $video1_title : 'Campus Tour Video';
-$video1_label = ($video1_label !== '' && $video1_label !== null) ? (string) $video1_label : 'OurCampus-1.MP4';
-$video1_duration = ($video1_duration !== '' && $video1_duration !== null) ? (string) $video1_duration : '02:45';
 $video2_title = ($video2_title !== '' && $video2_title !== null) ? (string) $video2_title : 'Virtual Walkthrough';
-$video2_label = ($video2_label !== '' && $video2_label !== null) ? (string) $video2_label : 'OurCampus.MP4';
-$video2_duration = ($video2_duration !== '' && $video2_duration !== null) ? (string) $video2_duration : '03:20';
+
+// YouTube video ID from URL
+function mlzs_origin_youtube_id($url) {
+    if (empty($url) || !is_string($url)) return null;
+    if (preg_match('#(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/v/)([a-zA-Z0-9_-]{11})#', $url, $m)) {
+        return $m[1];
+    }
+    return null;
+}
+// YouTube title via oEmbed (no API key), cached 24h
+function mlzs_origin_youtube_title($url) {
+    $id = mlzs_origin_youtube_id($url);
+    if (!$id) return '';
+    $cache_key = 'origin_yt_title_' . $id;
+    $cached = get_transient($cache_key);
+    if ($cached !== false && is_string($cached)) return $cached;
+    $oembed_url = 'https://www.youtube.com/oembed?url=' . rawurlencode('https://www.youtube.com/watch?v=' . $id) . '&format=json';
+    $resp = wp_remote_get($oembed_url, array('timeout' => 10));
+    if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) return '';
+    $body = wp_remote_retrieve_body($resp);
+    $json = json_decode($body, true);
+    $title = (is_array($json) && !empty($json['title']) && is_string($json['title'])) ? trim($json['title']) : '';
+    if ($title !== '') set_transient($cache_key, $title, DAY_IN_SECONDS);
+    return $title;
+}
+// YouTube duration via Data API v3 (requires API key in Options or constant MLZS_YOUTUBE_API_KEY), cached 24h
+function mlzs_origin_youtube_duration($url) {
+    $id = mlzs_origin_youtube_id($url);
+    if (!$id) return '';
+    $api_key = get_option('mlzs_youtube_api_key', '');
+    if (defined('MLZS_YOUTUBE_API_KEY')) {
+        $k = constant('MLZS_YOUTUBE_API_KEY');
+        if (is_string($k) && $k !== '') $api_key = $k;
+    }
+    if ($api_key === '') return '';
+    $cache_key = 'origin_yt_dur_' . $id;
+    $cached = get_transient($cache_key);
+    if ($cached !== false && is_string($cached)) return $cached;
+    $api_url = 'https://www.googleapis.com/youtube/v3/videos?id=' . $id . '&part=contentDetails&key=' . rawurlencode($api_key);
+    $resp = wp_remote_get($api_url, array('timeout' => 10));
+    if (is_wp_error($resp) || wp_remote_retrieve_response_code($resp) !== 200) return '';
+    $body = wp_remote_retrieve_body($resp);
+    $json = json_decode($body, true);
+    $duration_iso = '';
+    if (is_array($json) && !empty($json['items'][0]['contentDetails']['duration'])) {
+        $duration_iso = $json['items'][0]['contentDetails']['duration'];
+    }
+    if ($duration_iso === '') return '';
+    try {
+        $di = new DateInterval($duration_iso);
+        $s = (int) $di->s;
+        $m = (int) $di->i;
+        $h = (int) $di->h;
+        $formatted = ($h > 0 ? $h . ':' : '') . str_pad((string) $m, 2, '0', STR_PAD_LEFT) . ':' . str_pad((string) $s, 2, '0', STR_PAD_LEFT);
+        set_transient($cache_key, $formatted, DAY_IN_SECONDS);
+        return $formatted;
+    } catch (Exception $e) {
+        return '';
+    }
+}
+// Derive label (YouTube title, filename, or fallback) and duration (YouTube API, attachment meta, or —)
+function mlzs_origin_video_label_and_duration($url, $fallback_label = 'Video') {
+    $label = $fallback_label;
+    $duration = '';
+    if (!empty($url) && is_string($url)) {
+        $yt_id = mlzs_origin_youtube_id($url);
+        if ($yt_id) {
+            $title = mlzs_origin_youtube_title($url);
+            if ($title !== '') $label = $title;
+            $dur = mlzs_origin_youtube_duration($url);
+            if ($dur !== '') $duration = $dur;
+        } else {
+            $path = parse_url($url, PHP_URL_PATH);
+            if ($path) {
+                $basename = basename($path);
+                if ($basename !== '') $label = $basename;
+            }
+            $aid = attachment_url_to_postid($url);
+            if ($aid) {
+                $meta = wp_get_attachment_metadata($aid);
+                if (!empty($meta['length_formatted'])) $duration = $meta['length_formatted'];
+                elseif (isset($meta['length']) && is_numeric($meta['length'])) $duration = gmdate('i:s', (int) $meta['length']);
+            }
+        }
+    }
+    return array('label' => $label, 'duration' => $duration);
+}
+$v1 = mlzs_origin_video_label_and_duration($video1_url, 'Video 1');
+$video1_label = $v1['label'];
+$video1_duration = $v1['duration'] !== '' ? $v1['duration'] : '—';
+$v2 = mlzs_origin_video_label_and_duration($video2_url, 'Video 2');
+$video2_label = $v2['label'];
+$video2_duration = $v2['duration'] !== '' ? $v2['duration'] : '—';
+
+// YouTube thumbnail from URL (youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID)
+function mlzs_origin_youtube_thumbnail($url) {
+    if (empty($url) || !is_string($url)) return null;
+    $id = null;
+    if (preg_match('#(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/v/)([a-zA-Z0-9_-]{11})#', $url, $m)) {
+        $id = $m[1];
+    }
+    if (!$id) return null;
+    return 'https://img.youtube.com/vi/' . $id . '/hqdefault.jpg';
+}
+$video1_thumb = mlzs_origin_youtube_thumbnail($video1_url);
+$video2_thumb = mlzs_origin_youtube_thumbnail($video2_url);
 
 // ——— Gallery ———
+$gal_icon    = $opt ? get_field('origin_gallery_icon', $page_id) : null;
 $gal_badge   = $opt ? get_field('origin_gallery_badge', $page_id) : null;
 $gal_before  = $opt ? get_field('origin_gallery_heading_before', $page_id) : null;
 $gal_highlight = $opt ? get_field('origin_gallery_heading_highlight', $page_id) : null;
@@ -74,6 +188,7 @@ $gal_subtext = $opt ? get_field('origin_gallery_subtext', $page_id) : null;
 $gal_items   = $opt ? get_field('origin_gallery_items', $page_id) : null;
 $gal_btn_link = $opt ? get_field('origin_gallery_btn_link', $page_id) : null;
 
+$gal_icon    = (is_string($gal_icon) && trim($gal_icon) !== '') ? trim($gal_icon) : 'image';
 $gal_badge   = ($gal_badge !== '' && $gal_badge !== null) ? (string) $gal_badge : 'Photo Gallery';
 $gal_before  = ($gal_before !== '' && $gal_before !== null) ? (string) $gal_before : 'Explore Our';
 $gal_highlight = ($gal_highlight !== '' && $gal_highlight !== null) ? (string) $gal_highlight : 'Campus';
@@ -88,6 +203,9 @@ $default_gal = array(
     array('image' => array(), 'label' => 'Auditorium', 'caption' => 'Multi-purpose auditorium and stage'),
 );
 $gal_items = (is_array($gal_items) && count($gal_items) >= 6) ? $gal_items : $default_gal;
+
+$gal_more_images = $opt ? get_field('origin_gallery_more_images', $page_id) : null;
+$gal_more_images = is_array($gal_more_images) ? $gal_more_images : array();
 
 $gal_btn_url = $gal_btn_target = $gal_btn_text = '';
 if (!empty($gal_btn_link) && is_array($gal_btn_link)) {
@@ -144,12 +262,14 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
 $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
 ?>
 
-    <!-- Hero Section -->
-    <section class="relative px-4 sm:px-6 lg:px-8 pt-28 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 lg:pt-40 lg:pb-28 bg-gradient-to-br from-primary-dark via-primary to-primary-light overflow-hidden">
+    <!-- Hero Section (matches origin.html: optional hero bg image) -->
+    <section class="relative px-4 sm:px-6 lg:px-8 pt-28 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 lg:pt-40 lg:pb-28 overflow-hidden <?php echo $hero_bg_url ? '' : 'bg-gradient-to-br from-primary-dark via-primary to-primary-light'; ?>"<?php if ($hero_bg_url) : ?> style="background-image: linear-gradient(135deg, rgba(61,52,139,0.85) 0%, rgba(118,120,237,0.75) 50%, rgba(247,184,1,0.6) 100%), url('<?php echo esc_url($hero_bg_url); ?>'); background-size: cover; background-position: center;"<?php endif; ?>>
+        <?php if (!$hero_bg_url) : ?>
         <div class="absolute inset-0 opacity-10">
             <div class="absolute top-0 left-0 w-64 h-64 rounded-full bg-accent blur-3xl"></div>
             <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-accent-light blur-3xl"></div>
         </div>
+        <?php endif; ?>
         <div class="max-w-7xl mx-auto relative z-10">
             <div class="text-center max-w-4xl mx-auto">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-4 sm:mb-6">
@@ -205,15 +325,26 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                     </div>
                 </div>
                 <div class="space-y-6 sm:space-y-8">
+                    <?php if ($overview_img_url) : ?>
+                    <div class="rounded-[1rem] overflow-hidden shadow-soft border border-gray-100 bg-gray-100">
+                        <img src="<?php echo esc_url($overview_img_url); ?>" alt="<?php echo esc_attr($overview_img_alt); ?>" class="w-full h-auto object-cover aspect-[4/3] sm:aspect-video">
+                    </div>
+                    <?php endif; ?>
                     <div class="bg-white rounded-[1rem] p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
                         <div class="mb-3 sm:mb-4 flex items-center justify-between">
                             <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($video1_title); ?></h3>
-                            <i data-lucide="play-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
+                            <i data-lucide="<?php echo esc_attr($video1_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
                         </div>
                         <div class="relative rounded-xl overflow-hidden bg-black aspect-video">
-                            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                            <?php if ($video1_thumb) : ?>
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('<?php echo esc_url($video1_thumb); ?>');"></div>
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center"></div>
+                            <?php else : ?>
+                            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800"></div>
+                            <?php endif; ?>
+                            <div class="absolute inset-0 flex items-center justify-center">
                                 <?php if (!empty($video1_url)) : ?>
-                                <a href="<?php echo esc_url($video1_url); ?>" target="_blank" rel="noopener" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center hover:bg-white/30 transition-all group">
+                                <a href="<?php echo esc_url($video1_url); ?>" data-fancybox="origin-video" data-caption="<?php echo esc_attr($video1_title); ?>" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center hover:bg-white/30 transition-all group">
                                     <i data-lucide="play" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform"></i>
                                 </a>
                                 <?php else : ?>
@@ -222,7 +353,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                                 </div>
                                 <?php endif; ?>
                             </div>
-                            <div class="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 flex items-center justify-between text-white text-xs sm:text-sm">
+                            <div class="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 flex items-center justify-between text-white text-xs sm:text-sm drop-shadow-md">
                                 <span><?php echo esc_html($video1_label); ?></span>
                                 <span><?php echo esc_html($video1_duration); ?></span>
                             </div>
@@ -231,12 +362,18 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                     <div class="bg-white rounded-[1rem] p-4 sm:p-5 md:p-6 shadow-soft border border-gray-100 overflow-hidden">
                         <div class="mb-3 sm:mb-4 flex items-center justify-between">
                             <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($video2_title); ?></h3>
-                            <i data-lucide="video" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
+                            <i data-lucide="<?php echo esc_attr($video2_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-primary"></i>
                         </div>
                         <div class="relative rounded-xl overflow-hidden bg-black aspect-video">
-                            <div class="absolute inset-0 bg-gradient-to-br from-primary-dark to-primary flex items-center justify-center">
+                            <?php if ($video2_thumb) : ?>
+                            <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('<?php echo esc_url($video2_thumb); ?>');"></div>
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center"></div>
+                            <?php else : ?>
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary-dark to-primary"></div>
+                            <?php endif; ?>
+                            <div class="absolute inset-0 flex items-center justify-center">
                                 <?php if (!empty($video2_url)) : ?>
-                                <a href="<?php echo esc_url($video2_url); ?>" target="_blank" rel="noopener" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center hover:bg-white/30 transition-all group">
+                                <a href="<?php echo esc_url($video2_url); ?>" data-fancybox="origin-video" data-caption="<?php echo esc_attr($video2_title); ?>" class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-sm border-2 border-white/30 flex items-center justify-center hover:bg-white/30 transition-all group">
                                     <i data-lucide="play" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white group-hover:scale-110 transition-transform"></i>
                                 </a>
                                 <?php else : ?>
@@ -245,7 +382,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                                 </div>
                                 <?php endif; ?>
                             </div>
-                            <div class="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 flex items-center justify-between text-white text-xs sm:text-sm">
+                            <div class="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 flex items-center justify-between text-white text-xs sm:text-sm drop-shadow-md">
                                 <span><?php echo esc_html($video2_label); ?></span>
                                 <span><?php echo esc_html($video2_duration); ?></span>
                             </div>
@@ -261,7 +398,7 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-8 sm:mb-10 md:mb-12">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 border border-primary/20 mb-3 sm:mb-4">
-                    <i data-lucide="image" class="w-3 h-3 sm:w-4 sm:h-4 text-primary"></i>
+                    <i data-lucide="<?php echo esc_attr($gal_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 text-primary"></i>
                     <span class="text-xs sm:text-sm font-semibold text-primary uppercase tracking-wider"><?php echo esc_html($gal_badge); ?></span>
                 </div>
                 <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
@@ -294,6 +431,22 @@ $theme_skyline = get_template_directory_uri() . '/assets/img/skyline.webp';
                 </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- More Images Grid (matches origin.html 470–497) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+                <?php
+                $more_list = !empty($gal_more_images) ? $gal_more_images : array_fill(0, 8, array());
+                foreach ($more_list as $idx => $more_img) :
+                    $more_url = !empty($more_img) ? mlzs_origin_img_url($more_img) : '';
+                    if ($more_url === '') $more_url = $theme_skyline;
+                    $more_alt = (is_array($more_img) && !empty($more_img['alt']) && is_string($more_img['alt'])) ? trim($more_img['alt']) : 'Campus View ' . ((int) $idx + 1);
+                ?>
+                <div class="group aspect-square overflow-hidden rounded-xl bg-gray-100 hover:shadow-lg transition-all duration-300">
+                    <img src="<?php echo esc_url($more_url); ?>" alt="<?php echo esc_attr($more_alt); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                </div>
+                <?php endforeach; ?>
+            </div>
+
             <div class="text-center mt-8 sm:mt-10 md:mt-12">
                 <a href="<?php echo $gal_btn_url; ?>" target="<?php echo esc_attr($gal_btn_target); ?>" class="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 bg-white border-2 border-primary text-primary text-sm sm:text-base font-bold rounded-full hover:bg-primary hover:text-white transition-all group">
                     <span><?php echo esc_html($gal_btn_text); ?></span>

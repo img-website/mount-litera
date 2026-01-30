@@ -89,7 +89,7 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+define('MLZS_YOUTUBE_API_KEY', 'AIzaSyC2AXpPTCmfuFtttlZHggADfI1SHI1cXA8');
 
 /* That's all, stop editing! Happy publishing. */
 

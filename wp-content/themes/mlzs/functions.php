@@ -302,8 +302,8 @@ function mlzs_enqueue_assets() {
         true
     );
 
-    // Fancybox for Alumni Feed and Photo Gallery pages (lightbox)
-    if (is_page_template('feed.php') || is_page_template('gallery.php')) {
+    // Fancybox for Alumni Feed, Photo Gallery, and Origin (Campus) video popup
+    if (is_page_template('feed.php') || is_page_template('gallery.php') || is_page_template('origin.php')) {
         wp_enqueue_style(
             'fancybox',
             'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css',
@@ -322,6 +322,7 @@ function mlzs_enqueue_assets() {
                 if (typeof Fancybox !== 'undefined') {
                     Fancybox.bind('[data-fancybox=\"alumni-gallery\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['slideshow', 'download', 'thumbs', 'close'] } }, Thumbs: { autoStart: true } });
                     Fancybox.bind('[data-fancybox=\"gallery\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['slideshow', 'download', 'thumbs', 'close'] } }, Thumbs: { autoStart: true } });
+                    Fancybox.bind('[data-fancybox=\"origin-video\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['close'] } } });
                 }
             });
         ";
@@ -2401,6 +2402,7 @@ function mlzs_acf_life_field_group() {
             array('key' => 'field_life_intro_para2', 'label' => __('Paragraph 2', 'mlzs'), 'name' => 'life_intro_para2', 'type' => 'textarea', 'rows' => 3),
             array('key' => 'field_life_intro_para3', 'label' => __('Paragraph 3', 'mlzs'), 'name' => 'life_intro_para3', 'type' => 'textarea', 'rows' => 3),
             array('key' => 'field_life_intro_mantra_heading', 'label' => __('Mantra Card Heading', 'mlzs'), 'name' => 'life_intro_mantra_heading', 'type' => 'text', 'default_value' => 'Our Mantra'),
+            array('key' => 'field_life_intro_mantra_icon', 'label' => __('Mantra Card Icon', 'mlzs'), 'name' => 'life_intro_mantra_icon', 'type' => 'text', 'default_value' => 'star'),
             array('key' => 'field_life_intro_mantra_quote', 'label' => __('Mantra Quote', 'mlzs'), 'name' => 'life_intro_mantra_quote', 'type' => 'textarea', 'rows' => 2, 'default_value' => '"This is the mantra through which we place the child at the centre of everything that we do & ensures single-minded devotion to the growth & development."'),
             array('key' => 'field_life_intro_life_skills_heading', 'label' => __('Life Skills Box Heading', 'mlzs'), 'name' => 'life_intro_life_skills_heading', 'type' => 'text', 'default_value' => 'Life Skills Education'),
             array('key' => 'field_life_intro_life_skills_para', 'label' => __('Life Skills Box Paragraph', 'mlzs'), 'name' => 'life_intro_life_skills_para', 'type' => 'textarea', 'rows' => 3, 'default_value' => 'Life skills education is the study of abilities for adaptive & positive behavior that enable individuals to deal effectively with the demands & the challenges of everyday life.'),
@@ -2413,6 +2415,8 @@ function mlzs_acf_life_field_group() {
                 array('key' => 'field_life_know_style', 'label' => __('Icon Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'secondary' => 'Secondary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
                 array('key' => 'field_life_know_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text', 'default_value' => 'Higher Order Thinking Skills'),
                 array('key' => 'field_life_know_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 3),
+                array('key' => 'field_life_know_link', 'label' => __('Card Link (optional)', 'mlzs'), 'name' => 'link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Link Text = button label (e.g. Learn More).', 'mlzs')),
+                array('key' => 'field_life_know_link_icon', 'label' => __('Link Icon', 'mlzs'), 'name' => 'link_icon', 'type' => 'text', 'default_value' => 'arrow-right'),
             )),
             array('key' => 'field_life_tab_lifeskills', 'label' => __('Life Skills Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
             array('key' => 'field_life_lifeskills_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'life_lifeskills_badge', 'type' => 'text', 'default_value' => 'Pillar 02'),
@@ -2428,11 +2432,14 @@ function mlzs_acf_life_field_group() {
             array('key' => 'field_life_risk_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'life_risk_badge', 'type' => 'text', 'default_value' => 'Pillar 03'),
             array('key' => 'field_life_risk_heading', 'label' => __('Heading', 'mlzs'), 'name' => 'life_risk_heading', 'type' => 'text', 'default_value' => 'Risk Taking & Self-Management'),
             array('key' => 'field_life_risk_box1_title', 'label' => __('Box 1 Title', 'mlzs'), 'name' => 'life_risk_box1_title', 'type' => 'text', 'default_value' => 'The Courage to Decide'),
+            array('key' => 'field_life_risk_box1_icon', 'label' => __('Box 1 Icon', 'mlzs'), 'name' => 'life_risk_box1_icon', 'type' => 'text', 'default_value' => 'shield-alert'),
             array('key' => 'field_life_risk_box1_para', 'label' => __('Box 1 Paragraph', 'mlzs'), 'name' => 'life_risk_box1_para', 'type' => 'textarea', 'rows' => 3),
             array('key' => 'field_life_risk_box2_title', 'label' => __('Box 2 Title', 'mlzs'), 'name' => 'life_risk_box2_title', 'type' => 'text', 'default_value' => 'Self-Management'),
+            array('key' => 'field_life_risk_box2_icon', 'label' => __('Box 2 Icon', 'mlzs'), 'name' => 'life_risk_box2_icon', 'type' => 'text', 'default_value' => 'user-cog'),
             array('key' => 'field_life_risk_box2_para', 'label' => __('Box 2 Paragraph', 'mlzs'), 'name' => 'life_risk_box2_para', 'type' => 'textarea', 'rows' => 3),
             array('key' => 'field_life_risk_box2_tags', 'label' => __('Box 2 Tags (comma-separated)', 'mlzs'), 'name' => 'life_risk_box2_tags', 'type' => 'text', 'default_value' => 'Goal Setting, Self-Monitoring, Responsibility'),
             array('key' => 'field_life_risk_leader_title', 'label' => __('Leader Card Title', 'mlzs'), 'name' => 'life_risk_leader_title', 'type' => 'text', 'default_value' => 'The 21st Century Leader'),
+            array('key' => 'field_life_risk_leader_icon', 'label' => __('Leader Card Header Icon', 'mlzs'), 'name' => 'life_risk_leader_icon', 'type' => 'text', 'default_value' => 'target'),
             array('key' => 'field_life_risk_leader_subtitle', 'label' => __('Leader Card Subtitle', 'mlzs'), 'name' => 'life_risk_leader_subtitle', 'type' => 'text', 'default_value' => 'Our Emergent Student Profile'),
             array('key' => 'field_life_risk_leader_items', 'label' => __('Leader Card Items (4)', 'mlzs'), 'name' => 'life_risk_leader_items', 'type' => 'repeater', 'layout' => 'row', 'min' => 4, 'max' => 4, 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
                 array('key' => 'field_life_leader_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'lightbulb'),
@@ -2484,7 +2491,11 @@ function mlzs_acf_media_field_group() {
             array('key' => 'field_media_intro_left_para1', 'label' => __('Left Card Paragraph 1', 'mlzs'), 'name' => 'media_intro_left_para1', 'type' => 'textarea', 'rows' => 3),
             array('key' => 'field_media_intro_left_para2', 'label' => __('Left Card Paragraph 2', 'mlzs'), 'name' => 'media_intro_left_para2', 'type' => 'textarea', 'rows' => 2),
             array('key' => 'field_media_intro_left_image', 'label' => __('Left Column Image', 'mlzs'), 'name' => 'media_intro_left_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_media_intro_left_image_caption', 'label' => __('Left Image Overlay Caption', 'mlzs'), 'name' => 'media_intro_left_image_caption', 'type' => 'text', 'default_value' => 'Interactive Multimedia Classroom'),
+            array('key' => 'field_media_intro_left_image_icon', 'label' => __('Left Image Overlay Icon', 'mlzs'), 'name' => 'media_intro_left_image_icon', 'type' => 'text', 'default_value' => 'tv'),
             array('key' => 'field_media_intro_right_image', 'label' => __('Right Column Image', 'mlzs'), 'name' => 'media_intro_right_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_media_intro_right_image_caption', 'label' => __('Right Image Overlay Caption', 'mlzs'), 'name' => 'media_intro_right_image_caption', 'type' => 'text', 'default_value' => 'Cloud-Based Learning Content'),
+            array('key' => 'field_media_intro_right_image_icon', 'label' => __('Right Image Overlay Icon', 'mlzs'), 'name' => 'media_intro_right_image_icon', 'type' => 'text', 'default_value' => 'cloud'),
             array('key' => 'field_media_intro_right_icon', 'label' => __('Right Card Icon', 'mlzs'), 'name' => 'media_intro_right_icon', 'type' => 'text', 'default_value' => 'cloud'),
             array('key' => 'field_media_intro_right_title', 'label' => __('Right Card Title', 'mlzs'), 'name' => 'media_intro_right_title', 'type' => 'text', 'default_value' => 'Advanced Technology Infrastructure'),
             array('key' => 'field_media_intro_right_para1', 'label' => __('Right Card Paragraph 1', 'mlzs'), 'name' => 'media_intro_right_para1', 'type' => 'textarea', 'rows' => 2),
@@ -2534,6 +2545,7 @@ function mlzs_acf_media_field_group() {
             array('key' => 'field_media_team_banner_heading', 'label' => __('Banner Heading', 'mlzs'), 'name' => 'media_team_banner_heading', 'type' => 'text', 'default_value' => 'Continuous Content Development'),
             array('key' => 'field_media_team_banner_para', 'label' => __('Banner Paragraph', 'mlzs'), 'name' => 'media_team_banner_para', 'type' => 'textarea', 'rows' => 3, 'default_value' => 'Our creative team continuously creates, develops, and uploads lesson content, ensuring that students always have access to fresh, relevant, and engaging educational materials tailored to their learning needs.'),
             array('key' => 'field_media_tab_benefits', 'label' => __('Benefits Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_media_benefits_student_icon', 'label' => __('Student Badge Icon', 'mlzs'), 'name' => 'media_benefits_student_icon', 'type' => 'text', 'default_value' => 'graduation-cap'),
             array('key' => 'field_media_benefits_student_badge', 'label' => __('Student Badge', 'mlzs'), 'name' => 'media_benefits_student_badge', 'type' => 'text', 'default_value' => 'Student Benefits'),
             array('key' => 'field_media_benefits_student_heading', 'label' => __('Student Heading (before highlight)', 'mlzs'), 'name' => 'media_benefits_student_heading', 'type' => 'text', 'default_value' => 'Preparing Students for'),
             array('key' => 'field_media_benefits_student_highlight', 'label' => __('Student Heading (highlighted)', 'mlzs'), 'name' => 'media_benefits_student_highlight', 'type' => 'text', 'default_value' => 'Tomorrow\'s World'),
@@ -2541,6 +2553,7 @@ function mlzs_acf_media_field_group() {
                 array('key' => 'field_media_ben_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text', 'default_value' => 'Enhanced Engagement'),
                 array('key' => 'field_media_ben_para', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 2),
             )),
+            array('key' => 'field_media_benefits_teacher_icon', 'label' => __('Teacher Badge Icon', 'mlzs'), 'name' => 'media_benefits_teacher_icon', 'type' => 'text', 'default_value' => 'user-plus'),
             array('key' => 'field_media_benefits_teacher_badge', 'label' => __('Teacher Badge', 'mlzs'), 'name' => 'media_benefits_teacher_badge', 'type' => 'text', 'default_value' => 'Teacher Benefits'),
             array('key' => 'field_media_benefits_teacher_heading', 'label' => __('Teacher Heading (before highlight)', 'mlzs'), 'name' => 'media_benefits_teacher_heading', 'type' => 'text', 'default_value' => 'Empowering Our'),
             array('key' => 'field_media_benefits_teacher_highlight', 'label' => __('Teacher Heading (highlighted)', 'mlzs'), 'name' => 'media_benefits_teacher_highlight', 'type' => 'text', 'default_value' => 'Educators'),
@@ -2591,14 +2604,27 @@ function mlzs_acf_nonteach_field_group() {
                 array('key' => 'field_nt_stat_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text', 'default_value' => 'Support Staff'),
             )),
             array('key' => 'field_nt_tab_table', 'label' => __('Staff Table', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_nt_search_placeholder', 'label' => __('Search Input Placeholder', 'mlzs'), 'name' => 'nonteach_search_placeholder', 'type' => 'text', 'default_value' => 'Search...'),
             array('key' => 'field_nt_table_heading', 'label' => __('Section Heading', 'mlzs'), 'name' => 'nonteach_table_heading', 'type' => 'text', 'default_value' => 'Non-Teaching Staff Directory'),
             array('key' => 'field_nt_table_subtext', 'label' => __('Section Subtext', 'mlzs'), 'name' => 'nonteach_table_subtext', 'type' => 'text', 'default_value' => 'Complete list of our administrative and support staff with their designations'),
-            array('key' => 'field_nt_table_stat_total', 'label' => __('Stat: Total Staff', 'mlzs'), 'name' => 'nonteach_table_stat_total', 'type' => 'text', 'default_value' => '11'),
-            array('key' => 'field_nt_table_stat_admin', 'label' => __('Stat: Administrative', 'mlzs'), 'name' => 'nonteach_table_stat_admin', 'type' => 'text', 'default_value' => '5'),
-            array('key' => 'field_nt_table_stat_support', 'label' => __('Stat: Support Staff', 'mlzs'), 'name' => 'nonteach_table_stat_support', 'type' => 'text', 'default_value' => '6'),
+            array('key' => 'field_nt_table_stat_total_label', 'label' => __('Stat: Total Staff Label', 'mlzs'), 'name' => 'nonteach_table_stat_total_label', 'type' => 'text', 'default_value' => 'Total Staff', 'instructions' => __('Numbers are auto-calculated from staff table.', 'mlzs')),
+            array('key' => 'field_nt_table_stat_admin_label', 'label' => __('Stat: Administrative Label', 'mlzs'), 'name' => 'nonteach_table_stat_admin_label', 'type' => 'text', 'default_value' => 'Administrative'),
+            array('key' => 'field_nt_table_stat_support_label', 'label' => __('Stat: Support Staff Label', 'mlzs'), 'name' => 'nonteach_table_stat_support_label', 'type' => 'text', 'default_value' => 'Support Staff'),
             array('key' => 'field_nt_staff_rows', 'label' => __('Staff Rows', 'mlzs'), 'name' => 'nonteach_staff_rows', 'type' => 'repeater', 'layout' => 'table', 'min' => 0, 'button_label' => __('Add Staff', 'mlzs'), 'sub_fields' => array(
                 array('key' => 'field_nt_staff_name', 'label' => __('Name', 'mlzs'), 'name' => 'name', 'type' => 'text'),
-                array('key' => 'field_nt_staff_designation', 'label' => __('Designation', 'mlzs'), 'name' => 'designation', 'type' => 'text'),
+                array('key' => 'field_nt_staff_designation', 'label' => __('Designation', 'mlzs'), 'name' => 'designation', 'type' => 'select', 'choices' => array(
+                    'PRINCIPAL' => 'PRINCIPAL',
+                    'Executive Head' => 'Executive Head',
+                    'ADMIN INCHARGE' => 'ADMIN INCHARGE',
+                    'IT-EXECUTIVE' => 'IT-EXECUTIVE',
+                    'ACCOUNTANT' => 'ACCOUNTANT',
+                    'TRANSPORT INCHARGE' => 'TRANSPORT INCHARGE',
+                    'EXAMINATION CONTROLLER' => 'EXAMINATION CONTROLLER',
+                    'COUNSELLOR' => 'COUNSELLOR',
+                    'STORE INCHARGE' => 'STORE INCHARGE',
+                    'IT EXEC.' => 'IT EXEC.',
+                    'NURSING STAFF' => 'NURSING STAFF',
+                ), 'default_value' => '', 'allow_null' => 0, 'return_format' => 'value'),
             )),
             array('key' => 'field_nt_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
             array('key' => 'field_nt_cta_heading', 'label' => __('CTA Heading', 'mlzs'), 'name' => 'nonteach_cta_heading', 'type' => 'text', 'default_value' => 'Join Our Support Team'),
@@ -2628,12 +2654,14 @@ function mlzs_acf_origin_field_group() {
         'title'                 => __('Campus / Origin Page Sections', 'mlzs'),
         'fields'                => array(
             array('key' => 'field_origin_tab_hero', 'label' => __('Hero Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_origin_hero_bg_image', 'label' => __('Hero Background Image', 'mlzs'), 'name' => 'origin_hero_bg_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium', 'instructions' => __('Optional. Matches origin.html hero background.', 'mlzs')),
             array('key' => 'field_origin_hero_badge', 'label' => __('Badge Text', 'mlzs'), 'name' => 'origin_hero_badge', 'type' => 'text', 'default_value' => 'Campus Tour'),
             array('key' => 'field_origin_hero_icon', 'label' => __('Badge Icon', 'mlzs'), 'name' => 'origin_hero_icon', 'type' => 'text', 'default_value' => 'map-pin'),
             array('key' => 'field_origin_hero_headline_before', 'label' => __('Headline (before highlight)', 'mlzs'), 'name' => 'origin_hero_headline_before', 'type' => 'text', 'default_value' => 'Our'),
             array('key' => 'field_origin_hero_headline_highlight', 'label' => __('Headline (highlighted)', 'mlzs'), 'name' => 'origin_hero_headline_highlight', 'type' => 'text', 'default_value' => 'Campus'),
             array('key' => 'field_origin_hero_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'origin_hero_subtext', 'type' => 'textarea', 'rows' => 2, 'default_value' => 'Discover the vibrant learning environment at Mount Litera Zee School, Alwar - 5 acres of inspiring spaces designed for holistic education.'),
             array('key' => 'field_origin_tab_overview', 'label' => __('Campus Overview', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_origin_overview_section_image', 'label' => __('Campus / Section Image', 'mlzs'), 'name' => 'origin_overview_section_image', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium', 'instructions' => __('Optional. Image shown beside overview (matches origin.html).', 'mlzs')),
             array('key' => 'field_origin_overview_heading', 'label' => __('Card Heading', 'mlzs'), 'name' => 'origin_overview_heading', 'type' => 'text', 'default_value' => 'Campus Overview'),
             array('key' => 'field_origin_overview_location', 'label' => __('Location Subtitle', 'mlzs'), 'name' => 'origin_overview_location', 'type' => 'text', 'default_value' => 'Sirmoli Village, Alwar'),
             array('key' => 'field_origin_overview_icon', 'label' => __('Card Icon', 'mlzs'), 'name' => 'origin_overview_icon', 'type' => 'text', 'default_value' => 'building-2'),
@@ -2643,15 +2671,14 @@ function mlzs_acf_origin_field_group() {
                 array('key' => 'field_origin_ov_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text', 'default_value' => 'Prime Location'),
                 array('key' => 'field_origin_ov_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 3),
             )),
+            array('key' => 'field_origin_video1_icon', 'label' => __('Video 1 Block Icon', 'mlzs'), 'name' => 'origin_video1_icon', 'type' => 'text', 'default_value' => 'play-circle'),
             array('key' => 'field_origin_video1_title', 'label' => __('Video 1 Title', 'mlzs'), 'name' => 'origin_video1_title', 'type' => 'text', 'default_value' => 'Campus Tour Video'),
-            array('key' => 'field_origin_video1_url', 'label' => __('Video 1 URL (optional)', 'mlzs'), 'name' => 'origin_video1_url', 'type' => 'url'),
-            array('key' => 'field_origin_video1_label', 'label' => __('Video 1 Label (e.g. filename)', 'mlzs'), 'name' => 'origin_video1_label', 'type' => 'text', 'default_value' => 'OurCampus-1.MP4'),
-            array('key' => 'field_origin_video1_duration', 'label' => __('Video 1 Duration', 'mlzs'), 'name' => 'origin_video1_duration', 'type' => 'text', 'default_value' => '02:45'),
+            array('key' => 'field_origin_video1_url', 'label' => __('Video 1 URL (optional)', 'mlzs'), 'name' => 'origin_video1_url', 'type' => 'url', 'instructions' => __('Label and duration are auto-derived from the video.', 'mlzs')),
+            array('key' => 'field_origin_video2_icon', 'label' => __('Video 2 Block Icon', 'mlzs'), 'name' => 'origin_video2_icon', 'type' => 'text', 'default_value' => 'video'),
             array('key' => 'field_origin_video2_title', 'label' => __('Video 2 Title', 'mlzs'), 'name' => 'origin_video2_title', 'type' => 'text', 'default_value' => 'Virtual Walkthrough'),
-            array('key' => 'field_origin_video2_url', 'label' => __('Video 2 URL (optional)', 'mlzs'), 'name' => 'origin_video2_url', 'type' => 'url'),
-            array('key' => 'field_origin_video2_label', 'label' => __('Video 2 Label', 'mlzs'), 'name' => 'origin_video2_label', 'type' => 'text', 'default_value' => 'OurCampus.MP4'),
-            array('key' => 'field_origin_video2_duration', 'label' => __('Video 2 Duration', 'mlzs'), 'name' => 'origin_video2_duration', 'type' => 'text', 'default_value' => '03:20'),
+            array('key' => 'field_origin_video2_url', 'label' => __('Video 2 URL (optional)', 'mlzs'), 'name' => 'origin_video2_url', 'type' => 'url', 'instructions' => __('Label and duration are auto-derived from the video.', 'mlzs')),
             array('key' => 'field_origin_tab_gallery', 'label' => __('Campus Gallery', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_origin_gallery_icon', 'label' => __('Gallery Badge Icon', 'mlzs'), 'name' => 'origin_gallery_icon', 'type' => 'text', 'default_value' => 'image'),
             array('key' => 'field_origin_gallery_badge', 'label' => __('Gallery Badge', 'mlzs'), 'name' => 'origin_gallery_badge', 'type' => 'text', 'default_value' => 'Photo Gallery'),
             array('key' => 'field_origin_gallery_heading_before', 'label' => __('Heading (before highlight)', 'mlzs'), 'name' => 'origin_gallery_heading_before', 'type' => 'text', 'default_value' => 'Explore Our'),
             array('key' => 'field_origin_gallery_heading_highlight', 'label' => __('Heading (highlighted)', 'mlzs'), 'name' => 'origin_gallery_heading_highlight', 'type' => 'text', 'default_value' => 'Campus'),
@@ -2661,6 +2688,7 @@ function mlzs_acf_origin_field_group() {
                 array('key' => 'field_origin_gal_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text', 'default_value' => 'Academic Building'),
                 array('key' => 'field_origin_gal_caption', 'label' => __('Caption', 'mlzs'), 'name' => 'caption', 'type' => 'text', 'default_value' => 'Main campus entrance and academic block'),
             )),
+            array('key' => 'field_origin_gallery_more_images', 'label' => __('More Images Grid', 'mlzs'), 'name' => 'origin_gallery_more_images', 'type' => 'gallery', 'return_format' => 'array', 'preview_size' => 'thumbnail', 'library' => 'all', 'min' => 0, 'max' => 0, 'instructions' => __('Additional gallery images (grid below the 6 cards). Matches origin.html lines 470–497.', 'mlzs')),
             array('key' => 'field_origin_gallery_btn_link', 'label' => __('View Complete Gallery Button Link', 'mlzs'), 'name' => 'origin_gallery_btn_link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Link Text = button label.', 'mlzs')),
             array('key' => 'field_origin_tab_features', 'label' => __('Campus Features (4)', 'mlzs'), 'name' => '', 'type' => 'tab'),
             array('key' => 'field_origin_features_heading_before', 'label' => __('Heading (before highlight)', 'mlzs'), 'name' => 'origin_features_heading_before', 'type' => 'text', 'default_value' => 'Campus'),

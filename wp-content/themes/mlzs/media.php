@@ -42,7 +42,11 @@ $intro_left_title = $opt ? get_field('media_intro_left_title', $page_id) : null;
 $intro_left_para1 = $opt ? get_field('media_intro_left_para1', $page_id) : null;
 $intro_left_para2 = $opt ? get_field('media_intro_left_para2', $page_id) : null;
 $intro_left_image = $opt ? get_field('media_intro_left_image', $page_id) : null;
+$intro_left_image_caption = $opt ? get_field('media_intro_left_image_caption', $page_id) : null;
+$intro_left_image_icon    = $opt ? get_field('media_intro_left_image_icon', $page_id) : null;
 $intro_right_image = $opt ? get_field('media_intro_right_image', $page_id) : null;
+$intro_right_image_caption = $opt ? get_field('media_intro_right_image_caption', $page_id) : null;
+$intro_right_image_icon    = $opt ? get_field('media_intro_right_image_icon', $page_id) : null;
 $intro_right_icon  = $opt ? get_field('media_intro_right_icon', $page_id) : null;
 $intro_right_title = $opt ? get_field('media_intro_right_title', $page_id) : null;
 $intro_right_para1 = $opt ? get_field('media_intro_right_para1', $page_id) : null;
@@ -61,6 +65,11 @@ $intro_right_icon  = (is_string($intro_right_icon) && trim($intro_right_icon) !=
 $intro_right_title = ($intro_right_title !== '' && $intro_right_title !== null) ? (string) $intro_right_title : 'Advanced Technology Infrastructure';
 $intro_right_para1 = ($intro_right_para1 !== '' && $intro_right_para1 !== null) ? (string) $intro_right_para1 : 'The multimedia classes solution consists of the latest technology equipment viz. projector, updation of content via cloud computing so that real-time updates are possible in the classroom.';
 $intro_right_para2 = ($intro_right_para2 !== '' && $intro_right_para2 !== null) ? (string) $intro_right_para2 : 'Apart from technology, the biggest USP is the way in which multimedia classes have been conceptualized i.e., Multiple Learning Experiences Model and empowering teachers with the Lesson Plan approach.';
+
+$intro_left_image_caption  = ($intro_left_image_caption !== '' && $intro_left_image_caption !== null) ? (string) $intro_left_image_caption : 'Interactive Multimedia Classroom';
+$intro_left_image_icon     = (is_string($intro_left_image_icon) && trim($intro_left_image_icon) !== '') ? trim($intro_left_image_icon) : 'tv';
+$intro_right_image_caption = ($intro_right_image_caption !== '' && $intro_right_image_caption !== null) ? (string) $intro_right_image_caption : 'Cloud-Based Learning Content';
+$intro_right_image_icon    = (is_string($intro_right_image_icon) && trim($intro_right_image_icon) !== '') ? trim($intro_right_image_icon) : 'cloud';
 
 $intro_left_img_url  = mlzs_media_img_url($intro_left_image);
 if ($intro_left_img_url === '') $intro_left_img_url = 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&h=900&fit=crop';
@@ -145,18 +154,22 @@ $default_team_items = array(
 $team_items = (is_array($team_items) && count($team_items) >= 3) ? $team_items : $default_team_items;
 
 // ——— Benefits ———
+$ben_student_icon    = $opt ? get_field('media_benefits_student_icon', $page_id) : null;
 $ben_student_badge   = $opt ? get_field('media_benefits_student_badge', $page_id) : null;
 $ben_student_heading = $opt ? get_field('media_benefits_student_heading', $page_id) : null;
 $ben_student_highlight = $opt ? get_field('media_benefits_student_highlight', $page_id) : null;
 $ben_student_items   = $opt ? get_field('media_benefits_student_items', $page_id) : null;
+$ben_teacher_icon    = $opt ? get_field('media_benefits_teacher_icon', $page_id) : null;
 $ben_teacher_badge   = $opt ? get_field('media_benefits_teacher_badge', $page_id) : null;
 $ben_teacher_heading = $opt ? get_field('media_benefits_teacher_heading', $page_id) : null;
 $ben_teacher_highlight = $opt ? get_field('media_benefits_teacher_highlight', $page_id) : null;
 $ben_teacher_items   = $opt ? get_field('media_benefits_teacher_items', $page_id) : null;
 
+$ben_student_icon    = (is_string($ben_student_icon) && trim($ben_student_icon) !== '') ? trim($ben_student_icon) : 'graduation-cap';
 $ben_student_badge   = ($ben_student_badge !== '' && $ben_student_badge !== null) ? (string) $ben_student_badge : 'Student Benefits';
 $ben_student_heading = ($ben_student_heading !== '' && $ben_student_heading !== null) ? (string) $ben_student_heading : 'Preparing Students for';
 $ben_student_highlight = ($ben_student_highlight !== '' && $ben_student_highlight !== null) ? (string) $ben_student_highlight : 'Tomorrow\'s World';
+$ben_teacher_icon    = (is_string($ben_teacher_icon) && trim($ben_teacher_icon) !== '') ? trim($ben_teacher_icon) : 'user-plus';
 $ben_teacher_badge   = ($ben_teacher_badge !== '' && $ben_teacher_badge !== null) ? (string) $ben_teacher_badge : 'Teacher Benefits';
 $ben_teacher_heading = ($ben_teacher_heading !== '' && $ben_teacher_heading !== null) ? (string) $ben_teacher_heading : 'Empowering Our';
 $ben_teacher_highlight = ($ben_teacher_highlight !== '' && $ben_teacher_highlight !== null) ? (string) $ben_teacher_highlight : 'Educators';
@@ -267,9 +280,9 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
                                 <div class="text-center">
                                     <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                                        <i data-lucide="tv" class="w-6 h-6 sm:w-8 sm:h-8 text-white"></i>
+                                        <i data-lucide="<?php echo esc_attr($intro_left_image_icon); ?>" class="w-6 h-6 sm:w-8 sm:h-8 text-white"></i>
                                     </div>
-                                    <p class="text-white text-sm sm:text-base font-medium">Interactive Multimedia Classroom</p>
+                                    <p class="text-white text-sm sm:text-base font-medium"><?php echo esc_html($intro_left_image_caption); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -283,9 +296,9 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
                                 <div class="text-center">
                                     <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                                        <i data-lucide="cloud" class="w-6 h-6 sm:w-8 sm:h-8 text-white"></i>
+                                        <i data-lucide="<?php echo esc_attr($intro_right_image_icon); ?>" class="w-6 h-6 sm:w-8 sm:h-8 text-white"></i>
                                     </div>
-                                    <p class="text-white text-sm sm:text-base font-medium">Cloud-Based Learning Content</p>
+                                    <p class="text-white text-sm sm:text-base font-medium"><?php echo esc_html($intro_right_image_caption); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -494,7 +507,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                 </div>
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 text-primary mb-4 sm:mb-6">
-                        <i data-lucide="user-plus" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                        <i data-lucide="<?php echo esc_attr($ben_teacher_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         <span class="text-xs sm:text-sm font-bold uppercase tracking-wider"><?php echo esc_html($ben_teacher_badge); ?></span>
                     </div>
                     <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-6">

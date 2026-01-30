@@ -190,7 +190,7 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                         </table>
                     </div>
                     <?php if ($v_note !== '') : ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 <?php echo $v_note_style === 'amber' ? 'bg-amber-50 rounded-xl border border-amber-100' : 'bg-blue-50 rounded-xl border border-blue-100'; ?>">
+                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $v_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
                         <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
                             <i data-lucide="<?php echo esc_attr($v_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $v_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
                             <span><b>Note:</b> <?php echo esc_html($v_note); ?></span>
@@ -238,7 +238,7 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                         </table>
                     </div>
                     <?php if ($w_note !== '') : ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 <?php echo $w_note_style === 'amber' ? 'bg-amber-50 rounded-xl border border-amber-100' : 'bg-blue-50 rounded-xl border border-blue-100'; ?>">
+                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $w_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
                         <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
                             <i data-lucide="<?php echo esc_attr($w_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $w_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
                             <span><b>Note:</b> <?php echo esc_html($w_note); ?></span>

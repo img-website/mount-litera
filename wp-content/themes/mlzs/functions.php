@@ -332,12 +332,16 @@ function mlzs_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'mlzs_enqueue_assets');
 
+/** Settings > Env – API keys (YouTube, Google Maps) stored in options. */
+require_once get_template_directory() . '/inc/admin-env-settings.php';
+
 /**
- * Set ACF Google Maps API key from wp-config constant (for Reach page map field and any Google Map fields).
+ * Set ACF Google Maps API key from Settings > Env (ACF options page).
  */
 function mlzs_acf_google_maps_api_key() {
-    if (defined('MLZS_GOOGLE_MAPS_API_KEY') && function_exists('acf_update_setting')) {
-        acf_update_setting('google_api_key', constant('MLZS_GOOGLE_MAPS_API_KEY'));
+    $key = function_exists('get_field') ? get_field('mlzs_google_maps_api_key', 'acf-options-env') : '';
+    if (is_string($key) && $key !== '' && function_exists('acf_update_setting')) {
+        acf_update_setting('google_api_key', $key);
     }
 }
 add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);

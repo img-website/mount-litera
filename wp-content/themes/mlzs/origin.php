@@ -97,16 +97,12 @@ function mlzs_origin_youtube_title($url) {
     if ($title !== '') set_transient($cache_key, $title, DAY_IN_SECONDS);
     return $title;
 }
-// YouTube duration via Data API v3 (requires API key in Options or constant MLZS_YOUTUBE_API_KEY), cached 24h
+// YouTube duration via Data API v3 (API key from Settings > Env), cached 24h
 function mlzs_origin_youtube_duration($url) {
     $id = mlzs_origin_youtube_id($url);
     if (!$id) return '';
-    $api_key = get_option('mlzs_youtube_api_key', '');
-    if (defined('MLZS_YOUTUBE_API_KEY')) {
-        $k = constant('MLZS_YOUTUBE_API_KEY');
-        if (is_string($k) && $k !== '') $api_key = $k;
-    }
-    if ($api_key === '') return '';
+    $api_key = function_exists('get_field') ? get_field('mlzs_youtube_api_key', 'acf-options-env') : '';
+    if (!is_string($api_key) || $api_key === '') return '';
     $cache_key = 'origin_yt_dur_' . $id;
     $cached = get_transient($cache_key);
     if ($cached !== false && is_string($cached)) return $cached;

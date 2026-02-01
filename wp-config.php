@@ -88,9 +88,7 @@ $table_prefix = 'mlzs_';
 define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
-
-define('MLZS_YOUTUBE_API_KEY', 'AIzaSyC2AXpPTCmfuFtttlZHggADfI1SHI1cXA8');
-define('MLZS_GOOGLE_MAPS_API_KEY', 'AIzaSyDC3RCcvMaCHd7VOf7hRhgceXDQ5cSFyGU');
+/* API keys (YouTube, Google Maps) are managed via Settings > Env in WordPress admin. */
 
 /* That's all, stop editing! Happy publishing. */
 

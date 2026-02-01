@@ -199,7 +199,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                     <div class="w-8 h-8 rounded-full <?php echo esc_attr($s_style); ?> flex items-center justify-center">
                                         <span class="text-xs font-bold <?php echo esc_attr($s_txt); ?>"><?php echo esc_html($s_num); ?></span>
                                     </div>
-                                    <h4 class="font-bold text-text-main-light"><?php echo esc_html($s_title); ?></h4>
+                                    <h3 class="font-bold text-text-main-light"><?php echo esc_html($s_title); ?></h3>
                                 </div>
                                 <p class="text-xs sm:text-sm text-text-secondary-light">
                                     <?php echo esc_html($s_desc); ?>
@@ -273,7 +273,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                     <div class="w-8 h-8 rounded-lg <?php echo esc_attr($f_style); ?> flex items-center justify-center">
                                         <i data-lucide="<?php echo esc_attr($f_icon); ?>" class="w-4 h-4 text-primary"></i>
                                     </div>
-                                    <h4 class="font-bold text-text-main-light"><?php echo esc_html($f_title); ?></h4>
+                                    <h3 class="font-bold text-text-main-light"><?php echo esc_html($f_title); ?></h3>
                                 </div>
                                 <p class="text-xs sm:text-sm text-text-secondary-light">
                                     <?php echo esc_html($f_desc); ?>
@@ -337,7 +337,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <div class="bg-gradient-to-r from-primary to-primary-light rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                     <div>
-                        <h3 class="text-lg sm:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-lg sm:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-sm text-white/80 mb-6">
                             <?php echo esc_html($cta_paragraph); ?>
                         </p>

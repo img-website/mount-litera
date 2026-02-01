@@ -374,7 +374,7 @@ if (!function_exists('mlzs_infirmary_gallery_img_url')) {
             <div class="bg-gradient-to-r from-primary to-primary-light rounded-3xl p-6 md:p-8 lg:p-12 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
                     <div>
-                        <h3 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-sm sm:text-base md:text-lg text-white/80 leading-relaxed mb-6">
                             <?php echo esc_html($cta_para); ?>
                         </p>

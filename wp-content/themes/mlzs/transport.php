@@ -195,7 +195,7 @@ $cta_stats = (is_array($cta_stats) && !empty($cta_stats)) ? $cta_stats : $defaul
                             <i data-lucide="<?php echo esc_attr($r_icon); ?>" class="w-3.5 h-3.5 sm:w-4 sm:h-4 <?php echo esc_attr($r_ic['icon']); ?>"></i>
                         </div>
                         <div>
-                            <h4 class="text-sm sm:text-base font-bold text-text-main-light mb-1 sm:mb-2"><?php echo esc_html($r_title); ?></h4>
+                            <h3 class="text-sm sm:text-base font-bold text-text-main-light mb-1 sm:mb-2"><?php echo esc_html($r_title); ?></h3>
                             <p class="text-xs sm:text-sm md:text-base text-text-secondary-light"><?php echo esc_html($r_para); ?></p>
                             <?php if (!empty($r_sub)) : ?>
                             <div class="space-y-1.5 sm:space-y-2 pl-0 sm:pl-0 mt-2 sm:mt-3">
@@ -293,7 +293,7 @@ $cta_stats = (is_array($cta_stats) && !empty($cta_stats)) ? $cta_stats : $defaul
             <div class="bg-gradient-to-r from-primary to-primary-light rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                     <div>
-                        <h3 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-xs sm:text-sm md:text-base text-white/80 mb-4 sm:mb-6"><?php echo esc_html($cta_paragraph); ?></p>
                         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                             <?php

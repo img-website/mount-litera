@@ -187,7 +187,7 @@ $stats_year = ($stats_year !== '' && $stats_year !== null) ? (string) $stats_yea
                                             <i data-lucide="<?php echo esc_attr($b_icon); ?>" class="w-4 h-4 <?php echo esc_attr($ic['icon']); ?>"></i>
                                         </div>
                                         <div>
-                                            <h4 class="text-sm font-bold text-text-main-light"><?php echo esc_html($b_title); ?></h4>
+                                            <h3 class="text-sm font-bold text-text-main-light"><?php echo esc_html($b_title); ?></h3>
                                             <p class="text-xs text-text-secondary-light"><?php echo esc_html($b_subtitle); ?></p>
                                         </div>
                                     </div>

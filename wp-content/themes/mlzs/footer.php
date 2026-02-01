@@ -147,7 +147,7 @@ if (!is_array($footer_social) || empty($footer_social)) $footer_social = $defaul
                         <i data-lucide="map-pin" class="w-6 h-6 text-accent group-hover:scale-110 transition-transform duration-300"></i>
                     </div>
                     <div>
-                        <h4 class="text-white text-sm font-bold uppercase tracking-wide mb-1 group-hover:text-accent transition-colors"><?php echo esc_html( (string) $footer_address_heading ); ?></h4>
+                        <h3 class="text-white text-sm font-bold uppercase tracking-wide mb-1 group-hover:text-accent transition-colors"><?php echo esc_html( (string) $footer_address_heading ); ?></h3>
                         <p class="text-slate-400 text-sm leading-snug"><?php echo esc_html( (string) $footer_address_text ); ?></p>
                     </div>
                 </div>

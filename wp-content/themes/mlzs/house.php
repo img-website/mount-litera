@@ -280,7 +280,7 @@ if (!function_exists('mlzs_house_block_img_url')) {
                         <?php echo wp_kses_post($bcontent); ?>
                     </div>
                     <div class="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-slate-200">
-                        <h4 class="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 sm:mb-4">House Values</h4>
+                        <h3 class="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 sm:mb-4">House Values</h3>
                         <div class="flex flex-wrap gap-2 sm:gap-3">
                             <?php foreach ($bvalues as $v) :
                                 $vlabel = isset($v['label']) ? (string) $v['label'] : '';

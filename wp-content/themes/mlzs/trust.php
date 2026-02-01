@@ -155,7 +155,7 @@ $cta_btn2_icon = (is_string($cta_btn2_icon) && trim($cta_btn2_icon) !== '') ? tr
                     <div class="relative">
                         <div class="absolute -top-6 -right-6 w-72 h-72 bg-secondary/20 rounded-full blur-2xl"></div>
                         <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
-                            <h3 class="text-2xl font-bold text-white mb-6 text-center"><?php echo esc_html($board_title); ?></h3>
+                            <h2 class="text-2xl font-bold text-white mb-6 text-center"><?php echo esc_html($board_title); ?></h2>
                             <div class="space-y-6">
                                 <?php
                                 $grad_map = array(
@@ -175,7 +175,7 @@ $cta_btn2_icon = (is_string($cta_btn2_icon) && trim($cta_btn2_icon) !== '') ? tr
                                         <?php echo esc_html($t_init); ?>
                                     </div>
                                     <div>
-                                        <h4 class="text-white font-bold text-lg"><?php echo esc_html($t_name); ?></h4>
+                                        <h3 class="text-white font-bold text-lg"><?php echo esc_html($t_name); ?></h3>
                                         <p class="text-slate-300 text-sm"><?php echo esc_html($t_desig); ?></p>
                                     </div>
                                 </div>

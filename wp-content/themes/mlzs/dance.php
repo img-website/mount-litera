@@ -315,7 +315,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                 </div>
 
                 <div class="bg-gradient-to-br from-primary to-primary-dark rounded-xl sm:rounded-2xl p-4 sm:p-6 text-white">
-                    <h3 class="text-base sm:text-lg md:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                    <h2 class="text-base sm:text-lg md:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                     <p class="text-sm text-white/80 mb-6"><?php echo esc_html($cta_desc); ?></p>
                     <div class="space-y-4">
                         <a href="<?php echo esc_url($cta_btn1['url']); ?>" <?php echo !empty($cta_btn1['target']) ? ' target="' . esc_attr($cta_btn1['target']) . '"' : ''; ?> class="w-full px-4 py-3 bg-white text-primary rounded-lg font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2 group text-sm">

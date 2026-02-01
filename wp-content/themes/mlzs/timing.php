@@ -232,10 +232,10 @@ $info_style_classes = array(
                     </div>
 
                     <div class="mt-6 sm:mt-8 p-3 sm:p-4 rounded-xl bg-slate-50 border border-slate-100">
-                        <h4 class="text-xs sm:text-sm font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <h3 class="text-xs sm:text-sm font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
                             <i data-lucide="phone-call" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
                             <?php echo esc_html($guidelines_heading); ?>
-                        </h4>
+                        </h3>
                         <ul class="space-y-2 text-xs sm:text-sm text-gray-600">
                             <?php foreach ($guidelines_list as $g) :
                                 $g_text = isset($g['text']) ? (string) $g['text'] : '';

@@ -297,10 +297,10 @@ if (empty($academics_tabs)) {
                     <span class="w-fit rounded-full bg-primary/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary dark:text-primary-dark ring-1 ring-primary/20">
                         <?php echo esc_html( (string) $welcome_badge ); ?>
                     </span>
-                    <h1 class="font-display text-4xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark sm:text-5xl lg:text-6xl">
+                    <h2 class="font-display text-4xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark sm:text-5xl lg:text-6xl">
                         <?php echo esc_html( (string) $welcome_heading1 ); ?><br/>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-velvet via-slate-blue to-amber-flame"><?php echo esc_html( (string) $welcome_highlight ); ?></span>
-                    </h1>
+                    </h2>
                     <p class="max-w-xl text-lg leading-relaxed text-text-secondary-light dark:text-text-secondary-dark">
                         <?php echo esc_html( (string) $welcome_desc ); ?>
                     </p>
@@ -374,7 +374,7 @@ if (empty($academics_tabs)) {
             <div class="w-full flex flex-col gap-4">
                 <div class="flex flex-col items-center text-center gap-4">
                     <span class="px-3 py-1 rounded-full bg-primary/30 border border-primary/50 text-accent text-xs font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(247,184,1,0.1)]"><?php echo esc_html( (string) $approach_badge ); ?></span>
-                    <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight"><?php echo esc_html( (string) $approach_heading ); ?></h1>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white tracking-tight"><?php echo esc_html( (string) $approach_heading ); ?></h2>
                     <p class="text-slate-400 text-lg max-w-2xl font-light">
                         <?php echo esc_html( (string) $approach_description ); ?>
                     </p>
@@ -468,9 +468,9 @@ if (empty($academics_tabs)) {
                 <i data-lucide="<?php echo esc_attr( (string) $academics_badge_icon ); ?>" class="w-4 h-4"></i>
                 <?php echo esc_html( (string) $academics_badge_text ); ?>
             </div>
-            <h1 class="text-5xl md:text-6xl font-medium tracking-tight text-gray-900 mb-6">
+            <h2 class="text-5xl md:text-6xl font-medium tracking-tight text-gray-900 mb-6">
                 <?php echo esc_html( (string) $academics_heading ); ?>
-            </h1>
+            </h2>
             <p class="text-gray-500 max-w-2xl text-lg leading-relaxed font-light">
                 <?php echo esc_html( (string) $academics_description ); ?>
             </p>

@@ -158,9 +158,9 @@ $gradient_overlays = array(
         <div class="max-w-7xl mx-auto">
             <div class="mb-8 sm:mb-12">
                 <div class="text-center mb-8">
-                    <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-text-main-light mb-4">
-                        <?php echo esc_html($video_heading); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"><?php echo esc_html($video_heading_highlight); ?></span>
-                    </h3>
+<h2 class="text-lg sm:text-xl md:text-2xl font-bold text-text-main-light mb-4">
+                                        <?php echo esc_html($video_heading); ?> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent"><?php echo esc_html($video_heading_highlight); ?></span>
+                                    </h2>
                     <p class="text-sm text-text-secondary-light max-w-2xl mx-auto">
                         <?php echo esc_html($video_subtext); ?>
                     </p>
@@ -193,7 +193,7 @@ $gradient_overlays = array(
                         </div>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 sm:p-4">
                             <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <h4 class="font-bold text-xs sm:text-sm mb-1"><?php echo esc_html($hover_title); ?></h4>
+                                <p class="font-bold text-xs sm:text-sm mb-1"><?php echo esc_html($hover_title); ?></p>
                                 <p class="text-xs opacity-90">Click to play video</p>
                             </div>
                         </div>
@@ -233,7 +233,7 @@ $gradient_overlays = array(
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                                 <div class="text-white transform translate-y-3 group-hover:translate-y-0 transition-transform duration-300">
-                                    <h4 class="font-bold text-xs mb-1"><?php echo esc_html($mv_hover); ?></h4>
+                                    <p class="font-bold text-xs mb-1"><?php echo esc_html($mv_hover); ?></p>
                                     <p class="text-xs opacity-90">Watch video testimonial</p>
                                 </div>
                             </div>
@@ -268,7 +268,7 @@ $gradient_overlays = array(
             <div class="bg-gradient-to-r from-primary to-primary-light rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                     <div>
-                        <h3 class="text-lg sm:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-lg sm:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-sm text-white/80 mb-6">
                             <?php echo esc_html($cta_paragraph); ?>
                         </p>

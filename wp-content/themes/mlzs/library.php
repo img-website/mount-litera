@@ -262,7 +262,7 @@ function mlzs_library_gallery_img_url($row) {
             <div class="mt-16 bg-gradient-to-r from-primary/10 to-accent/10 rounded-3xl p-8 md:p-12 border border-primary/20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div>
-                        <h3 class="text-2xl sm:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-base sm:text-lg text-text-secondary-light leading-relaxed mb-6">
                             <?php echo esc_html($cta_para); ?>
                         </p>

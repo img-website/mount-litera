@@ -233,7 +233,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <div class="bg-gradient-to-r from-primary/10 to-accent/10 rounded-3xl p-6 md:p-8 lg:p-12 border border-primary/20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 items-center">
                     <div>
-                        <h3 class="text-2xl sm:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-text-main-light mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-base sm:text-lg text-text-secondary-light leading-relaxed mb-6"><?php echo esc_html($cta_para); ?></p>
                         <div class="flex flex-col sm:flex-row gap-4">
                             <a href="<?php echo esc_url($cta_btn1_url); ?>" class="px-4 py-2 sm:px-6 sm:py-3 bg-primary text-white rounded-full font-bold hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group w-full sm:w-auto text-sm sm:text-base">

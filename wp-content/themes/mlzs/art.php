@@ -318,7 +318,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                     <div>
-                        <h3 class="text-lg sm:text-xl md:text-2xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-sm text-white/80 mb-6">
                             <?php echo esc_html($cta_desc); ?>
                         </p>

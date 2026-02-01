@@ -303,7 +303,7 @@ $stat_colors = array('primary' => 'text-[#3D348B]', 'accent' => 'text-[#F7B801]'
             <div class="mt-16 bg-gradient-to-r from-primary/10 to-accent/10 rounded-3xl p-8 md:p-12 border border-primary/20">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div>
-                        <h3 class="text-3xl font-bold text-text-main-light mb-6"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-3xl font-bold text-text-main-light mb-6"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-text-secondary-light leading-relaxed mb-6"><?php echo esc_html($cta_paragraph); ?></p>
                         <div class="flex flex-wrap gap-4">
                             <?php if (is_array($cta_btn1) && !empty($cta_btn1['url'])) : ?>

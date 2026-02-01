@@ -613,7 +613,7 @@ $fabric_cards = (is_array($fabric_cards) && !empty($fabric_cards)) ? $fabric_car
                         </div>
                     </div>
                     <div class="p-6">
-                        <h4 class="text-lg font-bold text-gray-900 mb-2"><?php echo esc_html($a['title'] ?? ''); ?></h4>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2"><?php echo esc_html($a['title'] ?? ''); ?></h3>
                         <p class="text-sm text-gray-600 mb-4"><?php echo esc_html($a['description'] ?? ''); ?></p>
                         <?php 
                         $swatches = isset($a['color_swatches']) && is_array($a['color_swatches']) ? $a['color_swatches'] : array();

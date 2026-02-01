@@ -238,7 +238,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                     <i data-lucide="<?php echo esc_attr($pi_icon); ?>" class="w-3 h-3"></i>
                                 </div>
                                 <div>
-                                    <h5 class="text-sm font-bold text-text-main-light mb-1"><?php echo esc_html($pi_title); ?></h5>
+                                    <h4 class="text-sm font-bold text-text-main-light mb-1"><?php echo esc_html($pi_title); ?></h4>
                                     <p class="text-xs sm:text-sm text-text-secondary-light"><?php echo esc_html($pi_desc); ?></p>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 text-white">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                     <div>
-                        <h3 class="text-base sm:text-lg md:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h3>
+                        <h2 class="text-base sm:text-lg md:text-xl font-bold mb-4"><?php echo esc_html($cta_heading); ?></h2>
                         <p class="text-sm text-white/80 mb-6">
                             <?php echo esc_html($cta_paragraph); ?>
                         </p>

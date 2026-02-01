@@ -186,14 +186,14 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
     <div class="flex-1 flex items-center justify-center container mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 w-full max-w-5xl">
             <div class="space-y-2">
-                <h3 class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 sm:mb-6 uppercase">Explore</h3>
+                <p class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 sm:mb-6 uppercase">Explore</p>
                 <ul class="space-y-3 sm:space-y-4 menu-root">
                     <?php mlzs_header_menu_level($header_full_menu, 0); ?>
                 </ul>
             </div>
             <div class="flex flex-col justify-between space-y-8 sm:space-y-10 mt-8 md:mt-0 md:pl-20 md:border-l border-white/10">
                 <div>
-                    <h3 class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 sm:mb-6 uppercase">Quick Actions</h3>
+                    <p class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-4 sm:mb-6 uppercase">Quick Actions</p>
                     <ul class="space-y-3 sm:space-y-4">
                         <?php foreach ($header_quick_actions as $qa) :
                             $qa_link = isset($qa['link']) && is_array($qa['link']) ? $qa['link'] : array('url' => '#', 'title' => '', 'target' => '');
@@ -207,7 +207,7 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-3 sm:mb-4 uppercase"><?php echo esc_html( (string) $header_connect_heading ); ?></h3>
+                    <p class="text-xs font-bold tracking-[0.2em] text-gray-500 mb-3 sm:mb-4 uppercase"><?php echo esc_html( (string) $header_connect_heading ); ?></p>
                     <p class="text-gray-400 mb-4 text-xs sm:text-sm font-light"><?php echo esc_html( (string) $header_connect_email ); ?> <br> <?php echo esc_html( (string) $header_connect_phone ); ?></p>
                     <div class="flex gap-3 sm:gap-4">
                         <?php foreach ($header_social as $s) :

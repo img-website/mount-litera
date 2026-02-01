@@ -3252,6 +3252,140 @@ function mlzs_acf_uniform_field_group() {
 add_action('acf/init', 'mlzs_acf_uniform_field_group');
 
 /**
+ * ACF Pro: Core Values Page – Hero, WRFC Mantra, Core Values Table, Values in Action, CTA
+ */
+function mlzs_acf_value_field_group() {
+    if (!function_exists('acf_add_local_field_group')) return;
+    acf_add_local_field_group(array(
+        'key' => 'group_mlzs_value',
+        'title' => __('Core Values Page Sections', 'mlzs'),
+        'fields' => array(
+            array('key' => 'field_val_tab_hero', 'label' => __('Hero', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_val_hero_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'value_hero_badge', 'type' => 'text', 'default_value' => 'Foundation of Leadership'),
+            array('key' => 'field_val_hero_before', 'label' => __('Headline Before', 'mlzs'), 'name' => 'value_hero_headline_before', 'type' => 'text', 'default_value' => 'Our'),
+            array('key' => 'field_val_hero_highlight', 'label' => __('Headline Highlighted', 'mlzs'), 'name' => 'value_hero_headline_highlight', 'type' => 'text', 'default_value' => 'Core Values'),
+            array('key' => 'field_val_hero_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'value_hero_subtext', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_val_hero_bg', 'label' => __('Background Image', 'mlzs'), 'name' => 'value_hero_bg_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_val_tab_wrfc', 'label' => __('WRFC Mantra', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_val_wrfc_main_img', 'label' => __('Main Image', 'mlzs'), 'name' => 'value_wrfc_main_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_val_wrfc_overlay_img', 'label' => __('Overlay/Small Image', 'mlzs'), 'name' => 'value_wrfc_overlay_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_val_wrfc_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'value_wrfc_icon', 'type' => 'text', 'default_value' => 'heart'),
+            array('key' => 'field_val_wrfc_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'value_wrfc_badge', 'type' => 'text', 'default_value' => 'Our Mantra'),
+            array('key' => 'field_val_wrfc_heading', 'label' => __('Heading', 'mlzs'), 'name' => 'value_wrfc_heading', 'type' => 'text'),
+            array('key' => 'field_val_wrfc_para1', 'label' => __('Paragraph 1', 'mlzs'), 'name' => 'value_wrfc_para1', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_val_wrfc_para2', 'label' => __('Paragraph 2', 'mlzs'), 'name' => 'value_wrfc_para2', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_val_wrfc_philo_heading', 'label' => __('Philosophy Box Heading', 'mlzs'), 'name' => 'value_wrfc_philo_heading', 'type' => 'text', 'default_value' => 'The WRFC Philosophy'),
+            array('key' => 'field_val_wrfc_philo_icon', 'label' => __('Philosophy Icon', 'mlzs'), 'name' => 'value_wrfc_philo_icon', 'type' => 'text', 'default_value' => 'star'),
+            array('key' => 'field_val_wrfc_philo_points', 'label' => __('Philosophy Points', 'mlzs'), 'name' => 'value_wrfc_philo_points', 'type' => 'repeater', 'layout' => 'table', 'min' => 0, 'button_label' => __('Add Point', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_val_philo_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'text'),
+            )),
+            array('key' => 'field_val_tab_table', 'label' => __('Core Values Table', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_val_table_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'value_table_badge', 'type' => 'text', 'default_value' => 'Foundation of Leadership'),
+            array('key' => 'field_val_table_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'value_table_icon', 'type' => 'text', 'default_value' => 'shield'),
+            array('key' => 'field_val_table_heading', 'label' => __('Heading (full - fallback)', 'mlzs'), 'name' => 'value_table_heading', 'type' => 'text'),
+            array('key' => 'field_val_table_heading_before', 'label' => __('Heading Before Highlight', 'mlzs'), 'name' => 'value_table_heading_before', 'type' => 'text', 'default_value' => 'Core Values That'),
+            array('key' => 'field_val_table_heading_highlight', 'label' => __('Heading Highlighted', 'mlzs'), 'name' => 'value_table_heading_highlight', 'type' => 'text', 'default_value' => 'Shape Leaders'),
+            array('key' => 'field_val_table_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'value_table_subtext', 'type' => 'text'),
+            array('key' => 'field_val_table_col1_title', 'label' => __('Column 1 Title', 'mlzs'), 'name' => 'value_table_col1_title', 'type' => 'text', 'default_value' => 'Core Value'),
+            array('key' => 'field_val_table_col1_sub', 'label' => __('Column 1 Subtitle', 'mlzs'), 'name' => 'value_table_col1_sub', 'type' => 'text', 'default_value' => 'The principle we uphold'),
+            array('key' => 'field_val_table_col2_title', 'label' => __('Column 2 Title', 'mlzs'), 'name' => 'value_table_col2_title', 'type' => 'text', 'default_value' => 'Definition'),
+            array('key' => 'field_val_table_col2_sub', 'label' => __('Column 2 Subtitle', 'mlzs'), 'name' => 'value_table_col2_sub', 'type' => 'text', 'default_value' => 'How we live this value'),
+            array('key' => 'field_val_table_rows', 'label' => __('Values Rows', 'mlzs'), 'name' => 'value_table_rows', 'type' => 'repeater', 'layout' => 'block', 'min' => 0, 'button_label' => __('Add Value', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_val_row_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'shield-check'),
+                array('key' => 'field_val_row_style', 'label' => __('Color Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'primary-light' => 'Primary Light', 'accent' => 'Accent', 'accent-dark' => 'Accent Dark'), 'default_value' => 'primary'),
+                array('key' => 'field_val_row_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_val_row_subtitle', 'label' => __('Subtitle', 'mlzs'), 'name' => 'subtitle', 'type' => 'text'),
+                array('key' => 'field_val_row_definition', 'label' => __('Definition', 'mlzs'), 'name' => 'definition', 'type' => 'textarea', 'rows' => 2),
+            )),
+            array('key' => 'field_val_tab_action', 'label' => __('Values in Action', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_val_action_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'value_action_badge', 'type' => 'text', 'default_value' => 'Values in Action'),
+            array('key' => 'field_val_action_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'value_action_icon', 'type' => 'text', 'default_value' => 'zap'),
+            array('key' => 'field_val_action_heading_before', 'label' => __('Heading Before', 'mlzs'), 'name' => 'value_action_heading_before', 'type' => 'text', 'default_value' => 'Living Our'),
+            array('key' => 'field_val_action_heading_highlight', 'label' => __('Heading Highlighted', 'mlzs'), 'name' => 'value_action_heading_highlight', 'type' => 'text', 'default_value' => 'Values'),
+            array('key' => 'field_val_action_heading_after', 'label' => __('Heading After', 'mlzs'), 'name' => 'value_action_heading_after', 'type' => 'text', 'default_value' => 'Daily'),
+            array('key' => 'field_val_action_heading', 'label' => __('Heading (full fallback)', 'mlzs'), 'name' => 'value_action_heading', 'type' => 'text'),
+            array('key' => 'field_val_action_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'value_action_subtext', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_val_action_cards', 'label' => __('Action Cards (3)', 'mlzs'), 'name' => 'value_action_cards', 'type' => 'repeater', 'layout' => 'block', 'min' => 0, 'button_label' => __('Add Card', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_val_card_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'users'),
+                array('key' => 'field_val_card_style', 'label' => __('Style', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light'), 'default_value' => 'primary'),
+                array('key' => 'field_val_card_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_val_card_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 2),
+            )),
+            array('key' => 'field_val_tab_cta', 'label' => __('CTA', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_val_cta_heading', 'label' => __('Heading', 'mlzs'), 'name' => 'value_cta_heading', 'type' => 'text', 'default_value' => 'Experience Our Values'),
+            array('key' => 'field_val_cta_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'value_cta_paragraph', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_val_cta_btn1', 'label' => __('Button 1 (Schedule Visit)', 'mlzs'), 'name' => 'value_cta_btn1', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_val_cta_btn2', 'label' => __('Button 2 (Download Prospectus)', 'mlzs'), 'name' => 'value_cta_btn2', 'type' => 'link', 'return_format' => 'array'),
+            array('key' => 'field_val_cta_stats', 'label' => __('Stat Boxes (4)', 'mlzs'), 'name' => 'value_cta_stats', 'type' => 'repeater', 'layout' => 'row', 'min' => 0, 'button_label' => __('Add Stat', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_val_stat_number', 'label' => __('Number/Text', 'mlzs'), 'name' => 'number', 'type' => 'text'),
+                array('key' => 'field_val_stat_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text'),
+                array('key' => 'field_val_stat_style', 'label' => __('Color', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent', 'primary-light' => 'Primary Light', 'accent-dark' => 'Accent Dark'), 'default_value' => 'primary'),
+            )),
+        ),
+        'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'value.php'))),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_value_field_group');
+
+/**
+ * ACF Pro: Vision & Mission Page – Hero, Vision section, Mission section
+ */
+function mlzs_acf_vision_field_group() {
+    if (!function_exists('acf_add_local_field_group')) return;
+    acf_add_local_field_group(array(
+        'key' => 'group_mlzs_vision',
+        'title' => __('Vision & Mission Page Sections', 'mlzs'),
+        'fields' => array(
+            array('key' => 'field_vis_tab_hero', 'label' => __('Hero', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_vis_hero_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'vision_hero_badge', 'type' => 'text', 'default_value' => 'Our Guiding Principles'),
+            array('key' => 'field_vis_hero_before', 'label' => __('Headline Before', 'mlzs'), 'name' => 'vision_hero_headline_before', 'type' => 'text', 'default_value' => 'Vision'),
+            array('key' => 'field_vis_hero_highlight', 'label' => __('Headline Highlighted', 'mlzs'), 'name' => 'vision_hero_headline_highlight', 'type' => 'text', 'default_value' => '&'),
+            array('key' => 'field_vis_hero_after', 'label' => __('Headline After', 'mlzs'), 'name' => 'vision_hero_headline_after', 'type' => 'text', 'default_value' => 'Mission'),
+            array('key' => 'field_vis_hero_subtext', 'label' => __('Subtext', 'mlzs'), 'name' => 'vision_hero_subtext', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_vis_hero_bg', 'label' => __('Background Image', 'mlzs'), 'name' => 'vision_hero_bg_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_vis_tab_vision', 'label' => __('Vision Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_vis_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'vision_section_icon', 'type' => 'text', 'default_value' => 'eye'),
+            array('key' => 'field_vis_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'vision_section_badge', 'type' => 'text', 'default_value' => 'Our Vision'),
+            array('key' => 'field_vis_heading', 'label' => __('Heading', 'mlzs'), 'name' => 'vision_section_heading', 'type' => 'text'),
+            array('key' => 'field_vis_para1', 'label' => __('Paragraph 1', 'mlzs'), 'name' => 'vision_section_para1', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_vis_para2', 'label' => __('Paragraph 2', 'mlzs'), 'name' => 'vision_section_para2', 'type' => 'textarea', 'rows' => 2),
+            array('key' => 'field_vis_list_label', 'label' => __('List Label', 'mlzs'), 'name' => 'vision_section_list_label', 'type' => 'text', 'default_value' => 'The vision of Mount Litera Zee School envisages:'),
+            array('key' => 'field_vis_list_items', 'label' => __('List Items', 'mlzs'), 'name' => 'vision_section_list_items', 'type' => 'repeater', 'layout' => 'table', 'min' => 0, 'button_label' => __('Add Item', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_vis_list_text', 'label' => __('Text', 'mlzs'), 'name' => 'text', 'type' => 'textarea', 'rows' => 2),
+            )),
+            array('key' => 'field_vis_highlight1', 'label' => __('Highlight Box 1', 'mlzs'), 'name' => 'vision_highlight1', 'type' => 'group', 'sub_fields' => array(
+                array('key' => 'field_vis_h1_number', 'label' => __('Number/Title', 'mlzs'), 'name' => 'number', 'type' => 'text', 'default_value' => 'Complete'),
+                array('key' => 'field_vis_h1_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text', 'default_value' => 'Educational Experience'),
+            )),
+            array('key' => 'field_vis_highlight2', 'label' => __('Highlight Box 2', 'mlzs'), 'name' => 'vision_highlight2', 'type' => 'group', 'sub_fields' => array(
+                array('key' => 'field_vis_h2_number', 'label' => __('Number/Title', 'mlzs'), 'name' => 'number', 'type' => 'text', 'default_value' => 'Unique'),
+                array('key' => 'field_vis_h2_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text', 'default_value' => 'Learning Approach'),
+            )),
+            array('key' => 'field_vis_main_img', 'label' => __('Main Image', 'mlzs'), 'name' => 'vision_main_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_vis_overlay_img', 'label' => __('Overlay Image', 'mlzs'), 'name' => 'vision_overlay_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_vis_tab_mission', 'label' => __('Mission Section', 'mlzs'), 'name' => '', 'type' => 'tab'),
+            array('key' => 'field_vis_mission_main_img', 'label' => __('Main Image', 'mlzs'), 'name' => 'vision_mission_main_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_vis_mission_overlay_img', 'label' => __('Overlay Image', 'mlzs'), 'name' => 'vision_mission_overlay_image', 'type' => 'image', 'return_format' => 'array'),
+            array('key' => 'field_vis_mission_img_title', 'label' => __('Image Overlay Title', 'mlzs'), 'name' => 'vision_mission_image_title', 'type' => 'text', 'default_value' => 'Shaping Global Minds'),
+            array('key' => 'field_vis_mission_img_subtitle', 'label' => __('Image Overlay Subtitle', 'mlzs'), 'name' => 'vision_mission_image_subtitle', 'type' => 'text', 'default_value' => 'On Indian soil with world-class standards'),
+            array('key' => 'field_vis_mission_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'vision_mission_icon', 'type' => 'text', 'default_value' => 'target'),
+            array('key' => 'field_vis_mission_badge', 'label' => __('Badge', 'mlzs'), 'name' => 'vision_mission_badge', 'type' => 'text', 'default_value' => 'Our Mission'),
+            array('key' => 'field_vis_mission_heading', 'label' => __('Heading', 'mlzs'), 'name' => 'vision_mission_heading', 'type' => 'text'),
+            array('key' => 'field_vis_mission_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'vision_mission_paragraph', 'type' => 'textarea', 'rows' => 3),
+            array('key' => 'field_vis_mission_pillars_heading', 'label' => __('Pillars Heading', 'mlzs'), 'name' => 'vision_mission_pillars_heading', 'type' => 'text', 'default_value' => 'Our Mission Pillars'),
+            array('key' => 'field_vis_mission_pillars', 'label' => __('Mission Pillars', 'mlzs'), 'name' => 'vision_mission_pillars', 'type' => 'repeater', 'layout' => 'block', 'min' => 0, 'button_label' => __('Add Pillar', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_vis_pillar_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'globe'),
+                array('key' => 'field_vis_pillar_style', 'label' => __('Color', 'mlzs'), 'name' => 'style', 'type' => 'select', 'choices' => array('primary' => 'Primary', 'accent' => 'Accent'), 'default_value' => 'primary'),
+                array('key' => 'field_vis_pillar_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
+                array('key' => 'field_vis_pillar_paragraph', 'label' => __('Paragraph', 'mlzs'), 'name' => 'paragraph', 'type' => 'textarea', 'rows' => 2),
+            )),
+        ),
+        'location' => array(array(array('param' => 'page_template', 'operator' => '==', 'value' => 'vision.php'))),
+    ));
+}
+add_action('acf/init', 'mlzs_acf_vision_field_group');
+
+/**
  * ACF Pro: Origin / Campus Page – Hero, Campus Overview (4 items), Videos (2), Gallery (6+), Features (4), CTA (Link buttons)
  * Image alt = use attachment alt from Media Library; no separate ACF alt field.
  */

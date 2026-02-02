@@ -13,6 +13,9 @@ require_once get_template_directory() . '/inc/setup.php';
 /** Settings > Env – API keys (YouTube, Google Maps) */
 require_once get_template_directory() . '/inc/admin-env-settings.php';
 
+/** HTML Email Templates */
+require_once get_template_directory() . '/inc/email-templates.php';
+
 /** Footer Contact Form – CPT, AJAX, wp_mail */
 require_once get_template_directory() . '/inc/contact-form-handler.php';
 

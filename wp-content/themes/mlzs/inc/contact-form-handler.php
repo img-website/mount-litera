@@ -150,13 +150,9 @@ function mlzs_ajax_footer_contact() {
         get_bloginfo('name'),
         $name
     );
-    $body = "Name: {$name}\n";
-    $body .= "Email: {$email}\n";
-    $body .= "Phone: " . ($phone ?: '—') . "\n\n";
-    $body .= "Message:\n{$message}\n";
-
-    $headers = array('Content-Type: text/plain; charset=UTF-8');
-    $sent = wp_mail(MLZS_CONTACT_EMAIL, $subject, $body, $headers);
+    $body = mlzs_email_body_contact($name, $email, $phone, $message);
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+    wp_mail(MLZS_CONTACT_EMAIL, $subject, $body, $headers);
 
     set_transient($rate_key, 1, MLZS_CONTACT_RATE_LIMIT_SECONDS);
 

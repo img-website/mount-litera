@@ -161,12 +161,8 @@ function mlzs_ajax_enquiry() {
         $name,
         $class
     );
-    $body = "Child's Name: {$name}\n";
-    $body .= "Class: {$class}\n";
-    $body .= "Contact Number: {$contact}\n";
-    $body .= "Email: {$email}\n";
-
-    $headers = array('Content-Type: text/plain; charset=UTF-8');
+    $body = mlzs_email_body_enquiry($name, $class, $contact, $email);
+    $headers = array('Content-Type: text/html; charset=UTF-8');
     wp_mail(MLZS_ENQUIRY_EMAIL, $subject, $body, $headers);
 
     set_transient($rate_key, 1, MLZS_ENQUIRY_RATE_LIMIT_SECONDS);

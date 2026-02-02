@@ -1,0 +1,362 @@
+<?php
+/**
+ * Theme setup, WebP conversion, and asset enqueue.
+ */
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+/** IDE stubs for Imagick (never executed; removes "undefined type" in Cursor/Intelephense) */
+if (false) {
+    class Imagick {
+        public const ALPHACHANNEL_ACTIVATE = 1;
+        public function __construct($files = null) {}
+        public function setImageFormat($format) {}
+        public function setImageAlphaChannel($channel) {}
+        public function setBackgroundColor($background) {}
+        public function setImageCompressionQuality($quality) {}
+        public function writeImage($filename = null) {}
+        public function clear() {}
+        public function destroy() {}
+    }
+    class ImagickPixel {
+        public function __construct($color = null) {}
+    }
+}
+
+/**
+ * Theme setup: title-tag, post-thumbnails, etc.
+ */
+function mlzs_theme_setup() {
+    add_theme_support('title-tag');
+    add_theme_support('post-thumbnails');
+    add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script'));
+}
+add_action('after_setup_theme', 'mlzs_theme_setup');
+
+/**
+ * Convert any uploaded image to WebP before saving to media library.
+ * Runs on wp_handle_upload – supports JPEG, PNG, GIF; saves as WebP.
+ */
+function mlzs_convert_upload_to_webp($upload) {
+    if (empty($upload['file']) || empty($upload['type']) || strpos($upload['type'], 'image/') !== 0) {
+        return $upload;
+    }
+    $mime = $upload['type'];
+    $allowed = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
+    if (!in_array($mime, $allowed, true)) {
+        return $upload;
+    }
+    $file_path = $upload['file'];
+    if (!is_file($file_path) || !is_readable($file_path)) {
+        return $upload;
+    }
+    $webp_path = preg_replace('/\.(jpe?g|png|gif|webp)$/i', '.webp', $file_path);
+    if ($webp_path === $file_path) {
+        return $upload;
+    }
+    $converted = mlzs_image_to_webp($file_path, $webp_path, $mime);
+    if (!$converted) {
+        return $upload;
+    }
+    @unlink($file_path);
+    $upload['file'] = $webp_path;
+    $upload['url'] = str_replace(wp_basename($file_path), wp_basename($webp_path), $upload['url']);
+    $upload['type'] = 'image/webp';
+    return $upload;
+}
+add_filter('wp_handle_upload', 'mlzs_convert_upload_to_webp', 10, 2);
+
+/**
+ * Convert image file to WebP using GD or Imagick.
+ *
+ * @param string $source_path Full path to source image.
+ * @param string $webp_path   Full path for WebP output.
+ * @param string $mime        Mime type of source (image/jpeg, image/png, etc.).
+ * @return bool True if conversion succeeded.
+ */
+function mlzs_image_to_webp($source_path, $webp_path, $mime) {
+    if (extension_loaded('imagick') && class_exists('Imagick')) {
+        try {
+            $img = new Imagick($source_path);
+            $img->setImageFormat('webp');
+            if ($mime === 'image/png' || $mime === 'image/gif') {
+                $img->setImageAlphaChannel(Imagick::ALPHACHANNEL_ACTIVATE);
+                $img->setBackgroundColor(new ImagickPixel('transparent'));
+            }
+            $img->setImageCompressionQuality(82);
+            $success = $img->writeImage($webp_path);
+            $img->clear();
+            $img->destroy();
+            return $success && is_file($webp_path);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+    if (!function_exists('imagewebp')) {
+        return false;
+    }
+    switch ($mime) {
+        case 'image/jpeg':
+        case 'image/jpg':
+            $image = @imagecreatefromjpeg($source_path);
+            break;
+        case 'image/png':
+            $image = @imagecreatefrompng($source_path);
+            if ($image) {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
+            break;
+        case 'image/gif':
+            $image = @imagecreatefromgif($source_path);
+            if ($image) {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
+            break;
+        case 'image/webp':
+            $image = @imagecreatefromwebp($source_path);
+            break;
+        default:
+            return false;
+    }
+    if (!$image) {
+        return false;
+    }
+    if ($mime === 'image/png' || $mime === 'image/gif') {
+        imagepalettetotruecolor($image);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+    }
+    $result = imagewebp($image, $webp_path, 82);
+    imagedestroy($image);
+    return $result && is_file($webp_path);
+}
+
+/**
+ * Ensure attachment metadata and mime type are set to WebP when file was converted.
+ */
+function mlzs_attachment_webp_metadata($metadata, $attachment_id) {
+    $file = get_attached_file($attachment_id);
+    if ($file && is_file($file) && strtolower(pathinfo($file, PATHINFO_EXTENSION)) === 'webp') {
+        wp_update_post(array(
+            'ID'             => $attachment_id,
+            'post_mime_type' => 'image/webp',
+        ));
+        if (is_array($metadata) && !empty($metadata['file'])) {
+            $metadata['file'] = wp_basename($file);
+        }
+    }
+    return $metadata;
+}
+add_filter('wp_generate_attachment_metadata', 'mlzs_attachment_webp_metadata', 10, 2);
+
+/**
+ * Enqueue styles and scripts the WordPress way.
+ */
+function mlzs_enqueue_assets() {
+    $theme_uri = get_template_directory_uri();
+    $theme_version = wp_get_theme()->get('Version') ?: '1.0.0';
+
+    // Google Fonts
+    wp_enqueue_style(
+        'mlzs-google-fonts',
+        'https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap',
+        array(),
+        null
+    );
+    wp_enqueue_style(
+        'mlzs-google-fonts-2',
+        'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap',
+        array(),
+        null
+    );
+
+    // Swiper CSS
+    wp_enqueue_style(
+        'swiper-bundle',
+        'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css',
+        array(),
+        '8'
+    );
+
+    // Theme custom CSS (scrollbar, Swiper overrides)
+    wp_enqueue_style(
+        'mlzs-custom',
+        $theme_uri . '/assets/css/custom.css',
+        array('swiper-bundle'),
+        $theme_version
+    );
+
+    // Tailwind CDN (script loads CSS via CDN)
+    wp_enqueue_script(
+        'tailwindcss',
+        'https://cdn.tailwindcss.com?plugins=forms,container-queries',
+        array(),
+        '3',
+        false
+    );
+
+    // Tailwind config (inline, must run after Tailwind)
+    $tailwind_config = "
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#3D348B',
+                        'primary-dark': '#2d2566',
+                        'primary-light': '#7678ED',
+                        'primary-lighter': '#9a9cf0',
+                        'secondary': '#F7B801',
+                        'accent': '#F7B801',
+                        'accent-dark': '#F18701',
+                        'accent-light': '#F35B04',
+                        'indigo-velvet': '#3D348B',
+                        'slate-blue': '#7678ED',
+                        'amber-flame': '#F7B801',
+                        'tiger-orange': '#F18701',
+                        'cayenne-red': '#F35B04',
+                        'surface': '#ffffff',
+                        'background-light': '#f8fafc',
+                        'background-dark': '#111827',
+                        'surface-light': '#ffffff',
+                        'surface-dark': '#1f2937',
+                        'text-main-light': '#0f172a',
+                        'text-main-dark': '#f8fafc',
+                        'text-secondary-light': '#475569',
+                        'text-secondary-dark': '#94a3b8',
+                        'border-light': '#e2e8f0',
+                        'border-dark': '#374151',
+                        'dark-text': '#1e293b',
+                        'card-dark': '#1e293b',
+                    },
+                    fontFamily: {
+                        'display': ['Spline Sans', 'sans-serif'],
+                        'body': ['Noto Sans', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'DEFAULT': '1rem',
+                        'lg': '1.5rem',
+                        'xl': '2rem',
+                        '2xl': '2.5rem',
+                        'full': '9999px'
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'fade-in': 'fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        'hero-zoom': 'heroZoom 8s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        heroZoom: {
+                            '0%, 100%': { transform: 'scale(1.1)' },
+                            '50%': { transform: 'scale(1.2)' },
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(61, 52, 139, 0.05)',
+                        'glow': '0 0 20px -5px rgba(61, 52, 139, 0.3)',
+                        'glow-accent': '0 0 20px -5px rgba(247, 184, 1, 0.4)',
+                    }
+                },
+            },
+        };
+    ";
+    wp_add_inline_script('tailwindcss', $tailwind_config, 'after');
+
+    // Lucide Icons (UMD build for createIcons())
+    wp_enqueue_script(
+        'lucide-icons',
+        'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js',
+        array(),
+        null,
+        true
+    );
+
+    // Swiper JS
+    wp_enqueue_script(
+        'swiper-bundle',
+        'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js',
+        array(),
+        '8',
+        true
+    );
+
+    // Theme main JS (header scroll, menu toggle, Lucide, Hero/Approach Swiper, Academics tabs)
+    wp_enqueue_script(
+        'mlzs-main',
+        $theme_uri . '/assets/Js/main.js',
+        array('swiper-bundle', 'lucide-icons'),
+        $theme_version,
+        true
+    );
+
+    // CSS only for privacy-policy.php & page.php (Privacy Policy, Terms & Conditions)
+    if (is_page_template('privacy-policy.php') || is_page_template('page.php')) {
+        $wp_ver = get_bloginfo('version');
+        wp_enqueue_style(
+            'wp-block-library-reset',
+            includes_url('css/dist/block-library/reset.min.css'),
+            array(),
+            $wp_ver
+        );
+        wp_enqueue_style(
+            'wp-block-editor-content',
+            includes_url('css/dist/block-editor/content.min.css'),
+            array('wp-block-library-reset'),
+            $wp_ver
+        );
+        wp_enqueue_style(
+            'wp-admin-common',
+            admin_url('css/common.min.css'),
+            array(),
+            $wp_ver
+        );
+        wp_enqueue_style(
+            'mlzs-page-content',
+            $theme_uri . '/assets/css/page-content.css',
+            array('wp-block-editor-content'),
+            $theme_version
+        );
+    }
+
+    // Fancybox for Alumni Feed, Photo Gallery, Origin (Campus) video, and Sports gallery popup
+    if (is_page_template('feed.php') || is_page_template('gallery.php') || is_page_template('origin.php') || is_page_template('sports.php')) {
+        wp_enqueue_style(
+            'fancybox',
+            'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css',
+            array(),
+            '5.0'
+        );
+        wp_enqueue_script(
+            'fancybox',
+            'https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js',
+            array(),
+            '5.0',
+            true
+        );
+        $fancybox_init = "
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof Fancybox !== 'undefined') {
+                    Fancybox.bind('[data-fancybox=\"alumni-gallery\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['slideshow', 'download', 'thumbs', 'close'] } }, Thumbs: { autoStart: true } });
+                    Fancybox.bind('[data-fancybox=\"gallery\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['slideshow', 'download', 'thumbs', 'close'] } }, Thumbs: { autoStart: true } });
+                    Fancybox.bind('[data-fancybox=\"sports-gallery\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['slideshow', 'download', 'thumbs', 'close'] } }, Thumbs: { autoStart: true } });
+                    Fancybox.bind('[data-fancybox=\"origin-video\"]', { Toolbar: { display: { left: ['infobar'], middle: [], right: ['close'] } } });
+                }
+            });
+        ";
+        wp_add_inline_script('fancybox', $fancybox_init, 'after');
+    }
+}
+add_action('wp_enqueue_scripts', 'mlzs_enqueue_assets');

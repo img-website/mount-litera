@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Sitemap Page
- * User-facing HTML sitemap (Hero + sections with links). Yoast SEO XML sitemap is separate; no conflict.
+ * User-facing HTML sitemap (Hero + search + pages with Yoast meta). Yoast SEO XML sitemap is separate; no conflict.
  */
 if (!defined('ABSPATH')) exit;
 get_header();
@@ -19,7 +19,7 @@ $hero_headline = ($hero_headline !== '' && $hero_headline !== null) ? (string) $
 $hero_highlight = ($hero_highlight !== '' && $hero_highlight !== null) ? (string) $hero_highlight : 'Map';
 $hero_subtext = ($hero_subtext !== '' && $hero_subtext !== null) ? (string) $hero_subtext : 'Explore all pages of Mount Litera Zee School website. Find information about academics, facilities, admissions, and more.';
 
-// ——— All published pages (auto; exclude this sitemap page) ———
+// ——— All published pages (flat list for search; exclude this sitemap page) ———
 $all_pages = get_pages(array(
     'post_type'   => 'page',
     'post_status' => 'publish',
@@ -27,19 +27,46 @@ $all_pages = get_pages(array(
     'sort_order'  => 'ASC',
     'exclude'     => array($page_id),
 ));
-$by_parent = array();
-foreach ($all_pages as $p) {
-    $pid = (int) $p->post_parent;
-    if (!isset($by_parent[$pid])) $by_parent[$pid] = array();
-    $by_parent[$pid][] = $p;
+
+/**
+ * Get page meta: page name, Yoast title (as sitemap description), image URL.
+ */
+function mlzs_sitemap_page_meta($p) {
+    $id = (int) $p->ID;
+    // Page name (first/top) – post title
+    $page_name = get_the_title($p);
+    // Description (below page name) – Yoast meta title
+    $desc = get_post_meta($id, '_yoast_wpseo_title', true);
+    if (empty($desc)) {
+        $desc = get_post_meta($id, '_yoast_wpseo_metadesc', true);
+    }
+    if (empty($desc) && !empty($p->post_excerpt)) {
+        $desc = $p->post_excerpt;
+    }
+    if (empty($desc)) {
+        $desc = wp_trim_words(wp_strip_all_tags($p->post_content), 25);
+    }
+    // Image: Yoast OG image (ID or URL) or featured image
+    $img_url = '';
+    $img_id = get_post_meta($id, '_yoast_wpseo_opengraph-image-id', true);
+    if (!empty($img_id) && is_numeric($img_id)) {
+        $img_url = wp_get_attachment_image_url((int) $img_id, 'medium');
+    }
+    if (empty($img_url)) {
+        $img_url = get_post_meta($id, '_yoast_wpseo_opengraph-image', true);
+    }
+    if (empty($img_url)) {
+        $img_id = get_post_thumbnail_id($id);
+        if ($img_id) {
+            $img_url = wp_get_attachment_image_url($img_id, 'medium');
+        }
+    }
+    return array(
+        'page_name' => $page_name,
+        'desc'      => $desc,
+        'img'       => $img_url,
+    );
 }
-$icon_style_classes = array(
-    'primary' => 'bg-primary/10 text-primary',
-    'green'   => 'bg-green-100 text-green-600',
-    'blue'    => 'bg-blue-100 text-blue-600',
-    'purple'  => 'bg-purple-100 text-purple-600',
-    'amber'   => 'bg-amber-100 text-amber-600',
-);
 ?>
     <!-- Hero -->
     <section class="relative bg-gradient-to-br from-primary via-primary-dark to-slate-900 text-white overflow-hidden">
@@ -62,83 +89,80 @@ $icon_style_classes = array(
         </div>
     </section>
 
-    <!-- Main Content: all published pages (auto) -->
+    <!-- Main Content: search bar + all pages -->
     <section class="py-16 md:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <?php
-            $style_keys = array_keys($icon_style_classes);
-            $style_index = 0;
-            // Top-level pages
-            if (!empty($by_parent[0])) :
-                $sec_style = $icon_style_classes[$style_keys[$style_index % count($style_keys)]];
-                $style_index++;
-            ?>
-            <div class="mb-16">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-12 h-12 rounded-lg <?php echo esc_attr($sec_style); ?> flex items-center justify-center">
-                        <i data-lucide="layout" class="w-6 h-6"></i>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900"><?php esc_html_e('Pages', 'mlzs'); ?></h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <?php foreach ($by_parent[0] as $p) :
-                        $url = get_permalink($p);
-                        $title = get_the_title($p);
-                    ?>
-                    <a href="<?php echo esc_url($url); ?>" class="group p-6 bg-white border border-slate-200 rounded-2xl hover:border-primary hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                        <div class="flex items-center gap-4 mb-3">
-                            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                                <i data-lucide="file-text" class="w-5 h-5 text-primary group-hover:text-white"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors"><?php echo esc_html($title); ?></h3>
-                        </div>
-                        <p class="text-sm text-slate-600"><?php echo esc_html($p->post_name); ?></p>
-                    </a>
-                    <?php endforeach; ?>
+            <!-- Search bar -->
+            <div class="mb-10">
+                <label for="sitemap-search" class="sr-only"><?php esc_html_e('Search pages', 'mlzs'); ?></label>
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                    <input type="text" id="sitemap-search" placeholder="<?php esc_attr_e('Search pages by title or description...', 'mlzs'); ?>" class="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-slate-800" autocomplete="off" />
+                    <span id="sitemap-no-results" class="hidden absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-500"><?php esc_html_e('No matches', 'mlzs'); ?></span>
                 </div>
             </div>
-            <?php endif;
 
-            // Child pages grouped by parent
-            if (!empty($by_parent[0])) {
-                foreach ($by_parent[0] as $parent_page) {
-                    $pid = (int) $parent_page->ID;
-                    if (empty($by_parent[$pid])) continue;
-                    $sec_style = $icon_style_classes[$style_keys[$style_index % count($style_keys)]];
-                    $style_index++;
-                    ?>
-            <div class="mb-16">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-12 h-12 rounded-lg <?php echo esc_attr($sec_style); ?> flex items-center justify-center">
-                        <i data-lucide="folder" class="w-6 h-6"></i>
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900"><?php echo esc_html(get_the_title($parent_page)); ?></h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <?php foreach ($by_parent[$pid] as $p) :
+            <!-- Page cards grid (filterable) -->
+            <div id="sitemap-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php
+                if (!empty($all_pages)) :
+                    foreach ($all_pages as $p) :
                         $url = get_permalink($p);
-                        $title = get_the_title($p);
-                    ?>
-                    <a href="<?php echo esc_url($url); ?>" class="group p-6 bg-white border border-slate-200 rounded-2xl hover:border-primary hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                        <div class="flex items-center gap-4 mb-3">
-                            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors">
-                                <i data-lucide="file-text" class="w-5 h-5 text-primary group-hover:text-white"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors"><?php echo esc_html($title); ?></h3>
+                        $meta = mlzs_sitemap_page_meta($p);
+                        $search_text = strtolower($meta['page_name'] . ' ' . $meta['desc'] . ' ' . $p->post_name);
+                ?>
+                <div class="sitemap-card group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-primary hover:shadow-lg transition-all duration-300" data-search="<?php echo esc_attr($search_text); ?>">
+                    <div class="flex flex-col h-full">
+                        <?php if (!empty($meta['img'])) : ?>
+                        <div class="aspect-video bg-slate-100 overflow-hidden">
+                            <img src="<?php echo esc_url($meta['img']); ?>" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                         </div>
-                        <p class="text-sm text-slate-600"><?php echo esc_html($p->post_name); ?></p>
-                    </a>
-                    <?php endforeach; ?>
+                        <?php else : ?>
+                        <div class="aspect-video bg-primary/5 flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-12 h-12 text-primary/40"></i>
+                        </div>
+                        <?php endif; ?>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h2 class="text-lg font-bold text-slate-900 group-hover:text-primary transition-colors mb-2"><?php echo esc_html($meta['page_name']); ?></h2>
+                            <?php if (!empty($meta['desc'])) : ?>
+                            <p class="text-sm text-slate-600 mb-4 flex-1 line-clamp-2"><?php echo esc_html($meta['desc']); ?></p>
+                            <?php else : ?>
+                            <p class="text-sm text-slate-500 mb-4 flex-1"><?php echo esc_html($p->post_name); ?></p>
+                            <?php endif; ?>
+                            <a href="<?php echo esc_url($url); ?>" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white font-medium text-sm hover:bg-primary-dark transition-colors w-fit">
+                                <span><?php esc_html_e('View Page', 'mlzs'); ?></span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
+                <?php
+                    endforeach;
+                else :
+                ?>
+                <p class="text-slate-600 col-span-full"><?php esc_html_e('No published pages to display.', 'mlzs'); ?></p>
+                <?php endif; ?>
             </div>
-                    <?php
-                }
-            }
-
-            if (empty($all_pages)) : ?>
-            <p class="text-slate-600"><?php esc_html_e('No published pages to display.', 'mlzs'); ?></p>
-            <?php endif; ?>
         </div>
     </section>
 
+    <script>
+    (function() {
+        var search = document.getElementById('sitemap-search');
+        var cards = document.querySelectorAll('.sitemap-card');
+        var noResults = document.getElementById('sitemap-no-results');
+        if (!search || !cards.length) return;
+        search.addEventListener('input', function() {
+            var q = (this.value || '').toLowerCase().trim();
+            var visible = 0;
+            cards.forEach(function(card) {
+                var text = (card.getAttribute('data-search') || '').toLowerCase();
+                var show = !q || text.indexOf(q) !== -1;
+                card.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+            noResults.classList.toggle('hidden', visible > 0 || !q);
+        });
+    })();
+    </script>
 <?php get_footer(); ?>

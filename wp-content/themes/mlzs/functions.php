@@ -13,6 +13,12 @@ require_once get_template_directory() . '/inc/setup.php';
 /** Settings > Env – API keys (YouTube, Google Maps) */
 require_once get_template_directory() . '/inc/admin-env-settings.php';
 
+/** Footer Contact Form – CPT, AJAX, wp_mail */
+require_once get_template_directory() . '/inc/contact-form-handler.php';
+
+/** Enquiry Form – CPT, AJAX, wp_mail */
+require_once get_template_directory() . '/inc/enquiry-form-handler.php';
+
 /**
  * Set ACF Google Maps API key from Settings > Env (ACF options page).
  */

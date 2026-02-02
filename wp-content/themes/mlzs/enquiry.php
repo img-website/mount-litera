@@ -85,10 +85,8 @@ $stat2_label  = ($stat2_label !== '' && $stat2_label !== null) ? (string) $stat2
 $form_icon    = $opt ? get_field('enquiry_form_icon', $page_id) : null;
 $form_title   = $opt ? get_field('enquiry_form_title', $page_id) : null;
 $form_subtitle = $opt ? get_field('enquiry_form_subtitle', $page_id) : null;
-$form_action  = $opt ? get_field('enquiry_form_action', $page_id) : null;
 $form_privacy_text = $opt ? get_field('enquiry_form_privacy_text', $page_id) : null;
 $form_privacy_link = $opt ? get_field('enquiry_form_privacy_link', $page_id) : null;
-$form_privacy_label = $opt ? get_field('enquiry_form_privacy_link_label', $page_id) : null;
 $form_submit_text = $opt ? get_field('enquiry_form_submit_text', $page_id) : null;
 $form_submit_icon = $opt ? get_field('enquiry_form_submit_icon', $page_id) : null;
 $form_features = $opt ? get_field('enquiry_form_features', $page_id) : null;
@@ -96,11 +94,11 @@ $form_features = $opt ? get_field('enquiry_form_features', $page_id) : null;
 $form_icon    = (is_string($form_icon) && trim($form_icon) !== '') ? trim($form_icon) : 'user-plus';
 $form_title   = ($form_title !== '' && $form_title !== null) ? (string) $form_title : 'Submit Enquiry';
 $form_subtitle = ($form_subtitle !== '' && $form_subtitle !== null) ? (string) $form_subtitle : "We'll contact you within 24 hours";
-$form_action  = ($form_action !== '' && $form_action !== null) ? esc_url($form_action) : '';
-if ($form_action === '') $form_action = $home_url . '#';
 $form_privacy_text = ($form_privacy_text !== '' && $form_privacy_text !== null) ? (string) $form_privacy_text : 'By submitting, you agree to our';
-$form_privacy_link = ($form_privacy_link !== '' && $form_privacy_link !== null) ? esc_url($form_privacy_link) : $home_url . '#';
-$form_privacy_label = ($form_privacy_label !== '' && $form_privacy_label !== null) ? (string) $form_privacy_label : 'Privacy Policy';
+$form_privacy_link = (is_array($form_privacy_link) && !empty($form_privacy_link['url'])) ? $form_privacy_link : array('url' => $home_url . '#', 'title' => 'Privacy Policy', 'target' => '');
+$form_privacy_url   = esc_url((string) $form_privacy_link['url']);
+$form_privacy_title = isset($form_privacy_link['title']) && (string) $form_privacy_link['title'] !== '' ? (string) $form_privacy_link['title'] : 'Privacy Policy';
+$form_privacy_target = isset($form_privacy_link['target']) && (string) $form_privacy_link['target'] !== '' ? ' target="' . esc_attr((string) $form_privacy_link['target']) . '"' : '';
 $form_submit_text = ($form_submit_text !== '' && $form_submit_text !== null) ? (string) $form_submit_text : 'Submit Enquiry';
 $form_submit_icon = (is_string($form_submit_icon) && trim($form_submit_icon) !== '') ? trim($form_submit_icon) : 'send';
 $default_form_features = array(
@@ -256,7 +254,10 @@ $first_email = !empty($contact_emails_array) ? $contact_emails_array[0] : 'mlzs.
                         </div>
                     </div>
 
-                    <form class="form-horizontal space-y-4 sm:space-y-6" method="POST" action="<?php echo esc_url($form_action); ?>" role="form">
+                    <form id="mlzs-enquiry-form" class="form-horizontal space-y-4 sm:space-y-6" method="POST" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" role="form">
+                        <?php wp_nonce_field('mlzs_enquiry', 'mlzs_enquiry_nonce', false); ?>
+                        <input type="hidden" name="action" value="mlzs_enquiry" />
+                        <div id="mlzs-enquiry-form-message" class="hidden rounded-xl px-4 py-3 text-sm" role="alert" aria-live="polite"></div>
                         <div class="space-y-2">
                             <label class="block text-xs sm:text-sm font-medium text-text-main-light">Child's Name <span class="text-red-500">*</span></label>
                             <div class="relative group">
@@ -309,12 +310,12 @@ $first_email = !empty($contact_emails_array) ? $contact_emails_array[0] : 'mlzs.
                         </div>
 
                         <div class="pt-4">
-                            <button type="submit" name="submit" class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-bold text-sm sm:text-base md:text-lg hover:shadow-[0_0_30px_rgba(61,52,139,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 group/btn">
-                                <span><?php echo esc_html($form_submit_text); ?></span>
-                                <i data-lucide="<?php echo esc_attr($form_submit_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                            <button id="mlzs-enquiry-submit-btn" type="submit" name="submit" class="w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-bold text-sm sm:text-base md:text-lg hover:shadow-[0_0_30px_rgba(61,52,139,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 group/btn disabled:opacity-70 disabled:cursor-not-allowed">
+                                <span class="mlzs-enquiry-btn-text"><?php echo esc_html($form_submit_text); ?></span>
+                                <i data-lucide="<?php echo esc_attr($form_submit_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform mlzs-enquiry-btn-icon"></i>
                             </button>
                             <p class="text-center text-xs sm:text-sm text-text-secondary-light mt-4">
-                                <?php echo esc_html($form_privacy_text); ?> <a href="<?php echo esc_url($form_privacy_link); ?>" class="text-primary hover:underline"><?php echo esc_html($form_privacy_label); ?></a>
+                                <?php echo esc_html($form_privacy_text); ?> <a href="<?php echo $form_privacy_url; ?>" class="text-primary hover:underline"<?php echo $form_privacy_target; ?>><?php echo esc_html($form_privacy_title); ?></a>
                             </p>
                         </div>
 

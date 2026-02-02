@@ -102,28 +102,31 @@ if (!is_array($footer_social) || empty($footer_social)) $footer_social = $defaul
                     </div>
                 </div>
                 <div class="flex justify-start lg:justify-end w-full">
-                    <form class="w-full max-w-lg flex flex-col gap-4" method="post" action="<?php echo esc_url($home_url); ?>">
+                    <form id="mlzs-footer-contact-form" class="w-full max-w-lg flex flex-col gap-4" method="post" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>">
+                        <?php wp_nonce_field('mlzs_footer_contact', 'mlzs_contact_nonce', false); ?>
+                        <input type="hidden" name="action" value="mlzs_footer_contact" />
+                        <div id="mlzs-contact-form-message" class="hidden rounded-xl px-4 py-3 text-sm" role="alert" aria-live="polite"></div>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="relative group/input">
                                 <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Your Name" type="text" name="contact_name" required/>
+                                <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Your Name" type="text" name="contact_name" required autocomplete="name"/>
                             </div>
                             <div class="relative group/input">
                                 <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Your Email" type="email" name="contact_email" required/>
+                                <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Your Email" type="email" name="contact_email" required autocomplete="email"/>
                             </div>
                         </div>
                         <div class="relative group/input">
                             <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                            <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Phone Number (Optional)" type="tel" name="contact_phone"/>
+                            <input class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner" placeholder="Phone Number (Optional)" type="tel" name="contact_phone" autocomplete="tel"/>
                         </div>
                         <div class="relative group/input">
                             <i data-lucide="message-square" class="absolute left-4 top-4 size-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
                             <textarea class="w-full bg-primary/20 border border-primary/40 rounded-xl pl-12 pr-4 py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner resize-none min-h-[120px]" placeholder="Your Message" name="contact_message" required></textarea>
                         </div>
-                        <button class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-base px-8 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_4px_14px_0_rgba(61,52,139,0.39)] hover:shadow-[0_6px_20px_rgba(61,52,139,0.23)] hover:-translate-y-0.5 active:translate-y-0 group/btn" type="submit">
-                            <span>Send Message</span>
-                            <i data-lucide="send" class="size-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                        <button id="mlzs-contact-submit-btn" class="w-full bg-primary hover:bg-primary-dark text-white font-bold text-base px-8 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-[0_4px_14px_0_rgba(61,52,139,0.39)] hover:shadow-[0_6px_20px_rgba(61,52,139,0.23)] hover:-translate-y-0.5 active:translate-y-0 group/btn disabled:opacity-70 disabled:cursor-not-allowed" type="submit">
+                            <span class="mlzs-btn-text">Send Message</span>
+                            <i data-lucide="send" class="size-5 group-hover/btn:translate-x-1 transition-transform mlzs-btn-icon"></i>
                         </button>
                     </form>
                 </div>

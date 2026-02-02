@@ -306,7 +306,7 @@ function mlzs_enqueue_assets() {
         true
     );
 
-    // Theme main JS (header scroll, menu toggle, Lucide, Hero/Approach Swiper, Academics tabs)
+    // Theme main JS (header scroll, menu toggle, Lucide, Hero/Approach Swiper, Academics tabs, footer contact)
     wp_enqueue_script(
         'mlzs-main',
         $theme_uri . '/assets/Js/main.js',
@@ -314,6 +314,9 @@ function mlzs_enqueue_assets() {
         $theme_version,
         true
     );
+    wp_localize_script('mlzs-main', 'mlzsAjax', array(
+        'url' => admin_url('admin-ajax.php'),
+    ));
 
     // Fancybox for Alumni Feed, Photo Gallery, Origin (Campus) video, and Sports gallery popup
     if (is_page_template('feed.php') || is_page_template('gallery.php') || is_page_template('origin.php') || is_page_template('sports.php')) {

@@ -48,10 +48,8 @@ function mlzs_acf_enquiry_field_group() {
             array('key' => 'field_enq_form_icon', 'label' => __('Form Card Icon', 'mlzs'), 'name' => 'enquiry_form_icon', 'type' => 'text', 'default_value' => 'user-plus'),
             array('key' => 'field_enq_form_title', 'label' => __('Form Title', 'mlzs'), 'name' => 'enquiry_form_title', 'type' => 'text', 'default_value' => 'Submit Enquiry'),
             array('key' => 'field_enq_form_subtitle', 'label' => __('Form Subtitle', 'mlzs'), 'name' => 'enquiry_form_subtitle', 'type' => 'text', 'default_value' => "We'll contact you within 24 hours"),
-            array('key' => 'field_enq_form_action', 'label' => __('Form Action URL', 'mlzs'), 'name' => 'enquiry_form_action', 'type' => 'url', 'instructions' => __('Leave blank to use # or add Contact Form 7 / custom handler URL.', 'mlzs')),
             array('key' => 'field_enq_form_privacy_text', 'label' => __('Privacy Text', 'mlzs'), 'name' => 'enquiry_form_privacy_text', 'type' => 'text', 'default_value' => 'By submitting, you agree to our'),
-            array('key' => 'field_enq_form_privacy_link', 'label' => __('Privacy Policy Link', 'mlzs'), 'name' => 'enquiry_form_privacy_link', 'type' => 'url'),
-            array('key' => 'field_enq_form_privacy_link_label', 'label' => __('Privacy Link Label', 'mlzs'), 'name' => 'enquiry_form_privacy_link_label', 'type' => 'text', 'default_value' => 'Privacy Policy'),
+            array('key' => 'field_enq_form_privacy_link', 'label' => __('Privacy Policy Link', 'mlzs'), 'name' => 'enquiry_form_privacy_link', 'type' => 'link', 'return_format' => 'array'),
             array('key' => 'field_enq_form_submit_text', 'label' => __('Submit Button Text', 'mlzs'), 'name' => 'enquiry_form_submit_text', 'type' => 'text', 'default_value' => 'Submit Enquiry'),
             array('key' => 'field_enq_form_submit_icon', 'label' => __('Submit Button Icon', 'mlzs'), 'name' => 'enquiry_form_submit_icon', 'type' => 'text', 'default_value' => 'send'),
             array('key' => 'field_enq_form_features', 'label' => __('Form Features (3 items: icon + label)', 'mlzs'), 'name' => 'enquiry_form_features', 'type' => 'repeater', 'min' => 3, 'max' => 3, 'layout' => 'table', 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(

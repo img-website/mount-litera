@@ -1,7 +1,7 @@
 <?php
 /**
- * HTML Email Templates – Contact & Enquiry forms.
- * Uses table layout + inline CSS for email client compatibility.
+ * HTML Email Templates – Contact, Enquiry, Admission.
+ * Premium card-based design. Inline CSS + tables for email client compatibility.
  */
 
 if (!defined('ABSPATH')) {
@@ -9,22 +9,21 @@ if (!defined('ABSPATH')) {
 }
 
 define('MLZS_EMAIL_PRIMARY', '#3D348B');
+define('MLZS_EMAIL_PRIMARY_LIGHT', '#5b52a8');
 define('MLZS_EMAIL_ACCENT', '#F7B801');
 define('MLZS_EMAIL_TEXT', '#1e293b');
 define('MLZS_EMAIL_TEXT_LIGHT', '#64748b');
+define('MLZS_EMAIL_BG_SOFT', '#f8fafc');
 define('MLZS_EMAIL_BORDER', '#e2e8f0');
 
 /**
- * Wrapper for HTML emails – header, content area, footer.
- *
- * @param string $title   Section title (e.g. "New Contact Submission").
- * @param string $content HTML content (table rows).
- * @return string Full HTML email body.
+ * Base email wrapper – outer container, card, header, footer.
  */
-function mlzs_email_wrapper($title, $content) {
+function mlzs_email_wrapper($title, $content, $hero_subtitle = '') {
     $site_name = get_bloginfo('name');
     $date     = wp_date('l, F j, Y \a\t g:i A');
     $year     = wp_date('Y');
+    $hero     = $hero_subtitle ? '<p style="margin:10px 0 0;font-size:15px;color:rgba(255,255,255,0.9);font-weight:500;">' . esc_html($hero_subtitle) . '</p>' : '<p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.85);">' . esc_html($title) . '</p>';
 
     return '<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -33,31 +32,26 @@ function mlzs_email_wrapper($title, $content) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>' . esc_html($title) . '</title>
 </head>
-<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:\'Segoe UI\',Tahoma,Geneva,Verdana,sans-serif;-webkit-font-smoothing:antialiased;">
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f1f5f9;">
+<body style="margin:0;padding:0;background-color:#e2e8f0;font-family:\'Segoe UI\',Tahoma,Geneva,Verdana,sans-serif;-webkit-font-smoothing:antialiased;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#e2e8f0;">
     <tr>
-        <td align="center" style="padding:32px 16px;">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.08);overflow:hidden;">
-                <!-- Header -->
+        <td align="center" style="padding:40px 20px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:580px;margin:0 auto;background:#ffffff;border-radius:16px;box-shadow:0 10px 40px rgba(61,52,139,0.12),0 2px 10px rgba(0,0,0,0.06);overflow:hidden;">
                 <tr>
-                    <td style="background:linear-gradient(135deg,' . MLZS_EMAIL_PRIMARY . ' 0%,#2d2566 100%);padding:28px 32px;text-align:center;">
-                        <h1 style="margin:0;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:-0.02em;">' . esc_html($site_name) . '</h1>
-                        <p style="margin:8px 0 0;font-size:13px;color:rgba(255,255,255,0.85);">' . esc_html($title) . '</p>
+                    <td style="background:linear-gradient(145deg,' . MLZS_EMAIL_PRIMARY . ' 0%,#2a2357 100%);padding:36px 40px;text-align:center;">
+                        <h1 style="margin:0;font-size:24px;font-weight:700;color:#ffffff;letter-spacing:-0.03em;">' . esc_html($site_name) . '</h1>
+                        ' . $hero . '
                     </td>
                 </tr>
-                <!-- Content -->
                 <tr>
-                    <td style="padding:32px;">
-                        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
-                            ' . $content . '
-                        </table>
+                    <td style="padding:0;">
+                        ' . $content . '
                     </td>
                 </tr>
-                <!-- Footer -->
                 <tr>
-                    <td style="padding:20px 32px;background:#f8fafc;border-top:1px solid ' . MLZS_EMAIL_BORDER . ';font-size:12px;color:' . MLZS_EMAIL_TEXT_LIGHT . ';">
-                        <p style="margin:0;">Received on ' . esc_html($date) . '</p>
-                        <p style="margin:8px 0 0;">This is an automated notification from your website. &copy; ' . esc_html($year) . ' ' . esc_html($site_name) . '. All rights reserved.</p>
+                    <td style="padding:24px 40px;background:' . MLZS_EMAIL_BG_SOFT . ';border-top:1px solid ' . MLZS_EMAIL_BORDER . ';font-size:12px;color:' . MLZS_EMAIL_TEXT_LIGHT . ';text-align:center;">
+                        <p style="margin:0;">' . esc_html($date) . ' &nbsp;•&nbsp; Automated notification</p>
+                        <p style="margin:6px 0 0;opacity:0.8;">&copy; ' . esc_html($year) . ' ' . esc_html($site_name) . '</p>
                     </td>
                 </tr>
             </table>
@@ -69,45 +63,80 @@ function mlzs_email_wrapper($title, $content) {
 }
 
 /**
- * Single row for email content table.
- *
- * @param string $label Label text.
- * @param string $value Value text.
- * @return string HTML table row.
+ * Card block – section with optional header bar.
  */
-function mlzs_email_row($label, $value) {
-    return '<tr>
-        <td style="padding:12px 0;border-bottom:1px solid ' . MLZS_EMAIL_BORDER . ';">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tr>
-                    <td style="font-size:12px;font-weight:600;color:' . MLZS_EMAIL_TEXT_LIGHT . ';width:140px;vertical-align:top;">' . esc_html($label) . '</td>
-                    <td style="font-size:15px;color:' . MLZS_EMAIL_TEXT . ';line-height:1.5;">' . nl2br(esc_html($value)) . '</td>
-                </tr>
-            </table>
-        </td>
-    </tr>';
+function mlzs_email_card($content, $title = '', $accent = false) {
+    $bg    = $accent ? 'background:linear-gradient(90deg,' . MLZS_EMAIL_ACCENT . ' 0%,#e5a800 100%);' : 'background:' . MLZS_EMAIL_PRIMARY . ';';
+    $title_html = $title ? '<tr><td style="padding:14px 20px;' . $bg . 'color:#ffffff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">' . esc_html($title) . '</td></tr>' : '';
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:24px;border-radius:12px;overflow:hidden;border:1px solid ' . MLZS_EMAIL_BORDER . ';background:#ffffff;">
+        ' . $title_html . '
+        <tr><td style="padding:24px 28px;">' . $content . '</td></tr>
+    </table>';
+}
+
+/**
+ * Info row – label + value, minimal border.
+ */
+function mlzs_email_info_row($label, $value, $last = false) {
+    $border = $last ? 'none' : 'border-bottom:1px solid ' . MLZS_EMAIL_BORDER . ';';
+    $val = $value ?: '—';
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="' . $border . '">
+        <tr>
+            <td style="padding:10px 0;font-size:12px;color:' . MLZS_EMAIL_TEXT_LIGHT . ';width:45%;vertical-align:top;">' . esc_html($label) . '</td>
+            <td style="padding:10px 0;font-size:15px;color:' . MLZS_EMAIL_TEXT . ';font-weight:500;line-height:1.5;">' . nl2br(esc_html($val)) . '</td>
+        </tr>
+    </table>';
+}
+
+/**
+ * Hero message block – for contact form message.
+ */
+function mlzs_email_message_block($message) {
+    return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 24px;">
+        <tr>
+            <td style="padding:20px 24px;background:' . MLZS_EMAIL_BG_SOFT . ';border-left:4px solid ' . MLZS_EMAIL_PRIMARY . ';border-radius:0 8px 8px 0;font-size:15px;color:' . MLZS_EMAIL_TEXT . ';line-height:1.7;">' . nl2br(esc_html($message)) . '</td>
+        </tr>
+    </table>';
+}
+
+/**
+ * Contact strip – email + phone in a row.
+ */
+function mlzs_email_contact_strip($email, $phone) {
+    $phone_html = $phone ? ' &nbsp;<span style="color:' . MLZS_EMAIL_BORDER . ';">|</span>&nbsp; <strong>' . esc_html($phone) . '</strong>' : '';
+    return '<p style="margin:0;font-size:14px;color:' . MLZS_EMAIL_TEXT_LIGHT . ';"><a href="mailto:' . esc_attr($email) . '" style="color:' . MLZS_EMAIL_PRIMARY . ';text-decoration:none;font-weight:600;">' . esc_html($email) . '</a>' . $phone_html . '</p>';
 }
 
 /**
  * Build HTML body for Contact (footer) form submission.
  */
 function mlzs_email_body_contact($name, $email, $phone, $message) {
-    $rows = mlzs_email_row(__('Name', 'mlzs'), $name);
-    $rows .= mlzs_email_row(__('Email', 'mlzs'), $email);
-    $rows .= mlzs_email_row(__('Phone', 'mlzs'), $phone ?: '—');
-    $rows .= mlzs_email_row(__('Message', 'mlzs'), $message);
-    return mlzs_email_wrapper(__('New Contact Submission', 'mlzs'), $rows);
+    $inner = '<p style="margin:0 0 20px;font-size:18px;font-weight:600;color:' . MLZS_EMAIL_TEXT . ';">' . esc_html($name) . '</p>';
+    $inner .= mlzs_email_message_block($message);
+    $inner .= mlzs_email_contact_strip($email, $phone);
+    $content = '<div style="padding:32px 36px;">' . $inner . '</div>';
+    return mlzs_email_wrapper(__('New Contact Submission', 'mlzs'), $content, sprintf(__('Message from %s', 'mlzs'), $name));
 }
 
 /**
  * Build HTML body for Enquiry form submission.
  */
 function mlzs_email_body_enquiry($name, $class, $contact, $email) {
-    $rows = mlzs_email_row(__("Child's Name", 'mlzs'), $name);
-    $rows .= mlzs_email_row(__('Class', 'mlzs'), $class);
-    $rows .= mlzs_email_row(__('Contact Number', 'mlzs'), $contact);
-    $rows .= mlzs_email_row(__('Email', 'mlzs'), $email);
-    return mlzs_email_wrapper(__('New Admission Enquiry', 'mlzs'), $rows);
+    $hero = sprintf(__('%s — Class %s', 'mlzs'), $name, $class);
+    $highlight = '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:24px;">
+        <tr>
+            <td style="padding:20px 24px;background:linear-gradient(90deg,rgba(61,52,139,0.1) 0%,rgba(61,52,139,0.02) 100%);border-radius:10px;border:1px solid rgba(61,52,139,0.15);">
+                <p style="margin:0;font-size:20px;font-weight:700;color:' . MLZS_EMAIL_PRIMARY . ';">' . esc_html($name) . '</p>
+                <p style="margin:6px 0 0;font-size:14px;color:' . MLZS_EMAIL_TEXT_LIGHT . ';">' . sprintf(esc_html__('Admission enquiry for Class %s', 'mlzs'), esc_html($class)) . '</p>
+            </td>
+        </tr>
+    </table>';
+    $rows = mlzs_email_info_row(__("Child's Name", 'mlzs'), $name, false);
+    $rows .= mlzs_email_info_row(__('Class', 'mlzs'), $class, false);
+    $rows .= mlzs_email_info_row(__('Contact Number', 'mlzs'), $contact, false);
+    $rows .= mlzs_email_info_row(__('Email', 'mlzs'), $email, true);
+    $content = '<div style="padding:32px 36px;">' . $highlight . mlzs_email_card($rows) . '</div>';
+    return mlzs_email_wrapper(__('New Admission Enquiry', 'mlzs'), $content, $hero);
 }
 
 /**
@@ -121,23 +150,41 @@ function mlzs_email_body_admission($meta) {
     $income_labels = array('lt_6' => '< 6 Lacs', 'lt_10' => '< 10 Lacs', 'lt_20' => '< 20 Lacs');
     $income_val = isset($income_labels[$v('_adm_income')]) ? $income_labels[$v('_adm_income')] : ($v('_adm_income') ?: '—');
 
-    $rows = mlzs_email_row(__('Date', 'mlzs'), $v('_adm_date'));
-    $rows .= mlzs_email_row(__('Enquiry/Reg. No.', 'mlzs'), $v('_adm_enquiry_no') ?: '—');
-    $rows .= mlzs_email_row(__("Child's Name", 'mlzs'), trim($v('_adm_child_first_name') . ' ' . $v('_adm_child_surname')));
-    $rows .= mlzs_email_row(__('Date of Birth', 'mlzs'), $v('_adm_child_dob'));
-    $rows .= mlzs_email_row(__('Current Age', 'mlzs'), ($v('_adm_age_years') || $v('_adm_age_months')) ? $v('_adm_age_years') . ' yrs ' . $v('_adm_age_months') . ' months' : '—');
-    $rows .= mlzs_email_row(__('Current School', 'mlzs'), $v('_adm_current_school') ?: '—');
-    $rows .= mlzs_email_row(__('Class Sought', 'mlzs'), $v('_adm_admission_class'));
-    $rows .= mlzs_email_row(__("Father's Name", 'mlzs'), trim($v('_adm_father_first_name') . ' ' . $v('_adm_father_surname')));
-    $rows .= mlzs_email_row(__("Father's Qualification", 'mlzs'), $v('_adm_father_qualification') ?: '—');
-    $rows .= mlzs_email_row(__("Father's Occupation", 'mlzs'), $v('_adm_father_occupation') ?: '—');
-    $rows .= mlzs_email_row(__("Mother's Name", 'mlzs'), trim($v('_adm_mother_first_name') . ' ' . $v('_adm_mother_surname')));
-    $rows .= mlzs_email_row(__("Mother's Qualification", 'mlzs'), $v('_adm_mother_qualification') ?: '—');
-    $rows .= mlzs_email_row(__("Mother's Occupation", 'mlzs'), $v('_adm_mother_occupation') ?: '—');
-    $rows .= mlzs_email_row(__('Family Annual Income', 'mlzs'), $income_val);
-    $rows .= mlzs_email_row(__('Address', 'mlzs'), $v('_adm_address'));
-    $rows .= mlzs_email_row(__('Email', 'mlzs'), $v('_adm_email'));
-    $rows .= mlzs_email_row(__('Contact', 'mlzs'), $v('_adm_contact'));
-    $rows .= mlzs_email_row(__('Preferred Visit Date', 'mlzs'), $v('_adm_preferred_visit_date') ?: '—');
-    return mlzs_email_wrapper(__('New Admission Registration', 'mlzs'), $rows);
+    $child_name = trim($v('_adm_child_first_name') . ' ' . $v('_adm_child_surname'));
+    $class_sought = $v('_adm_admission_class');
+    $hero = $child_name . ' — Class ' . $class_sought;
+
+    $age = ($v('_adm_age_years') || $v('_adm_age_months')) ? trim($v('_adm_age_years') . ' yrs ' . $v('_adm_age_months') . ' months') : '—';
+
+    $child_rows = mlzs_email_info_row(__('Date', 'mlzs'), $v('_adm_date'), false);
+    $child_rows .= mlzs_email_info_row(__('Enquiry/Reg. No.', 'mlzs'), $v('_adm_enquiry_no') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__("Child's Name", 'mlzs'), $child_name, false);
+    $child_rows .= mlzs_email_info_row(__('Date of Birth', 'mlzs'), $v('_adm_child_dob'), false);
+    $child_rows .= mlzs_email_info_row(__('Current Age', 'mlzs'), $age, false);
+    $child_rows .= mlzs_email_info_row(__('Current School', 'mlzs'), $v('_adm_current_school') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Class Sought', 'mlzs'), $class_sought, true);
+
+    $father_name = trim($v('_adm_father_first_name') . ' ' . $v('_adm_father_surname'));
+    $father_rows = mlzs_email_info_row(__('Name', 'mlzs'), $father_name, false);
+    $father_rows .= mlzs_email_info_row(__('Qualification', 'mlzs'), $v('_adm_father_qualification') ?: '—', false);
+    $father_rows .= mlzs_email_info_row(__('Occupation', 'mlzs'), $v('_adm_father_occupation') ?: '—', true);
+
+    $mother_name = trim($v('_adm_mother_first_name') . ' ' . $v('_adm_mother_surname'));
+    $mother_rows = mlzs_email_info_row(__('Name', 'mlzs'), $mother_name, false);
+    $mother_rows .= mlzs_email_info_row(__('Qualification', 'mlzs'), $v('_adm_mother_qualification') ?: '—', false);
+    $mother_rows .= mlzs_email_info_row(__('Occupation', 'mlzs'), $v('_adm_mother_occupation') ?: '—', true);
+
+    $contact_rows = mlzs_email_info_row(__('Family Annual Income', 'mlzs'), $income_val, false);
+    $contact_rows .= mlzs_email_info_row(__('Address', 'mlzs'), $v('_adm_address'), false);
+    $contact_rows .= mlzs_email_info_row(__('Email', 'mlzs'), $v('_adm_email'), false);
+    $contact_rows .= mlzs_email_info_row(__('Contact', 'mlzs'), $v('_adm_contact'), false);
+    $contact_rows .= mlzs_email_info_row(__('Preferred Visit Date', 'mlzs'), $v('_adm_preferred_visit_date') ?: '—', true);
+
+    $cards = mlzs_email_card($child_rows, __("Child's Information", 'mlzs'), false);
+    $cards .= mlzs_email_card($father_rows, __("Father's Information", 'mlzs'), true);
+    $cards .= mlzs_email_card($mother_rows, __("Mother's Information", 'mlzs'), false);
+    $cards .= mlzs_email_card($contact_rows, __('Family & Contact', 'mlzs'), false);
+
+    $content = '<div style="padding:32px 36px;">' . $cards . '</div>';
+    return mlzs_email_wrapper(__('New Admission Registration', 'mlzs'), $content, $hero);
 }

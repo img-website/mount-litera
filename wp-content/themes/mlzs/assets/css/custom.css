@@ -87,3 +87,7 @@
 #full-menu .has-submenu.is-open > .menu-row .down-arrow {
     transform: rotate(180deg);
 }
+
+* {
+    line-height: normal !important;
+}

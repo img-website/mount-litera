@@ -31,6 +31,9 @@ require_once get_template_directory() . '/inc/registration-form-handler.php';
 /** Form Export (PDF, Excel) and Import (CSV/Excel) for CPT submissions */
 require_once get_template_directory() . '/inc/form-export-import.php';
 
+/** Transfer Certificate – CPT, Add TC form, Frontend search */
+require_once get_template_directory() . '/inc/tc-handler.php';
+
 /**
  * One-time flush rewrite rules so new CPTs appear in admin.
  */

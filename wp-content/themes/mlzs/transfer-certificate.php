@@ -350,6 +350,7 @@ $stats_year = ($stats_year !== '' && $stats_year !== null) ? (string) $stats_yea
 <script>
 (function() {
     if (typeof window.mlzsSubmitTCForm === 'function') return;
+    var tcCurrentPdfUrl = '';
     window.mlzsSubmitTCForm = function(event) {
         event.preventDefault();
         var searchText = document.getElementById('tc_search_text').value.trim();
@@ -358,13 +359,26 @@ $stats_year = ($stats_year !== '' && $stats_year !== null) ? (string) $stats_yea
             return false;
         }
         mlzsShowTCLoading();
-        setTimeout(function() {
-            if (searchText.toLowerCase().indexOf('tc-2024') !== -1 || searchText.toLowerCase().indexOf('demo') !== -1) {
-                mlzsShowTCSuccess(searchText);
-            } else {
-                mlzsShowTCError("Transfer Certificate not found. Please check the serial number.");
+        var formData = new FormData();
+        formData.append('action', 'mlzs_tc_search');
+        formData.append('serial', searchText);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', (typeof mlzsAjax !== 'undefined' && mlzsAjax && mlzsAjax.url) ? mlzsAjax.url : '<?php echo esc_url(admin_url("admin-ajax.php")); ?>');
+        xhr.onload = function() {
+            try {
+                var res = JSON.parse(xhr.responseText);
+                if (res.success && res.data) {
+                    tcCurrentPdfUrl = res.data.pdf_url || '';
+                    mlzsShowTCSuccess(res.data);
+                } else {
+                    mlzsShowTCError(res.data && res.data.message ? res.data.message : "Transfer Certificate not found. Please check the serial number.");
+                }
+            } catch (e) {
+                mlzsShowTCError("Something went wrong. Please try again.");
             }
-        }, 1500);
+        };
+        xhr.onerror = function() { mlzsShowTCError("Network error. Please try again."); };
+        xhr.send(formData);
         return false;
     };
     window.mlzsShowTCLoading = function() {
@@ -373,24 +387,17 @@ $stats_year = ($stats_year !== '' && $stats_year !== null) ? (string) $stats_yea
         document.getElementById('tc-error-state').classList.add('hidden');
         document.getElementById('tc-success-state').classList.add('hidden');
     };
-    window.mlzsShowTCSuccess = function(serialNumber) {
+    window.mlzsShowTCSuccess = function(data) {
         document.getElementById('tc-initial-state').classList.add('hidden');
         document.getElementById('tc-loading-state').classList.add('hidden');
         document.getElementById('tc-error-state').classList.add('hidden');
         document.getElementById('tc-success-state').classList.remove('hidden');
-        document.getElementById('tc-serial').textContent = serialNumber;
-        var names = ["Aarav Sharma", "Vihaan Patel", "Aditya Singh", "Ananya Gupta", "Diya Kumar"];
-        var classes = ["X Science", "XII Commerce", "XI Humanities", "IX", "VIII"];
-        var randomName = names[Math.floor(Math.random() * names.length)];
-        var randomClass = classes[Math.floor(Math.random() * classes.length)];
-        var issueDate = new Date();
-        var validDate = new Date(issueDate);
-        validDate.setMonth(validDate.getMonth() + 6);
-        var fmt = function(d) { return d.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' }); };
-        document.getElementById('tc-student').textContent = randomName;
-        document.getElementById('tc-class').textContent = randomClass;
-        document.getElementById('tc-issue').textContent = fmt(issueDate);
-        document.getElementById('tc-valid').textContent = fmt(validDate);
+        document.getElementById('tc-serial').textContent = data.serial || '';
+        document.getElementById('tc-student').textContent = data.student || '—';
+        document.getElementById('tc-class').textContent = data.class || '—';
+        document.getElementById('tc-issue').textContent = data.issue || '—';
+        document.getElementById('tc-valid').textContent = data.valid || '—';
+        tcCurrentPdfUrl = data.pdf_url || '';
         if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
     };
     window.mlzsShowTCError = function(message) {
@@ -402,14 +409,40 @@ $stats_year = ($stats_year !== '' && $stats_year !== null) ? (string) $stats_yea
         if (el && message) el.textContent = message;
     };
     window.mlzsResetTCSearch = function() {
+        tcCurrentPdfUrl = '';
         document.getElementById('tc_search_text').value = '';
         document.getElementById('tc-initial-state').classList.remove('hidden');
         document.getElementById('tc-loading-state').classList.add('hidden');
         document.getElementById('tc-error-state').classList.add('hidden');
         document.getElementById('tc-success-state').classList.add('hidden');
     };
-    window.mlzsDownloadTC = function() { alert("Download functionality would be implemented in production"); };
-    window.mlzsPrintTC = function() { alert("Print functionality would be implemented in production"); };
+    window.mlzsDownloadTC = function() {
+        if (tcCurrentPdfUrl && tcCurrentPdfUrl !== '') {
+            var link = document.createElement('a');
+            link.href = tcCurrentPdfUrl;
+            link.download = 'TC-Certificate.pdf';
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } else {
+            alert("PDF not available. Please ensure the TC has a PDF file uploaded.");
+        }
+    };
+    window.mlzsPrintTC = function() {
+        if (tcCurrentPdfUrl && tcCurrentPdfUrl !== '') {
+            var w = window.open(tcCurrentPdfUrl, '_blank');
+            if (w) {
+                w.onload = function() {
+                    setTimeout(function() {
+                        w.print();
+                    }, 500);
+                };
+            }
+        } else {
+            alert("PDF not available. Please ensure the TC has a PDF file uploaded.");
+        }
+    };
     document.addEventListener('DOMContentLoaded', function() {
         var totalEl = document.getElementById('tc-total-issued');
         var yearEl = document.getElementById('tc-current-year');

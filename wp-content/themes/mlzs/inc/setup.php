@@ -190,10 +190,10 @@ function mlzs_enqueue_assets() {
         $theme_version
     );
 
-    // Tailwind CDN (script loads CSS via CDN)
+    // Tailwind CDN (script loads CSS via CDN) – typography for Privacy/Terms pages
     wp_enqueue_script(
         'tailwindcss',
-        'https://cdn.tailwindcss.com?plugins=forms,container-queries',
+        'https://cdn.tailwindcss.com?plugins=forms,container-queries,typography',
         array(),
         '3',
         false
@@ -205,6 +205,19 @@ function mlzs_enqueue_assets() {
             darkMode: 'class',
             theme: {
                 extend: {
+                    typography: ({ theme }) => ({
+                        DEFAULT: {
+                            css: {
+                                fontFamily: theme('fontFamily.body').join(', '),
+                                color: theme('colors.slate.900'),
+                                maxWidth: 'none',
+                                'h1, h2, h3, h4': { fontFamily: theme('fontFamily.display').join(', ') },
+                                a: { color: theme('colors.primary'), fontWeight: '500' },
+                                'a:hover': { color: theme('colors.primary-dark') },
+                                strong: { color: theme('colors.slate.900') },
+                            },
+                        },
+                    }),
                     colors: {
                         'primary': '#3D348B',
                         'primary-dark': '#2d2566',
@@ -301,35 +314,6 @@ function mlzs_enqueue_assets() {
         $theme_version,
         true
     );
-
-    // CSS only for privacy-policy.php & page.php (Privacy Policy, Terms & Conditions)
-    if (is_page_template('privacy-policy.php') || is_page_template('page.php')) {
-        $wp_ver = get_bloginfo('version');
-        wp_enqueue_style(
-            'wp-block-library-reset',
-            includes_url('css/dist/block-library/reset.min.css'),
-            array(),
-            $wp_ver
-        );
-        wp_enqueue_style(
-            'wp-block-editor-content',
-            includes_url('css/dist/block-editor/content.min.css'),
-            array('wp-block-library-reset'),
-            $wp_ver
-        );
-        wp_enqueue_style(
-            'wp-admin-common',
-            admin_url('css/common.min.css'),
-            array(),
-            $wp_ver
-        );
-        wp_enqueue_style(
-            'mlzs-page-content',
-            $theme_uri . '/assets/css/page-content.css',
-            array('wp-block-editor-content'),
-            $theme_version
-        );
-    }
 
     // Fancybox for Alumni Feed, Photo Gallery, Origin (Campus) video, and Sports gallery popup
     if (is_page_template('feed.php') || is_page_template('gallery.php') || is_page_template('origin.php') || is_page_template('sports.php')) {

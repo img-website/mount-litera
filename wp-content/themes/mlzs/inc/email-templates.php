@@ -109,3 +109,35 @@ function mlzs_email_body_enquiry($name, $class, $contact, $email) {
     $rows .= mlzs_email_row(__('Email', 'mlzs'), $email);
     return mlzs_email_wrapper(__('New Admission Enquiry', 'mlzs'), $rows);
 }
+
+/**
+ * Build HTML body for Admission Registration form submission.
+ *
+ * @param array $meta Post meta array (keys like _adm_date, _adm_child_first_name, etc.).
+ * @return string Full HTML email body.
+ */
+function mlzs_email_body_admission($meta) {
+    $v = function($key) use ($meta) { return isset($meta[$key]) ? (string) $meta[$key] : ''; };
+    $income_labels = array('lt_6' => '< 6 Lacs', 'lt_10' => '< 10 Lacs', 'lt_20' => '< 20 Lacs');
+    $income_val = isset($income_labels[$v('_adm_income')]) ? $income_labels[$v('_adm_income')] : ($v('_adm_income') ?: '—');
+
+    $rows = mlzs_email_row(__('Date', 'mlzs'), $v('_adm_date'));
+    $rows .= mlzs_email_row(__('Enquiry/Reg. No.', 'mlzs'), $v('_adm_enquiry_no') ?: '—');
+    $rows .= mlzs_email_row(__("Child's Name", 'mlzs'), trim($v('_adm_child_first_name') . ' ' . $v('_adm_child_surname')));
+    $rows .= mlzs_email_row(__('Date of Birth', 'mlzs'), $v('_adm_child_dob'));
+    $rows .= mlzs_email_row(__('Current Age', 'mlzs'), ($v('_adm_age_years') || $v('_adm_age_months')) ? $v('_adm_age_years') . ' yrs ' . $v('_adm_age_months') . ' months' : '—');
+    $rows .= mlzs_email_row(__('Current School', 'mlzs'), $v('_adm_current_school') ?: '—');
+    $rows .= mlzs_email_row(__('Class Sought', 'mlzs'), $v('_adm_admission_class'));
+    $rows .= mlzs_email_row(__("Father's Name", 'mlzs'), trim($v('_adm_father_first_name') . ' ' . $v('_adm_father_surname')));
+    $rows .= mlzs_email_row(__("Father's Qualification", 'mlzs'), $v('_adm_father_qualification') ?: '—');
+    $rows .= mlzs_email_row(__("Father's Occupation", 'mlzs'), $v('_adm_father_occupation') ?: '—');
+    $rows .= mlzs_email_row(__("Mother's Name", 'mlzs'), trim($v('_adm_mother_first_name') . ' ' . $v('_adm_mother_surname')));
+    $rows .= mlzs_email_row(__("Mother's Qualification", 'mlzs'), $v('_adm_mother_qualification') ?: '—');
+    $rows .= mlzs_email_row(__("Mother's Occupation", 'mlzs'), $v('_adm_mother_occupation') ?: '—');
+    $rows .= mlzs_email_row(__('Family Annual Income', 'mlzs'), $income_val);
+    $rows .= mlzs_email_row(__('Address', 'mlzs'), $v('_adm_address'));
+    $rows .= mlzs_email_row(__('Email', 'mlzs'), $v('_adm_email'));
+    $rows .= mlzs_email_row(__('Contact', 'mlzs'), $v('_adm_contact'));
+    $rows .= mlzs_email_row(__('Preferred Visit Date', 'mlzs'), $v('_adm_preferred_visit_date') ?: '—');
+    return mlzs_email_wrapper(__('New Admission Registration', 'mlzs'), $rows);
+}

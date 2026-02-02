@@ -22,6 +22,20 @@ require_once get_template_directory() . '/inc/contact-form-handler.php';
 /** Enquiry Form – CPT, AJAX, wp_mail */
 require_once get_template_directory() . '/inc/enquiry-form-handler.php';
 
+/** Admission Registration Form – CPT, AJAX, wp_mail */
+require_once get_template_directory() . '/inc/admission-form-handler.php';
+
+/**
+ * One-time flush rewrite rules so new CPTs appear in admin.
+ */
+function mlzs_maybe_flush_rewrite_rules() {
+    if (get_option('mlzs_flushed_rewrites') !== '1') {
+        flush_rewrite_rules();
+        update_option('mlzs_flushed_rewrites', '1');
+    }
+}
+add_action('init', 'mlzs_maybe_flush_rewrite_rules', 999);
+
 /**
  * Set ACF Google Maps API key from Settings > Env (ACF options page).
  */
@@ -35,3 +49,4 @@ add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);
 
 /** Page-wise ACF field groups */
 require_once get_template_directory() . '/inc/acf-load.php';
+

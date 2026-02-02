@@ -275,7 +275,10 @@ $form_terms   = ($form_terms !== '' && $form_terms !== null) ? (string) $form_te
                     <p class="text-sm sm:text-base text-text-secondary-light max-w-2xl mx-auto"><?php echo esc_html($form_desc); ?></p>
                 </div>
 
-                <form class="space-y-6 sm:space-y-8" method="post" action="">
+                <form id="mlzs-admission-form" class="space-y-6 sm:space-y-8" method="post" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>">
+                    <?php wp_nonce_field('mlzs_admission', 'mlzs_admission_nonce', false); ?>
+                    <input type="hidden" name="action" value="mlzs_admission" />
+                    <div id="mlzs-admission-form-message" class="hidden rounded-xl px-4 py-3 text-sm" role="alert" aria-live="polite"></div>
                     <!-- Date & Enquiry Number -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div class="space-y-2">
@@ -456,9 +459,9 @@ $form_terms   = ($form_terms !== '' && $form_terms !== null) ? (string) $form_te
                         </div>
                     </div>
                     <div class="pt-4">
-                        <button type="submit" name="admission_registration" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-bold text-sm sm:text-base md:text-lg hover:shadow-[0_0_30px_rgba(61,52,139,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 group/btn mx-auto">
-                            <span><?php echo esc_html($form_submit); ?></span>
-                            <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                        <button id="mlzs-admission-submit-btn" type="submit" name="admission_registration" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-bold text-sm sm:text-base md:text-lg hover:shadow-[0_0_30px_rgba(61,52,139,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 group/btn mx-auto disabled:opacity-70 disabled:cursor-not-allowed">
+                            <span class="mlzs-admission-btn-text"><?php echo esc_html($form_submit); ?></span>
+                            <i data-lucide="send" class="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform mlzs-admission-btn-icon"></i>
                         </button>
                         <p class="text-center text-xs sm:text-sm text-text-secondary-light mt-4"><?php echo esc_html($form_terms); ?></p>
                     </div>

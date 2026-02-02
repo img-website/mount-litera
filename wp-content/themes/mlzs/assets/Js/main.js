@@ -303,6 +303,74 @@
         });
     }
 
+    function initAdmissionForm() {
+        var form = document.getElementById('mlzs-admission-form');
+        var msgEl = document.getElementById('mlzs-admission-form-message');
+        var btn = document.getElementById('mlzs-admission-submit-btn');
+        if (!form || !msgEl || !btn || typeof mlzsAjax === 'undefined') return;
+
+        var originalBtnText = (btn.querySelector('.mlzs-admission-btn-text') || {}).textContent || 'Submit Registration Form';
+
+        function showMessage(text, isError) {
+            msgEl.textContent = text;
+            msgEl.classList.remove('hidden');
+            msgEl.classList.remove('bg-green-500/20', 'text-green-300', 'border-green-500/50');
+            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            if (isError) {
+                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+            } else {
+                msgEl.classList.add('bg-green-500/20', 'text-green-300', 'border', 'border-green-500/50');
+            }
+            msgEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function hideMessage() {
+            msgEl.classList.add('hidden');
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            hideMessage();
+            btn.disabled = true;
+            var btnText = btn.querySelector('.mlzs-admission-btn-text');
+            var btnIcon = btn.querySelector('.mlzs-admission-btn-icon');
+            if (btnText) btnText.textContent = 'Submitting...';
+            if (btnIcon) btnIcon.style.display = 'none';
+
+            var fd = new FormData(form);
+            var req = new XMLHttpRequest();
+            req.open('POST', mlzsAjax.url);
+            req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            req.onload = function() {
+                btn.disabled = false;
+                if (btnText) btnText.textContent = originalBtnText;
+                if (btnIcon) btnIcon.style.display = '';
+
+                try {
+                    var data = JSON.parse(req.responseText);
+                    if (data.success && data.data && data.data.message) {
+                        showMessage(data.data.message, false);
+                        form.reset();
+                    } else {
+                        var errMsg = (data.data && data.data.message) ? data.data.message : 'Something went wrong. Please try again.';
+                        showMessage(errMsg, true);
+                    }
+                } catch (err) {
+                    showMessage('Something went wrong. Please try again.', true);
+                }
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            };
+            req.onerror = function() {
+                btn.disabled = false;
+                if (btnText) btnText.textContent = originalBtnText;
+                if (btnIcon) btnIcon.style.display = '';
+                showMessage('Unable to connect. Please check your connection and try again.', true);
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            };
+            req.send(fd);
+        });
+    }
+
     function initAcademicsTabs() {
         var tabs = document.querySelectorAll('.academics-tab');
         var panels = document.querySelectorAll('.academics-panel');
@@ -346,5 +414,6 @@
         initAcademicsTabs();
         initFooterContactForm();
         initEnquiryForm();
+        initAdmissionForm();
     });
 })();

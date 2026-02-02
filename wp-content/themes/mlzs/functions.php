@@ -25,6 +25,9 @@ require_once get_template_directory() . '/inc/enquiry-form-handler.php';
 /** Admission Registration Form – CPT, AJAX, wp_mail */
 require_once get_template_directory() . '/inc/admission-form-handler.php';
 
+/** Student Registration Form (form.php) – CPT, AJAX, file uploads, wp_mail */
+require_once get_template_directory() . '/inc/registration-form-handler.php';
+
 /**
  * One-time flush rewrite rules so new CPTs appear in admin.
  */

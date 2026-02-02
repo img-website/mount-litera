@@ -371,6 +371,129 @@
         });
     }
 
+    function initRegistrationForm() {
+        var form = document.getElementById('mlzs-registration-form');
+        var msgEl = document.getElementById('mlzs-registration-form-message');
+        var btn = document.getElementById('mlzs-registration-submit-btn');
+        if (!form || !msgEl || !btn || typeof mlzsAjax === 'undefined') return;
+
+        var btnTextEl = btn.querySelector('.mlzs-registration-btn-text');
+        var originalBtnText = (btnTextEl || {}).textContent || 'Submit Registration Form';
+
+        function initRegPhotoPreview() {
+            var boxes = document.querySelectorAll('.reg-photo-box');
+            boxes.forEach(function(box) {
+                var placeholder = box.querySelector('.reg-photo-placeholder');
+                var previewWrap = box.querySelector('.reg-photo-preview');
+                var previewImg = previewWrap ? previewWrap.querySelector('img') : null;
+                var removeBtn = box.querySelector('.reg-photo-remove');
+                var fileInput = box.querySelector('input[type="file"]');
+                if (!placeholder || !previewWrap || !previewImg || !removeBtn || !fileInput) return;
+
+                function showPreview(file) {
+                    if (!file || !file.type.match(/^image\//)) return;
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImg.src = e.target.result;
+                        placeholder.classList.add('hidden');
+                        previewWrap.classList.remove('hidden');
+                        removeBtn.classList.remove('hidden');
+                        if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+                    };
+                    reader.readAsDataURL(file);
+                }
+
+                function hidePreview() {
+                    fileInput.value = '';
+                    previewImg.src = '';
+                    placeholder.classList.remove('hidden');
+                    previewWrap.classList.add('hidden');
+                    removeBtn.classList.add('hidden');
+                    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+                }
+
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) showPreview(this.files[0]);
+                });
+
+                removeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hidePreview();
+                });
+            });
+        }
+
+        initRegPhotoPreview();
+
+        form.addEventListener('reset', function() {
+            setTimeout(function() {
+                document.querySelectorAll('.reg-photo-box').forEach(function(box) {
+                    var placeholder = box.querySelector('.reg-photo-placeholder');
+                    var previewWrap = box.querySelector('.reg-photo-preview');
+                    var previewImg = previewWrap ? previewWrap.querySelector('img') : null;
+                    var removeBtn = box.querySelector('.reg-photo-remove');
+                    var fileInput = box.querySelector('input[type="file"]');
+                    if (placeholder) placeholder.classList.remove('hidden');
+                    if (previewWrap) previewWrap.classList.add('hidden');
+                    if (previewImg) previewImg.src = '';
+                    if (removeBtn) removeBtn.classList.add('hidden');
+                    if (fileInput) fileInput.value = '';
+                });
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            }, 0);
+        });
+
+        function showMessage(text, isError) {
+            msgEl.textContent = text;
+            msgEl.classList.remove('hidden');
+            msgEl.classList.remove('bg-green-800', 'text-white', 'border-green-500/50');
+            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            if (isError) {
+                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+            } else {
+                msgEl.classList.add('bg-green-800', 'text-white', 'border', 'border-green-500/50');
+            }
+            msgEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            msgEl.classList.add('hidden');
+            btn.disabled = true;
+            if (btnTextEl) btnTextEl.textContent = 'Submitting...';
+
+            var fd = new FormData(form);
+            var req = new XMLHttpRequest();
+            req.open('POST', mlzsAjax.url);
+            req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            req.onload = function() {
+                btn.disabled = false;
+                if (btnTextEl) btnTextEl.textContent = originalBtnText;
+                try {
+                    var data = JSON.parse(req.responseText);
+                    if (data.success && data.data && data.data.message) {
+                        showMessage(data.data.message, false);
+                        form.reset();
+                    } else {
+                        var errMsg = (data.data && data.data.message) ? data.data.message : 'Something went wrong. Please try again.';
+                        showMessage(errMsg, true);
+                    }
+                } catch (err) {
+                    showMessage('Something went wrong. Please try again.', true);
+                }
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            };
+            req.onerror = function() {
+                btn.disabled = false;
+                if (btnTextEl) btnTextEl.textContent = originalBtnText;
+                showMessage('Unable to connect. Please check your connection and try again.', true);
+                if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+            };
+            req.send(fd);
+        });
+    }
+
     function initAcademicsTabs() {
         var tabs = document.querySelectorAll('.academics-tab');
         var panels = document.querySelectorAll('.academics-panel');
@@ -415,5 +538,6 @@
         initFooterContactForm();
         initEnquiryForm();
         initAdmissionForm();
+        initRegistrationForm();
     });
 })();

@@ -188,3 +188,65 @@ function mlzs_email_body_admission($meta) {
     $content = '<div style="padding:32px 36px;">' . $cards . '</div>';
     return mlzs_email_wrapper(__('New Admission Registration', 'mlzs'), $content, $hero);
 }
+
+/**
+ * Build HTML body for Student Registration form (form.php).
+ *
+ * @param array $meta Post meta (keys _reg_child_name, _reg_dob, etc.).
+ * @return string Full HTML email body.
+ */
+function mlzs_email_body_registration($meta) {
+    $v = function($key) use ($meta) { return isset($meta[$key]) ? (string) $meta[$key] : ''; };
+    $child_name = $v('_reg_child_name');
+    $class_sought = $v('_reg_class_sought');
+    $hero = $child_name . ' — ' . $class_sought;
+
+    $child_rows = mlzs_email_info_row(__('Session', 'mlzs'), $v('_reg_start_year') . '-' . $v('_reg_end_year'), false);
+    $child_rows .= mlzs_email_info_row(__("Child's Name", 'mlzs'), $child_name, false);
+    $child_rows .= mlzs_email_info_row(__('Sex', 'mlzs'), $v('_reg_sex') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Date of Birth', 'mlzs'), $v('_reg_dob'), false);
+    $child_rows .= mlzs_email_info_row(__('Aadhar', 'mlzs'), $v('_reg_aadhar') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Age (as on 31 Mar)', 'mlzs'), trim($v('_reg_age_years') . 'y ' . $v('_reg_age_months') . 'm ' . $v('_reg_age_days') . 'd') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Blood Group', 'mlzs'), $v('_reg_blood_group') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Place/City/State of Birth', 'mlzs'), trim($v('_reg_place_of_birth') . ', ' . $v('_reg_city_of_birth') . ', ' . $v('_reg_state_of_birth'), ', ') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Class Sought', 'mlzs'), $class_sought, false);
+    $child_rows .= mlzs_email_info_row(__('Current School', 'mlzs'), $v('_reg_current_school') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Current Class', 'mlzs'), $v('_reg_current_class') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Nationality', 'mlzs'), $v('_reg_nationality') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Domicile', 'mlzs'), $v('_reg_domicile') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Source of Info', 'mlzs'), $v('_reg_source_info') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Mother Tongue', 'mlzs'), $v('_reg_mother_tongue') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Admission Category', 'mlzs'), $v('_reg_admission_category') ?: '—', false);
+    $child_rows .= mlzs_email_info_row(__('Health Info', 'mlzs'), $v('_reg_health_info') ?: '—', true);
+
+    $father_rows = mlzs_email_info_row(__('Name', 'mlzs'), $v('_reg_father_name'), false);
+    $father_rows .= mlzs_email_info_row(__('Age', 'mlzs'), $v('_reg_father_age') ?: '—', false);
+    $father_rows .= mlzs_email_info_row(__('Qualification', 'mlzs'), $v('_reg_father_qualification') ?: '—', false);
+    $father_rows .= mlzs_email_info_row(__('Profession', 'mlzs'), $v('_reg_father_profession') ?: '—', false);
+    $father_rows .= mlzs_email_info_row(__('Organization', 'mlzs'), $v('_reg_father_organization') ?: '—', false);
+    $father_rows .= mlzs_email_info_row(__('Mobile', 'mlzs'), $v('_reg_father_mobile'), false);
+    $father_rows .= mlzs_email_info_row(__('Email', 'mlzs'), $v('_reg_father_email'), true);
+
+    $mother_rows = mlzs_email_info_row(__('Name', 'mlzs'), $v('_reg_mother_name'), false);
+    $mother_rows .= mlzs_email_info_row(__('Age', 'mlzs'), $v('_reg_mother_age') ?: '—', false);
+    $mother_rows .= mlzs_email_info_row(__('Qualification', 'mlzs'), $v('_reg_mother_qualification') ?: '—', false);
+    $mother_rows .= mlzs_email_info_row(__('Profession', 'mlzs'), $v('_reg_mother_profession') ?: '—', false);
+    $mother_rows .= mlzs_email_info_row(__('Organization', 'mlzs'), $v('_reg_mother_organization') ?: '—', false);
+    $mother_rows .= mlzs_email_info_row(__('Mobile', 'mlzs'), $v('_reg_mother_mobile'), false);
+    $mother_rows .= mlzs_email_info_row(__('Email', 'mlzs'), $v('_reg_mother_email') ?: '—', true);
+
+    $contact_rows = mlzs_email_info_row(__('Permanent Address', 'mlzs'), $v('_reg_permanent_address'), false);
+    $contact_rows .= mlzs_email_info_row(__('Resident Address', 'mlzs'), $v('_reg_resident_address') ?: '—', false);
+    $contact_rows .= mlzs_email_info_row(__('State/District (Permanent)', 'mlzs'), trim($v('_reg_state_permanent') . ', ' . $v('_reg_district_permanent'), ', ') ?: '—', false);
+    $contact_rows .= mlzs_email_info_row(__('Mobile', 'mlzs'), $v('_reg_mobile_permanent'), false);
+    $contact_rows .= mlzs_email_info_row(__('PIN Code', 'mlzs'), $v('_reg_pincode_permanent') ?: '—', false);
+    $contact_rows .= mlzs_email_info_row(__('Email', 'mlzs'), $v('_reg_email'), true);
+
+    $cards = mlzs_email_card($child_rows, __("Child's Information", 'mlzs'), false);
+    $cards .= mlzs_email_card($father_rows, __("Father's Information", 'mlzs'), true);
+    $cards .= mlzs_email_card($mother_rows, __("Mother's Information", 'mlzs'), false);
+    $cards .= mlzs_email_card($contact_rows, __('Address & Contact', 'mlzs'), false);
+
+    $content = '<div style="padding:32px 36px;">' . $cards . '</div>';
+    return mlzs_email_wrapper(__('New Student Registration', 'mlzs'), $content, $hero);
+}

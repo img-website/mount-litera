@@ -49,35 +49,69 @@ function mlzs_form_export_get_configs() {
         'mlzs_adm_reg' => array(
             'post_type'   => 'mlzs_adm_reg',
             'page_title'  => __('Admission Registrations', 'mlzs'),
-            'get_headers' => array(__('Child Name', 'mlzs'), __('Class', 'mlzs'), __('Father', 'mlzs'), __('Mother', 'mlzs'), __('Email', 'mlzs'), __('Contact', 'mlzs'), __('Date', 'mlzs')),
+            'get_headers' => array(
+                __('Date', 'mlzs'), __('Enquiry No.', 'mlzs'), __('Child Name', 'mlzs'), __('DOB', 'mlzs'), __('Age', 'mlzs'),
+                __('Current School', 'mlzs'), __('Class Sought', 'mlzs'),
+                __('Father Name', 'mlzs'), __('Father Qualification', 'mlzs'), __('Father Occupation', 'mlzs'),
+                __('Mother Name', 'mlzs'), __('Mother Qualification', 'mlzs'), __('Mother Occupation', 'mlzs'),
+                __('Income', 'mlzs'), __('Address', 'mlzs'), __('Email', 'mlzs'), __('Contact', 'mlzs'), __('Preferred Visit Date', 'mlzs'),
+                __('Created', 'mlzs'),
+            ),
             'get_row'     => function($post) {
                 $id = $post->ID;
+                $g = function($k) use ($id) { return get_post_meta($id, $k, true) ?: ''; };
+                $age_y = $g('_adm_age_years');
+                $age_m = $g('_adm_age_months');
+                $age = ($age_y || $age_m) ? trim($age_y . 'y ' . $age_m . 'm') : '';
+                $income_val = $g('_adm_income');
+                $income_labels = array('lt_6' => '< 6 Lacs', 'lt_10' => '< 10 Lacs', 'lt_20' => '< 20 Lacs');
+                if (isset($income_labels[$income_val])) $income_val = $income_labels[$income_val];
                 return array(
-                    $post->post_title,
-                    get_post_meta($id, '_adm_admission_class', true) ?: '',
-                    trim((get_post_meta($id, '_adm_father_first_name', true) ?: '') . ' ' . (get_post_meta($id, '_adm_father_surname', true) ?: '')),
-                    trim((get_post_meta($id, '_adm_mother_first_name', true) ?: '') . ' ' . (get_post_meta($id, '_adm_mother_surname', true) ?: '')),
-                    get_post_meta($id, '_adm_email', true) ?: '',
-                    get_post_meta($id, '_adm_contact', true) ?: '',
+                    $g('_adm_date'), $g('_adm_enquiry_no'),
+                    trim($g('_adm_child_first_name') . ' ' . $g('_adm_child_surname')), $g('_adm_child_dob'), $age,
+                    $g('_adm_current_school'), $g('_adm_admission_class'),
+                    trim($g('_adm_father_first_name') . ' ' . $g('_adm_father_surname')), $g('_adm_father_qualification'), $g('_adm_father_occupation'),
+                    trim($g('_adm_mother_first_name') . ' ' . $g('_adm_mother_surname')), $g('_adm_mother_qualification'), $g('_adm_mother_occupation'),
+                    $income_val, $g('_adm_address'), $g('_adm_email'), $g('_adm_contact'), $g('_adm_preferred_visit_date'),
                     get_the_date('', $post),
                 );
             },
-            'import_map'  => array('child' => 0, 'class' => 1, 'father' => 2, 'mother' => 3, 'email' => 4, 'contact' => 5),
+            'import_map'  => array(
+                0 => '_adm_child_first_name', 1 => '_adm_admission_class',
+                2 => '_adm_father_first_name', 3 => '_adm_mother_first_name',
+                4 => '_adm_email', 5 => '_adm_contact',
+            ),
             'import_title' => function($row) { return (isset($row[0]) ? $row[0] : '') . ' – ' . (isset($row[1]) ? $row[1] : ''); },
         ),
         'mlzs_student_reg' => array(
             'post_type'   => 'mlzs_student_reg',
             'page_title'  => __('Student Registrations', 'mlzs'),
-            'get_headers' => array(__('Child Name', 'mlzs'), __('Class', 'mlzs'), __('Father', 'mlzs'), __('Mother', 'mlzs'), __('Email', 'mlzs'), __('Mobile', 'mlzs'), __('Date', 'mlzs')),
+            'get_headers' => array(
+                __('Session', 'mlzs'), __('Child Name', 'mlzs'), __('Sex', 'mlzs'), __('DOB', 'mlzs'), __('Aadhar', 'mlzs'), __('Age', 'mlzs'), __('Blood Group', 'mlzs'),
+                __('Place of Birth', 'mlzs'), __('City of Birth', 'mlzs'), __('State of Birth', 'mlzs'),
+                __('Class Sought', 'mlzs'), __('Current School', 'mlzs'), __('Current Class', 'mlzs'), __('Nationality', 'mlzs'), __('Domicile', 'mlzs'),
+                __('Source of Info', 'mlzs'), __('Mother Tongue', 'mlzs'), __('Admission Category', 'mlzs'), __('Health Info', 'mlzs'),
+                __('Father Name', 'mlzs'), __('Father Age', 'mlzs'), __('Father Qualification', 'mlzs'), __('Father Profession', 'mlzs'), __('Father Mobile', 'mlzs'), __('Father Email', 'mlzs'),
+                __('Mother Name', 'mlzs'), __('Mother Age', 'mlzs'), __('Mother Qualification', 'mlzs'), __('Mother Profession', 'mlzs'), __('Mother Mobile', 'mlzs'), __('Mother Email', 'mlzs'),
+                __('Permanent Address', 'mlzs'), __('State', 'mlzs'), __('District', 'mlzs'), __('Mobile', 'mlzs'), __('PIN', 'mlzs'), __('Email', 'mlzs'),
+                __('Created', 'mlzs'),
+            ),
             'get_row'     => function($post) {
                 $id = $post->ID;
+                $g = function($k) use ($id) { return get_post_meta($id, $k, true) ?: ''; };
+                $age = ($g('_reg_age_years') || $g('_reg_age_months') || $g('_reg_age_days')) ? trim($g('_reg_age_years') . 'y ' . $g('_reg_age_months') . 'm ' . $g('_reg_age_days') . 'd') : '';
+                $mother_tongue = trim($g('_reg_mother_tongue') . ($g('_reg_mother_tongue_other_text') ? ' / ' . $g('_reg_mother_tongue_other_text') : ''));
+                $adm_cat = trim($g('_reg_admission_category') . ($g('_reg_admission_category_other_text') ? ' / ' . $g('_reg_admission_category_other_text') : ''));
+                $session = trim($g('_reg_start_year') . '-' . $g('_reg_end_year'), '-');
+                $photo_url = function($att_id) { return $att_id ? (wp_get_attachment_url($att_id) ?: '') : ''; };
                 return array(
-                    get_post_meta($id, '_reg_child_name', true) ?: '',
-                    get_post_meta($id, '_reg_class_sought', true) ?: '',
-                    get_post_meta($id, '_reg_father_name', true) ?: '',
-                    get_post_meta($id, '_reg_mother_name', true) ?: '',
-                    get_post_meta($id, '_reg_email', true) ?: '',
-                    get_post_meta($id, '_reg_mobile_permanent', true) ?: '',
+                    $session, $g('_reg_child_name'), $g('_reg_sex'), $g('_reg_dob'), $g('_reg_aadhar'), $age, $g('_reg_blood_group'),
+                    $g('_reg_place_of_birth'), $g('_reg_city_of_birth'), $g('_reg_state_of_birth'),
+                    $g('_reg_class_sought'), $g('_reg_current_school'), $g('_reg_current_class'), $g('_reg_nationality'), $g('_reg_domicile'),
+                    $g('_reg_source_info'), $mother_tongue, $adm_cat, $g('_reg_health_info'),
+                    $g('_reg_father_name'), $g('_reg_father_age'), $g('_reg_father_qualification'), $g('_reg_father_profession'), $g('_reg_father_mobile'), $g('_reg_father_email'),
+                    $g('_reg_mother_name'), $g('_reg_mother_age'), $g('_reg_mother_qualification'), $g('_reg_mother_profession'), $g('_reg_mother_mobile'), $g('_reg_mother_email'),
+                    $g('_reg_permanent_address'), $g('_reg_state_permanent'), $g('_reg_district_permanent'), $g('_reg_mobile_permanent'), $g('_reg_pincode_permanent'), $g('_reg_email'),
                     get_the_date('', $post),
                 );
             },
@@ -87,6 +121,37 @@ function mlzs_form_export_get_configs() {
                 4 => '_reg_email', 5 => '_reg_mobile_permanent',
             ),
             'import_title' => function($row) { return (isset($row[0]) ? $row[0] : '') . ' – ' . (isset($row[1]) ? $row[1] : ''); },
+        ),
+        'mlzs_tc' => array(
+            'post_type'   => 'mlzs_tc',
+            'page_title'  => __('Transfer Certificates', 'mlzs'),
+            'get_headers' => array(__('Serial Number', 'mlzs'), __('Student Name', 'mlzs'), __('Class', 'mlzs'), __('Issue Date', 'mlzs'), __('Valid Until', 'mlzs'), __('PDF URL', 'mlzs'), __('Date', 'mlzs')),
+            'get_row'     => function($post) {
+                $id = $post->ID;
+                $student = function_exists('get_field') ? get_field('tc_student_name', $id) : '';
+                $class = function_exists('get_field') ? get_field('tc_class', $id) : '';
+                $issue = function_exists('get_field') ? get_field('tc_issue_date', $id) : '';
+                $valid = function_exists('get_field') ? get_field('tc_valid_until', $id) : '';
+                $att_id = (int) get_post_meta($id, '_tc_pdf', true);
+                $pdf_url = $att_id ? (wp_get_attachment_url($att_id) ?: '') : '';
+                return array(
+                    $post->post_title,
+                    $student ?: '',
+                    $class ?: '',
+                    $issue ?: '',
+                    $valid ?: '',
+                    $pdf_url,
+                    get_the_date('', $post),
+                );
+            },
+            'import_map'  => array(
+                0 => '_tc_serial',
+                1 => 'tc_student_name',
+                2 => 'tc_class',
+                3 => 'tc_issue_date',
+                4 => 'tc_valid_until',
+            ),
+            'import_title' => function($row) { return isset($row[0]) ? trim((string) $row[0]) : ''; },
         ),
     );
 }
@@ -156,8 +221,9 @@ function mlzs_form_export_pdf_page() {
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; color: #1e293b; }
         h1 { font-size: 20px; margin-bottom: 8px; }
         .sub { font-size: 12px; color: #64748b; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; font-size: 12px; }
-        th, td { border: 1px solid #e2e8f0; padding: 8px 10px; text-align: left; }
+        .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; min-width: max-content; border-collapse: collapse; font-size: 11px; }
+        th, td { border: 1px solid #e2e8f0; padding: 6px 8px; text-align: left; font-size: 10px; }
         th { background: #f1f5f9; font-weight: 600; }
         tr:nth-child(even) { background: #fafafa; }
         .actions { margin-bottom: 20px; }
@@ -172,7 +238,7 @@ function mlzs_form_export_pdf_page() {
     </div>
     <h1><?php echo esc_html($cfg['page_title']); ?></h1>
     <p class="sub"><?php echo esc_html($site); ?> – <?php echo esc_html(wp_date('F j, Y')); ?> – <?php echo count($posts); ?> <?php esc_html_e('entries', 'mlzs'); ?></p>
-    <table>
+    <div class="table-wrap"><table>
         <thead><tr>
             <th>#</th>
             <?php foreach ($headers as $h) : ?><th><?php echo esc_html($h); ?></th><?php endforeach; ?>
@@ -186,7 +252,7 @@ function mlzs_form_export_pdf_page() {
             }
         ?></tr><?php endforeach; ?>
         </tbody>
-    </table>
+    </table></div>
 </body>
 </html><?php
     exit;

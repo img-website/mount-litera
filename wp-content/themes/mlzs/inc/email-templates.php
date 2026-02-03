@@ -154,7 +154,7 @@ function mlzs_email_body_admission($meta) {
     $class_sought = $v('_adm_admission_class');
     $hero = $child_name . ' — Class ' . $class_sought;
 
-    $age = ($v('_adm_age_years') || $v('_adm_age_months')) ? trim($v('_adm_age_years') . ' yrs ' . $v('_adm_age_months') . ' months') : '—';
+    $age = $v('_adm_age') ?: (($v('_adm_age_years') || $v('_adm_age_months')) ? trim($v('_adm_age_years') . ' yrs ' . $v('_adm_age_months') . ' months') : '—');
 
     $child_rows = mlzs_email_info_row(__('Date', 'mlzs'), $v('_adm_date'), false);
     $child_rows .= mlzs_email_info_row(__('Enquiry/Reg. No.', 'mlzs'), $v('_adm_enquiry_no') ?: '—', false);

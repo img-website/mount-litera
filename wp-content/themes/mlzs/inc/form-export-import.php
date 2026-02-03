@@ -60,9 +60,12 @@ function mlzs_form_export_get_configs() {
             'get_row'     => function($post) {
                 $id = $post->ID;
                 $g = function($k) use ($id) { return get_post_meta($id, $k, true) ?: ''; };
-                $age_y = $g('_adm_age_years');
-                $age_m = $g('_adm_age_months');
-                $age = ($age_y || $age_m) ? trim($age_y . 'y ' . $age_m . 'm') : '';
+                $age = $g('_adm_age');
+                if ($age === '') {
+                    $age_y = $g('_adm_age_years');
+                    $age_m = $g('_adm_age_months');
+                    $age = ($age_y || $age_m) ? trim($age_y . 'y ' . $age_m . 'm') : '';
+                }
                 $income_val = $g('_adm_income');
                 $income_labels = array('lt_6' => '< 6 Lacs', 'lt_10' => '< 10 Lacs', 'lt_20' => '< 20 Lacs');
                 if (isset($income_labels[$income_val])) $income_val = $income_labels[$income_val];

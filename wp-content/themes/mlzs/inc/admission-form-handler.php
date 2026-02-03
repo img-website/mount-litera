@@ -95,9 +95,12 @@ function mlzs_admission_render_table($fields) {
  */
 function mlzs_admission_meta_registration_child($post) {
     $id = $post->ID;
-    $age_y = get_post_meta($id, '_adm_age_years', true);
-    $age_m = get_post_meta($id, '_adm_age_months', true);
-    $age = ($age_y || $age_m) ? trim($age_y . 'y ' . $age_m . 'm') : '';
+    $age = get_post_meta($id, '_adm_age', true);
+    if ($age === '' || $age === null) {
+        $age_y = get_post_meta($id, '_adm_age_years', true);
+        $age_m = get_post_meta($id, '_adm_age_months', true);
+        $age = ($age_y || $age_m) ? trim($age_y . 'y ' . $age_m . 'm') : '';
+    }
     $fields = array(
         __('Date', 'mlzs') => get_post_meta($id, '_adm_date', true),
         __('Enquiry / Registration No.', 'mlzs') => get_post_meta($id, '_adm_enquiry_no', true),
@@ -252,12 +255,18 @@ function mlzs_ajax_admission() {
         wp_send_json_error(array('message' => __('Sorry, something went wrong. Please try again.', 'mlzs')));
     }
 
+    $age_parts = array();
+    if ($age_years !== '' && (int) $age_years >= 0) $age_parts[] = (int) $age_years . ' year' . ((int) $age_years !== 1 ? 's' : '');
+    if ($age_months !== '' && (int) $age_months >= 0) $age_parts[] = (int) $age_months . ' month' . ((int) $age_months !== 1 ? 's' : '');
+    $adm_age = implode(' ', $age_parts);
+
     $meta = array(
         '_adm_date' => $adm_date,
         '_adm_enquiry_no' => $adm_enquiry_no,
         '_adm_child_first_name' => $child_first,
         '_adm_child_surname' => $child_surname,
         '_adm_child_dob' => $child_dob,
+        '_adm_age' => $adm_age,
         '_adm_age_years' => $age_years,
         '_adm_age_months' => $age_months,
         '_adm_current_school' => $current_school,

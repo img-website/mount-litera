@@ -44,7 +44,6 @@ function mlzs_acf_feed_field_group() {
             array('key' => 'field_feed_form_icon', 'label' => __('Form Badge Icon', 'mlzs'), 'name' => 'feed_form_icon', 'type' => 'text', 'default_value' => 'message-square'),
             array('key' => 'field_feed_form_title', 'label' => __('Form Title', 'mlzs'), 'name' => 'feed_form_title', 'type' => 'text', 'default_value' => 'Suggestions & Feedback'),
             array('key' => 'field_feed_form_subtitle', 'label' => __('Form Subtitle', 'mlzs'), 'name' => 'feed_form_subtitle', 'type' => 'text', 'default_value' => 'Your suggestions help us improve. Share your thoughts with us.'),
-            array('key' => 'field_feed_form_action', 'label' => __('Form Action URL', 'mlzs'), 'name' => 'feed_form_action', 'type' => 'url', 'instructions' => __('Leave blank for # or use Contact Form 7 / custom handler URL.', 'mlzs')),
             array('key' => 'field_feed_form_privacy', 'label' => __('Privacy Note (below submit)', 'mlzs'), 'name' => 'feed_form_privacy', 'type' => 'text', 'default_value' => 'Your suggestions are confidential and will be used to improve our services.'),
             array('key' => 'field_feed_form_submit_text', 'label' => __('Submit Button Text', 'mlzs'), 'name' => 'feed_form_submit_text', 'type' => 'text', 'default_value' => 'Send Suggestion'),
             array('key' => 'field_feed_form_submit_icon', 'label' => __('Submit Button Icon', 'mlzs'), 'name' => 'feed_form_submit_icon', 'type' => 'text', 'default_value' => 'send'),

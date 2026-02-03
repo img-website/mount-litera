@@ -59,3 +59,6 @@ add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);
 /** Page-wise ACF field groups */
 require_once get_template_directory() . '/inc/acf-load.php';
 
+/** ACF empty-field checker: ?mlzs_acf_check=1 (admin only) */
+require_once get_template_directory() . '/inc/acf-field-checker.php';
+

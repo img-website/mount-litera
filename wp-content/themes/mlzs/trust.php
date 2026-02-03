@@ -141,8 +141,12 @@ $cta_btn2_icon = (is_string($cta_btn2_icon) && trim($cta_btn2_icon) !== '') ? tr
                     </h1>
                     
                     <div class="relative pl-8 border-l-4 border-secondary mb-8">
+                        <?php
+                        $hero_quote_contains_br = (strpos($hero_quote, '<br') !== false) || (strpos($hero_quote, '<p') !== false);
+                        $hero_quote_html = $hero_quote_contains_br ? wp_kses_post($hero_quote) : nl2br(esc_html($hero_quote));
+                        ?>
                         <p class="text-xl text-slate-200 italic font-serif">
-                            <?php echo nl2br(esc_html($hero_quote)); ?>
+                            <?php echo $hero_quote_html; ?>
                         </p>
                     </div>
                     

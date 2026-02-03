@@ -67,7 +67,6 @@ $form_badge   = $opt ? get_field('feed_form_badge', $page_id) : null;
 $form_icon    = $opt ? get_field('feed_form_icon', $page_id) : null;
 $form_title   = $opt ? get_field('feed_form_title', $page_id) : null;
 $form_subtitle = $opt ? get_field('feed_form_subtitle', $page_id) : null;
-$form_action  = $opt ? get_field('feed_form_action', $page_id) : null;
 $form_privacy = $opt ? get_field('feed_form_privacy', $page_id) : null;
 $form_submit_text = $opt ? get_field('feed_form_submit_text', $page_id) : null;
 $form_submit_icon = $opt ? get_field('feed_form_submit_icon', $page_id) : null;
@@ -76,7 +75,7 @@ $form_badge   = ($form_badge !== '' && $form_badge !== null) ? (string) $form_ba
 $form_icon    = (is_string($form_icon) && trim($form_icon) !== '') ? trim($form_icon) : 'message-square';
 $form_title   = ($form_title !== '' && $form_title !== null) ? (string) $form_title : 'Suggestions & Feedback';
 $form_subtitle = ($form_subtitle !== '' && $form_subtitle !== null) ? (string) $form_subtitle : 'Your suggestions help us improve. Share your thoughts with us.';
-$form_action  = ($form_action !== '' && $form_action !== null) ? esc_url($form_action) : $home_url . '#';
+$form_action  = $home_url . '#';
 $form_privacy = ($form_privacy !== '' && $form_privacy !== null) ? (string) $form_privacy : 'Your suggestions are confidential and will be used to improve our services.';
 $form_submit_text = ($form_submit_text !== '' && $form_submit_text !== null) ? (string) $form_submit_text : 'Send Suggestion';
 $form_submit_icon = (is_string($form_submit_icon) && trim($form_submit_icon) !== '') ? trim($form_submit_icon) : 'send';

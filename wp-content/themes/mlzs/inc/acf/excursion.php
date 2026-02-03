@@ -68,11 +68,9 @@ function mlzs_acf_excursion_field_group() {
             array('key' => 'field_exc_tab_cta', 'label' => __('Upcoming CTA', 'mlzs'), 'name' => '', 'type' => 'tab'),
             array('key' => 'field_exc_cta_title', 'label' => __('CTA Title', 'mlzs'), 'name' => 'excursion_cta_title', 'type' => 'text', 'default_value' => 'Upcoming Excursions'),
             array('key' => 'field_exc_cta_text', 'label' => __('CTA Text', 'mlzs'), 'name' => 'excursion_cta_text', 'type' => 'textarea', 'rows' => 2),
-            array('key' => 'field_exc_cta_btn1_label', 'label' => __('Button 1 Label', 'mlzs'), 'name' => 'excursion_cta_btn1_label', 'type' => 'text', 'default_value' => 'View Schedule'),
-            array('key' => 'field_exc_cta_btn1_link', 'label' => __('Button 1 Link', 'mlzs'), 'name' => 'excursion_cta_btn1_link', 'type' => 'url'),
+            array('key' => 'field_exc_cta_btn1_link', 'label' => __('Button 1 Link', 'mlzs'), 'name' => 'excursion_cta_btn1_link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Use link picker title for button text.', 'mlzs')),
             array('key' => 'field_exc_cta_btn1_icon', 'label' => __('Button 1 Icon', 'mlzs'), 'name' => 'excursion_cta_btn1_icon', 'type' => 'text', 'default_value' => 'calendar'),
-            array('key' => 'field_exc_cta_btn2_label', 'label' => __('Button 2 Label', 'mlzs'), 'name' => 'excursion_cta_btn2_label', 'type' => 'text', 'default_value' => 'Photo Gallery'),
-            array('key' => 'field_exc_cta_btn2_link', 'label' => __('Button 2 Link', 'mlzs'), 'name' => 'excursion_cta_btn2_link', 'type' => 'url'),
+            array('key' => 'field_exc_cta_btn2_link', 'label' => __('Button 2 Link', 'mlzs'), 'name' => 'excursion_cta_btn2_link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Use link picker title for button text.', 'mlzs')),
             array('key' => 'field_exc_cta_btn2_icon', 'label' => __('Button 2 Icon', 'mlzs'), 'name' => 'excursion_cta_btn2_icon', 'type' => 'text', 'default_value' => 'camera'),
             array('key' => 'field_exc_cta_stats', 'label' => __('Stats (number + label)', 'mlzs'), 'name' => 'excursion_cta_stats', 'type' => 'repeater', 'min' => 0, 'max' => 6, 'layout' => 'table', 'button_label' => __('Add Stat', 'mlzs'), 'sub_fields' => array(
                 array('key' => 'field_exc_cta_stat_number', 'label' => __('Number/Text', 'mlzs'), 'name' => 'number', 'type' => 'text'),

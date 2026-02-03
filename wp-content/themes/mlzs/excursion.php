@@ -104,22 +104,44 @@ $ben_cards = (is_array($ben_cards) && !empty($ben_cards)) ? $ben_cards : $defaul
 // ——— CTA ———
 $cta_title   = $opt ? get_field('excursion_cta_title', $page_id) : null;
 $cta_text    = $opt ? get_field('excursion_cta_text', $page_id) : null;
-$cta_btn1_label = $opt ? get_field('excursion_cta_btn1_label', $page_id) : null;
 $cta_btn1_link  = $opt ? get_field('excursion_cta_btn1_link', $page_id) : null;
 $cta_btn1_icon  = $opt ? get_field('excursion_cta_btn1_icon', $page_id) : null;
-$cta_btn2_label = $opt ? get_field('excursion_cta_btn2_label', $page_id) : null;
 $cta_btn2_link  = $opt ? get_field('excursion_cta_btn2_link', $page_id) : null;
 $cta_btn2_icon  = $opt ? get_field('excursion_cta_btn2_icon', $page_id) : null;
 $cta_stats   = $opt ? get_field('excursion_cta_stats', $page_id) : null;
 
 $cta_title   = ($cta_title !== '' && $cta_title !== null) ? (string) $cta_title : 'Upcoming Excursions';
 $cta_text    = ($cta_text !== '' && $cta_text !== null) ? (string) $cta_text : 'Stay updated with our upcoming educational trips and adventure programs. Give your child the gift of experiential learning.';
-$cta_btn1_label = ($cta_btn1_label !== '' && $cta_btn1_label !== null) ? (string) $cta_btn1_label : 'View Schedule';
-$cta_btn1_link  = ($cta_btn1_link !== '' && $cta_btn1_link !== null) ? esc_url($cta_btn1_link) : $home_url . '#';
 $cta_btn1_icon  = (is_string($cta_btn1_icon) && trim($cta_btn1_icon) !== '') ? trim($cta_btn1_icon) : 'calendar';
-$cta_btn2_label = ($cta_btn2_label !== '' && $cta_btn2_label !== null) ? (string) $cta_btn2_label : 'Photo Gallery';
-$cta_btn2_link  = ($cta_btn2_link !== '' && $cta_btn2_link !== null) ? esc_url($cta_btn2_link) : $home_url . '#';
 $cta_btn2_icon  = (is_string($cta_btn2_icon) && trim($cta_btn2_icon) !== '') ? trim($cta_btn2_icon) : 'camera';
+$cta_btn1_url = $home_url . '#';
+$cta_btn1_target = '_self';
+if (is_array($cta_btn1_link) && !empty($cta_btn1_link['url'])) {
+    $cta_btn1_url = esc_url($cta_btn1_link['url']);
+    if (!empty($cta_btn1_link['target'])) {
+        $cta_btn1_target = $cta_btn1_link['target'];
+    }
+} elseif (is_string($cta_btn1_link) && trim($cta_btn1_link) !== '') {
+    $cta_btn1_url = esc_url($cta_btn1_link);
+}
+$cta_btn1_label = 'View Schedule';
+if (is_array($cta_btn1_link) && isset($cta_btn1_link['title']) && trim((string) $cta_btn1_link['title']) !== '') {
+    $cta_btn1_label = (string) $cta_btn1_link['title'];
+}
+$cta_btn2_url = $home_url . '#';
+$cta_btn2_target = '_self';
+if (is_array($cta_btn2_link) && !empty($cta_btn2_link['url'])) {
+    $cta_btn2_url = esc_url($cta_btn2_link['url']);
+    if (!empty($cta_btn2_link['target'])) {
+        $cta_btn2_target = $cta_btn2_link['target'];
+    }
+} elseif (is_string($cta_btn2_link) && trim($cta_btn2_link) !== '') {
+    $cta_btn2_url = esc_url($cta_btn2_link);
+}
+$cta_btn2_label = 'Photo Gallery';
+if (is_array($cta_btn2_link) && isset($cta_btn2_link['title']) && trim((string) $cta_btn2_link['title']) !== '') {
+    $cta_btn2_label = (string) $cta_btn2_link['title'];
+}
 $default_cta_stats = array(
     array('number' => '4', 'label' => 'Destinations'),
     array('number' => 'Multiple', 'label' => 'Activities'),
@@ -340,11 +362,11 @@ if (!function_exists('mlzs_excursion_img_url')) {
                         <h3 class="text-lg sm:text-xl font-bold mb-4"><?php echo esc_html($cta_title); ?></h3>
                         <p class="text-sm text-white/80 mb-6"><?php echo esc_html($cta_text); ?></p>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="<?php echo $cta_btn1_link; ?>" class="px-4 py-2 sm:px-6 sm:py-3 bg-white text-primary rounded-full font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2 group text-sm">
+                            <a href="<?php echo esc_url($cta_btn1_url); ?>" target="<?php echo esc_attr($cta_btn1_target); ?>" class="px-4 py-2 sm:px-6 sm:py-3 bg-white text-primary rounded-full font-bold hover:bg-white/90 transition-all flex items-center justify-center gap-2 group text-sm">
                                 <i data-lucide="<?php echo esc_attr($cta_btn1_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 <?php echo esc_html($cta_btn1_label); ?>
                             </a>
-                            <a href="<?php echo $cta_btn2_link; ?>" class="px-4 py-2 sm:px-6 sm:py-3 bg-white/20 border border-white/30 text-white rounded-full font-bold hover:bg-white/30 transition-all flex items-center justify-center gap-2 group text-sm">
+                            <a href="<?php echo esc_url($cta_btn2_url); ?>" target="<?php echo esc_attr($cta_btn2_target); ?>" class="px-4 py-2 sm:px-6 sm:py-3 bg-white/20 border border-white/30 text-white rounded-full font-bold hover:bg-white/30 transition-all flex items-center justify-center gap-2 group text-sm">
                                 <i data-lucide="<?php echo esc_attr($cta_btn2_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                                 <?php echo esc_html($cta_btn2_label); ?>
                             </a>

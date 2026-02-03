@@ -179,9 +179,9 @@
             msgEl.textContent = text;
             msgEl.classList.remove('hidden');
             msgEl.classList.remove('bg-green-800', 'text-white', 'border-green-500/50');
-            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            msgEl.classList.remove('bg-red-800', 'text-white', 'border-red-500/50');
             if (isError) {
-                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+                msgEl.classList.add('bg-red-800', 'text-white', 'border', 'border-red-500/50');
             } else {
                 msgEl.classList.add('bg-green-800', 'text-white', 'border', 'border-green-500/50');
             }
@@ -247,9 +247,9 @@
             msgEl.textContent = text;
             msgEl.classList.remove('hidden');
             msgEl.classList.remove('bg-green-800', 'text-white', 'border-green-500/50');
-            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            msgEl.classList.remove('bg-red-800', 'text-white', 'border-red-500/50');
             if (isError) {
-                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+                msgEl.classList.add('bg-red-800', 'text-white', 'border', 'border-red-500/50');
             } else {
                 msgEl.classList.add('bg-green-800', 'text-white', 'border', 'border-green-500/50');
             }
@@ -315,9 +315,9 @@
             msgEl.textContent = text;
             msgEl.classList.remove('hidden');
             msgEl.classList.remove('bg-green-800', 'text-white', 'border-green-500/50');
-            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            msgEl.classList.remove('bg-red-800', 'text-white', 'border-red-500/50');
             if (isError) {
-                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+                msgEl.classList.add('bg-red-800', 'text-white', 'border', 'border-red-500/50');
             } else {
                 msgEl.classList.add('bg-green-800', 'text-white', 'border', 'border-green-500/50');
             }
@@ -448,9 +448,9 @@
             msgEl.textContent = text;
             msgEl.classList.remove('hidden');
             msgEl.classList.remove('bg-green-800', 'text-white', 'border-green-500/50');
-            msgEl.classList.remove('bg-red-500/20', 'text-red-300', 'border-red-500/50');
+            msgEl.classList.remove('bg-red-800', 'text-white', 'border-red-500/50');
             if (isError) {
-                msgEl.classList.add('bg-red-500/20', 'text-red-300', 'border', 'border-red-500/50');
+                msgEl.classList.add('bg-red-800', 'text-white', 'border', 'border-red-500/50');
             } else {
                 msgEl.classList.add('bg-green-800', 'text-white', 'border', 'border-green-500/50');
             }

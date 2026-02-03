@@ -96,6 +96,21 @@ foreach ($staff_rows as $row) {
 $table_stat_subjects = count($subjects_seen);
 if ($table_stat_subjects > 0 && $table_stat_subjects < 30) $table_stat_subjects = $table_stat_subjects . '+';
 
+// Hero stats: labels/icons from CMS, numbers from staff table (dynamic)
+$hero_stats_display = array();
+foreach ($hero_stats as $s) {
+    $icon = isset($s['icon']) ? trim((string) $s['icon']) : 'users';
+    $label = isset($s['label']) ? (string) $s['label'] : '';
+    if ($icon === 'award') {
+        $num = $table_stat_pgt;
+    } elseif ($icon === 'book-open') {
+        $num = is_string($table_stat_subjects) ? $table_stat_subjects : (string) $table_stat_subjects;
+    } else {
+        $num = $table_stat_total;
+    }
+    $hero_stats_display[] = array('icon' => $icon, 'number' => $num, 'label' => $label);
+}
+
 // ——— Department cards (3) ———
 $dept_heading = $opt ? get_field('teaching_dept_heading', $page_id) : null;
 $dept_subtext = $opt ? get_field('teaching_dept_subtext', $page_id) : null;
@@ -183,7 +198,7 @@ function mlzs_teaching_designation_filter_value($designation) {
                     </div>
                 </div>
                 <div class="w-full lg:w-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-4 lg:gap-6 bg-white/10 backdrop-blur-lg rounded-2xl p-4 sm:p-6 border border-white/20 shadow-xl">
-                    <?php foreach ($hero_stats as $s) :
+                    <?php foreach ($hero_stats_display as $s) :
                         $s_icon = isset($s['icon']) ? trim((string) $s['icon']) : 'users';
                         $s_num = isset($s['number']) ? (string) $s['number'] : '';
                         $s_lab = isset($s['label']) ? (string) $s['label'] : '';

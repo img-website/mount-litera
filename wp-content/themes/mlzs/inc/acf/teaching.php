@@ -21,9 +21,8 @@ function mlzs_acf_teaching_field_group() {
             array('key' => 'field_tch_hero_btn1_icon', 'label' => __('Button 1 Icon', 'mlzs'), 'name' => 'teaching_hero_btn1_icon', 'type' => 'text', 'default_value' => 'arrow-down'),
             array('key' => 'field_tch_hero_btn2_link', 'label' => __('Button 2 Link', 'mlzs'), 'name' => 'teaching_hero_btn2_link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Link Text = button label (e.g. Search Staff).', 'mlzs')),
             array('key' => 'field_tch_hero_btn2_icon', 'label' => __('Button 2 Icon', 'mlzs'), 'name' => 'teaching_hero_btn2_icon', 'type' => 'text', 'default_value' => 'search'),
-            array('key' => 'field_tch_hero_stats', 'label' => __('Hero Stat Cards (3)', 'mlzs'), 'name' => 'teaching_hero_stats', 'type' => 'repeater', 'layout' => 'row', 'min' => 3, 'max' => 3, 'button_label' => __('Add Stat', 'mlzs'), 'sub_fields' => array(
-                array('key' => 'field_tch_stat_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'users'),
-                array('key' => 'field_tch_stat_number', 'label' => __('Number/Text', 'mlzs'), 'name' => 'number', 'type' => 'text', 'default_value' => '70+'),
+            array('key' => 'field_tch_hero_stats', 'label' => __('Hero Stat Cards (3)', 'mlzs'), 'name' => 'teaching_hero_stats', 'type' => 'repeater', 'layout' => 'row', 'min' => 3, 'max' => 3, 'button_label' => __('Add Stat', 'mlzs'), 'instructions' => __('Icon + Label only. Numbers are auto-calculated from the Staff Table below (Total Staff, PGT, Subjects). Use icon: users = total, award = PGT, book-open = subjects.', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_tch_stat_icon', 'label' => __('Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'users', 'instructions' => __('e.g. users, award, book-open', 'mlzs')),
                 array('key' => 'field_tch_stat_label', 'label' => __('Label', 'mlzs'), 'name' => 'label', 'type' => 'text', 'default_value' => 'Teaching Professionals'),
             )),
             array('key' => 'field_tch_tab_table', 'label' => __('Staff Table', 'mlzs'), 'name' => '', 'type' => 'tab'),

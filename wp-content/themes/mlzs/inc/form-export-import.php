@@ -125,7 +125,7 @@ function mlzs_form_export_get_configs() {
         'mlzs_tc' => array(
             'post_type'   => 'mlzs_tc',
             'page_title'  => __('Transfer Certificates', 'mlzs'),
-            'get_headers' => array(__('Serial Number', 'mlzs'), __('Student Name', 'mlzs'), __('Class', 'mlzs'), __('Issue Date', 'mlzs'), __('Valid Until', 'mlzs'), __('PDF URL', 'mlzs'), __('Date', 'mlzs')),
+            'get_headers' => array(__('Serial Number', 'mlzs'), __('Student Name', 'mlzs'), __('Class', 'mlzs'), __('Issue Date', 'mlzs'), __('Valid Until', 'mlzs'), __('PDF Filename', 'mlzs'), __('Date', 'mlzs')),
             'get_row'     => function($post) {
                 $id = $post->ID;
                 $student = function_exists('get_field') ? get_field('tc_student_name', $id) : '';
@@ -133,14 +133,18 @@ function mlzs_form_export_get_configs() {
                 $issue = function_exists('get_field') ? get_field('tc_issue_date', $id) : '';
                 $valid = function_exists('get_field') ? get_field('tc_valid_until', $id) : '';
                 $att_id = (int) get_post_meta($id, '_tc_pdf', true);
-                $pdf_url = $att_id ? (wp_get_attachment_url($att_id) ?: '') : '';
+                $pdf_fn = '';
+                if ($att_id) {
+                    $p = get_attached_file($att_id);
+                    $pdf_fn = $p ? basename($p) : (wp_get_attachment_url($att_id) ? basename(wp_get_attachment_url($att_id)) : '');
+                }
                 return array(
                     $post->post_title,
                     $student ?: '',
                     $class ?: '',
                     $issue ?: '',
                     $valid ?: '',
-                    $pdf_url,
+                    $pdf_fn,
                     get_the_date('', $post),
                 );
             },
@@ -326,8 +330,10 @@ function mlzs_form_import_render_page($key = '') {
     $message = '';
     if (isset($_POST['mlzs_import_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['mlzs_import_nonce'])), 'mlzs_import_' . $key)) {
         if (!empty($_FILES['mlzs_import_file']['tmp_name'])) {
-            $count = mlzs_form_import_process($key, $_FILES['mlzs_import_file']);
-            $message = '<div class="notice notice-success"><p>' . sprintf(esc_html__('%d rows imported successfully.', 'mlzs'), $count) . '</p></div>';
+            $pdf_folder = ($key === 'mlzs_tc' && isset($_POST['tc_pdf_folder'])) ? trim(sanitize_text_field(wp_unslash($_POST['tc_pdf_folder'])), '/\\') : '';
+            $result = mlzs_form_import_process($key, $_FILES['mlzs_import_file'], $pdf_folder);
+            $msg = is_array($result) ? sprintf(esc_html__('%d rows imported.', 'mlzs'), $result['count']) . (isset($result['pdf_linked']) && $result['pdf_linked'] > 0 ? ' ' . sprintf(esc_html__('%d PDFs linked.', 'mlzs'), $result['pdf_linked']) : '') : sprintf(esc_html__('%d rows imported.', 'mlzs'), (int) $result);
+            $message = '<div class="notice notice-success"><p>' . $msg . '</p></div>';
         } else {
             $message = '<div class="notice notice-error"><p>' . esc_html__('Please select a CSV file.', 'mlzs') . '</p></div>';
         }
@@ -338,6 +344,9 @@ function mlzs_form_import_render_page($key = '') {
         <?php echo $message; ?>
         <div class="card" style="max-width: 560px; padding: 20px;">
             <p><?php esc_html_e('Upload a CSV or Excel file to bulk import. First row should be headers. Use the Export CSV as a template.', 'mlzs'); ?></p>
+            <?php if ($key === 'mlzs_tc') : ?>
+            <p><strong><?php esc_html_e('TC Import:', 'mlzs'); ?></strong> <?php esc_html_e('Add "PDF Filename" column (e.g. tc123.pdf). PDFs must be in wp-content/uploads/ – enter folder below.', 'mlzs'); ?></p>
+            <?php endif; ?>
             <p>
                 <a href="<?php echo esc_url(admin_url('admin.php?action=mlzs_export_csv&mlzs_export=' . $key . '&_wpnonce=' . wp_create_nonce('mlzs_export_' . $key))); ?>" class="button">
                     <?php esc_html_e('Download template CSV', 'mlzs'); ?>
@@ -345,6 +354,13 @@ function mlzs_form_import_render_page($key = '') {
             </p>
             <form method="post" enctype="multipart/form-data">
                 <?php wp_nonce_field('mlzs_import_' . $key, 'mlzs_import_nonce'); ?>
+                <?php if ($key === 'mlzs_tc') : ?>
+                <p>
+                    <label><strong><?php esc_html_e('PDFs folder', 'mlzs'); ?></strong>
+                    <input type="text" name="tc_pdf_folder" class="regular-text" placeholder="2026/02" value="<?php echo esc_attr(wp_date('Y/m')); ?>"></label>
+                    <span class="description"><?php esc_html_e('Relative to wp-content/uploads/ (where your PDFs are)', 'mlzs'); ?></span>
+                </p>
+                <?php endif; ?>
                 <p>
                     <input type="file" name="mlzs_import_file" accept=".csv,.xlsx,.xls" required>
                 </p>
@@ -357,7 +373,7 @@ function mlzs_form_import_render_page($key = '') {
     <?php
 }
 
-function mlzs_form_import_process($key, $file) {
+function mlzs_form_import_process($key, $file, $pdf_folder = '') {
     $configs = mlzs_form_export_get_configs();
     if (!isset($configs[$key]) || $configs[$key]['import_map'] === null) return 0;
 
@@ -366,6 +382,7 @@ function mlzs_form_import_process($key, $file) {
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
     $rows = array();
+    $headers = array();
     if ($ext === 'csv') {
         $h = fopen($path, 'r');
         if (!$h) return 0;
@@ -378,8 +395,10 @@ function mlzs_form_import_process($key, $file) {
         try {
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
             $sheet = $spreadsheet->getActiveSheet();
-            $rows = $sheet->toArray();
-            array_shift($rows);
+            $all = $sheet->toArray();
+            $headers = isset($all[0]) ? $all[0] : array();
+            array_shift($all);
+            $rows = $all;
         } catch (Exception $e) {
             return 0;
         }
@@ -387,9 +406,27 @@ function mlzs_form_import_process($key, $file) {
         return 0;
     }
 
+    $pdf_col = null;
+    if ($key === 'mlzs_tc' && !empty($headers)) {
+        foreach ($headers as $i => $h) {
+            if (is_string($h) && stripos($h, 'pdf') !== false) {
+                $pdf_col = $i;
+                break;
+            }
+        }
+    }
+    if ($key === 'mlzs_tc' && $pdf_col === null) $pdf_col = 5;
+
     $count = 0;
+    $pdf_linked = 0;
     $map = $cfg['import_map'];
     $title_fn = $cfg['import_title'];
+    $is_tc = ($key === 'mlzs_tc');
+    $uploads = $is_tc && $pdf_folder ? wp_upload_dir() : null;
+    $base_dir = '';
+    if ($is_tc && $pdf_folder && $uploads && isset($uploads['basedir'])) {
+        $base_dir = wp_normalize_path(trailingslashit($uploads['basedir']) . str_replace('\\', '/', trim($pdf_folder, '/\\')) . '/');
+    }
 
     foreach ($rows as $row) {
         if (empty($row) || (count($row) === 1 && trim((string) $row[0]) === '')) continue;
@@ -411,9 +448,36 @@ function mlzs_form_import_process($key, $file) {
                 update_post_meta($post_id, $meta_key, sanitize_text_field(wp_unslash($row[$idx])));
             }
         }
+
+        $pdf_idx = ($is_tc && $pdf_col !== null) ? $pdf_col : 5;
+        if ($is_tc && $base_dir && isset($row[$pdf_idx]) && trim((string) $row[$pdf_idx]) !== '') {
+            $pdf_name = trim(sanitize_file_name(wp_unslash($row[$pdf_idx])));
+            if ($pdf_name !== '' && substr(strtolower($pdf_name), -4) === '.pdf') {
+                $filepath = wp_normalize_path($base_dir . $pdf_name);
+                if (is_file($filepath) && is_readable($filepath)) {
+                    require_once ABSPATH . 'wp-admin/includes/file.php';
+                    require_once ABSPATH . 'wp-admin/includes/media.php';
+                    require_once ABSPATH . 'wp-admin/includes/image.php';
+                    $attach_id = attachment_url_to_postid($uploads['baseurl'] . '/' . trim($pdf_folder, '/\\') . '/' . $pdf_name);
+                    if (!$attach_id) {
+                        $attachment = array(
+                            'post_mime_type' => 'application/pdf',
+                            'post_title'     => pathinfo($pdf_name, PATHINFO_FILENAME),
+                            'post_content'   => '',
+                            'post_status'    => 'inherit',
+                        );
+                        $attach_id = wp_insert_attachment($attachment, $filepath, $post_id);
+                    }
+                    if ($attach_id && !is_wp_error($attach_id)) {
+                        update_post_meta($post_id, '_tc_pdf', $attach_id);
+                        $pdf_linked++;
+                    }
+                }
+            }
+        }
         $count++;
     }
-    return $count;
+    return $is_tc && $pdf_folder ? array('count' => $count, 'pdf_linked' => $pdf_linked) : $count;
 }
 
 add_action('admin_init', function() {

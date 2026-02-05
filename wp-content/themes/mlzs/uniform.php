@@ -471,7 +471,7 @@ $fabric_cards = (is_array($fabric_cards) && !empty($fabric_cards)) ? $fabric_car
                         if (isset($item['badge']) && $item['badge'] === 'PLEATED') $badge_cl = 'bg-[#1E3A8A]/10 text-[#1E3A8A]';
                     ?>
                     <div class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
-                        <div class="h-40 overflow-hidden">
+                        <div class="aspect-[16/9] overflow-hidden">
                             <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($item['title'] ?? ''); ?>" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-5">
@@ -553,7 +553,7 @@ $fabric_cards = (is_array($fabric_cards) && !empty($fabric_cards)) ? $fabric_car
                         $badge_cl = ($item['badge'] ?? '') === 'STRIPED' ? 'bg-accent/10 text-accent' : (strpos($item['badge'] ?? '', 'SLEEVE') !== false ? 'bg-[#50C878]/10 text-[#50C878]' : 'bg-[#1E3A8A]/10 text-[#1E3A8A]');
                     ?>
                     <div class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
-                        <div class="h-40 overflow-hidden">
+                        <div class="aspect-[16/9] overflow-hidden">
                             <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($item['title'] ?? ''); ?>" class="w-full h-full object-cover" loading="lazy">
                         </div>
                         <div class="p-5">

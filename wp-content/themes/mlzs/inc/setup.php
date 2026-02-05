@@ -36,10 +36,14 @@ function mlzs_theme_setup() {
 add_action('after_setup_theme', 'mlzs_theme_setup');
 
 /**
- * Convert any uploaded image to WebP before saving to media library.
- * Runs on wp_handle_upload – supports JPEG, PNG, GIF; saves as WebP.
+ * Convert uploaded image to WebP before saving to media library.
+ * Disabled by default: conversion was causing images not to display on many servers (XAMPP/Windows).
+ * To enable, add in wp-config.php: define( 'MLZS_CONVERT_UPLOADS_TO_WEBP', true );
  */
 function mlzs_convert_upload_to_webp($upload) {
+    if (!defined('MLZS_CONVERT_UPLOADS_TO_WEBP') || !MLZS_CONVERT_UPLOADS_TO_WEBP) {
+        return $upload;
+    }
     if (empty($upload['file']) || empty($upload['type']) || strpos($upload['type'], 'image/') !== 0) {
         return $upload;
     }
@@ -48,11 +52,14 @@ function mlzs_convert_upload_to_webp($upload) {
     if (!in_array($mime, $allowed, true)) {
         return $upload;
     }
+    if ($mime === 'image/webp') {
+        return $upload;
+    }
     $file_path = $upload['file'];
     if (!is_file($file_path) || !is_readable($file_path)) {
         return $upload;
     }
-    $webp_path = preg_replace('/\.(jpe?g|png|gif|webp)$/i', '.webp', $file_path);
+    $webp_path = preg_replace('/\.(jpe?g|png|gif)$/i', '.webp', $file_path);
     if ($webp_path === $file_path) {
         return $upload;
     }

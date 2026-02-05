@@ -150,7 +150,13 @@ $icon_style_map = array(
                 <?php foreach ($documents as $doc) :
                     $title = isset($doc['title']) ? (string) $doc['title'] : '';
                     $desc  = isset($doc['description']) ? (string) $doc['description'] : '';
-                    $link  = isset($doc['link']) && is_array($doc['link']) && !empty($doc['link']['url']) ? $doc['link'] : array('url' => '#', 'target' => '_blank');
+                    // Prefer uploaded PDF; fallback to link URL
+                    $link = array('url' => '#', 'target' => '_blank');
+                    if (!empty($doc['pdf_file']) && is_array($doc['pdf_file']) && !empty($doc['pdf_file']['url'])) {
+                        $link = array('url' => $doc['pdf_file']['url'], 'target' => '_blank');
+                    } elseif (isset($doc['link']) && is_array($doc['link']) && !empty($doc['link']['url'])) {
+                        $link = $doc['link'];
+                    }
                     $category = isset($doc['category']) ? (string) $doc['category'] : 'certificate';
                     $icon   = (isset($doc['icon']) && trim((string) $doc['icon']) !== '') ? trim((string) $doc['icon']) : 'file-text';
                     $btn_text = (isset($doc['button_text']) && (string) $doc['button_text'] !== '') ? (string) $doc['button_text'] : 'View Document';

@@ -34,7 +34,8 @@ function mlzs_acf_cbse_field_group() {
             array('key' => 'field_cbse_documents', 'label' => __('Document Cards', 'mlzs'), 'name' => 'cbse_documents', 'type' => 'repeater', 'layout' => 'block', 'button_label' => __('Add Document', 'mlzs'), 'sub_fields' => array(
                 array('key' => 'field_cbse_doc_title', 'label' => __('Title', 'mlzs'), 'name' => 'title', 'type' => 'text'),
                 array('key' => 'field_cbse_doc_description', 'label' => __('Description', 'mlzs'), 'name' => 'description', 'type' => 'text'),
-                array('key' => 'field_cbse_doc_link', 'label' => __('Link (PDF/URL)', 'mlzs'), 'name' => 'link', 'type' => 'link', 'return_format' => 'array'),
+                array('key' => 'field_cbse_doc_pdf', 'label' => __('Upload PDF', 'mlzs'), 'name' => 'pdf_file', 'type' => 'file', 'return_format' => 'array', 'mime_types' => 'pdf', 'instructions' => __('Upload PDF document. If you add both PDF and URL, PDF will be used.', 'mlzs')),
+                array('key' => 'field_cbse_doc_link', 'label' => __('Or paste URL (optional)', 'mlzs'), 'name' => 'link', 'type' => 'link', 'return_format' => 'array', 'instructions' => __('Use if you do not upload a PDF (external link).', 'mlzs')),
                 array('key' => 'field_cbse_doc_category', 'label' => __('Category (for filter)', 'mlzs'), 'name' => 'category', 'type' => 'select', 'choices' => array('fee' => 'Fee Structure', 'certificate' => 'Certificates', 'result' => 'Results', 'safety' => 'Safety & Compliance'), 'default_value' => 'certificate'),
                 array('key' => 'field_cbse_doc_icon', 'label' => __('Corner Icon', 'mlzs'), 'name' => 'icon', 'type' => 'text', 'default_value' => 'file-text'),
                 array('key' => 'field_cbse_doc_button_text', 'label' => __('Button Text', 'mlzs'), 'name' => 'button_text', 'type' => 'text', 'default_value' => 'View Document'),

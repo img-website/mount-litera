@@ -141,7 +141,10 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                 $w_note_style = isset($block['written_note_style']) ? $block['written_note_style'] : 'amber';
                 $v_rows  = isset($block['verbal_rows']) && is_array($block['verbal_rows']) ? $block['verbal_rows'] : array();
                 $w_rows  = isset($block['written_rows']) && is_array($block['written_rows']) ? $block['written_rows'] : array();
+                $v_headers = isset($block['verbal_header_labels']) ? array_filter(array_map('trim', explode("\n", (string) $block['verbal_header_labels']))) : array();
                 $w_headers = isset($block['written_header_labels']) ? array_filter(array_map('trim', explode("\n", (string) $block['written_header_labels']))) : array();
+                $v_notes_list = isset($block['verbal_notes']) && is_array($block['verbal_notes']) ? $block['verbal_notes'] : array();
+                $w_notes_list = isset($block['written_notes']) && is_array($block['written_notes']) ? $block['written_notes'] : array();
 
                 $box_bg = $b_style === 'primary' ? 'bg-primary/10' : ($b_style === 'primary-light' ? 'bg-primary-light/10' : 'bg-primary-dark/10');
                 $icon_color = $b_style === 'primary' ? 'text-primary' : ($b_style === 'primary-light' ? 'text-primary-light' : 'text-primary-dark');
@@ -163,7 +166,10 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                 </div>
 
                 <!-- Verbal Assessment -->
-                <?php if (!empty($v_rows)) : ?>
+                <?php if (!empty($v_rows)) :
+                    $v_has_columns = !empty($v_headers);
+                    $v_num_cols = $v_has_columns ? min(6, count($v_headers)) : 0;
+                ?>
                 <div class="mb-8 sm:mb-10 md:mb-12">
                     <div class="inline-flex items-center gap-2 mb-3 sm:mb-4">
                         <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full <?php echo esc_attr($dot_color); ?>"></div>
@@ -175,7 +181,9 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                                 <tr class="<?php echo esc_attr($verbal_th_bg); ?> text-white">
                                     <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Date</th>
                                     <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Day</th>
+                                    <?php if ($v_has_columns) : foreach (array_slice($v_headers, 0, 6) as $vh) : ?><th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider"><?php echo esc_html($vh); ?></th><?php endforeach; else : ?>
                                     <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Subject</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
@@ -183,13 +191,34 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900"><?php echo esc_html(isset($row['date']) ? $row['date'] : ''); ?></td>
                                     <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo esc_html(isset($row['day']) ? $row['day'] : ''); ?></td>
+                                    <?php if ($v_has_columns) :
+                                        for ($vc = 0; $vc < $v_num_cols; $vc++) {
+                                            $val = isset($row['col' . ($vc + 1)]) ? trim((string) $row['col' . ($vc + 1)]) : '';
+                                            echo '<td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700">' . nl2br(esc_html($val)) . '</td>';
+                                        }
+                                    else : ?>
                                     <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html(isset($row['subject']) ? $row['subject'] : '')); ?></td>
+                                    <?php endif; ?>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <?php if ($v_note !== '') : ?>
+                    <?php
+                    if (!empty($v_notes_list)) :
+                        foreach ($v_notes_list as $vnote) :
+                            $vnt = isset($vnote['note_text']) ? trim((string) $vnote['note_text']) : '';
+                            if ($vnt === '') continue;
+                            $vni = (isset($vnote['note_icon']) && trim((string) $vnote['note_icon']) !== '') ? trim($vnote['note_icon']) : 'info';
+                            $vns = isset($vnote['note_style']) ? $vnote['note_style'] : 'blue';
+                    ?>
+                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $vns === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
+                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
+                            <i data-lucide="<?php echo esc_attr($vni); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $vns === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
+                            <span><b>Note:</b> <?php echo esc_html($vnt); ?></span>
+                        </p>
+                    </div>
+                    <?php endforeach; elseif ($v_note !== '') : ?>
                     <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $v_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
                         <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
                             <i data-lucide="<?php echo esc_attr($v_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $v_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
@@ -212,8 +241,7 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                             <thead>
                                 <tr class="<?php echo esc_attr($written_th_bg); ?> text-white">
                                     <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Date</th>
-                                    <?php foreach ($w_headers as $wh) : ?><th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider"><?php echo esc_html($wh); ?></th><?php endforeach; ?>
-                                    <?php if (empty($w_headers)) : ?>
+                                    <?php if (!empty($w_headers)) : foreach (array_slice($w_headers, 0, 6) as $wh) : ?><th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider"><?php echo esc_html($wh); ?></th><?php endforeach; else : ?>
                                         <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 1</th>
                                         <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 2</th>
                                         <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 3</th>
@@ -221,23 +249,38 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <?php foreach ($w_rows as $row) :
+                                <?php
+                                $num_cols = !empty($w_headers) ? min(8, count($w_headers)) : 3;
+                                if ($num_cols === 0) $num_cols = 3;
+                                foreach ($w_rows as $row) :
                                     $cols = array();
-                                    for ($c = 1; $c <= 5; $c++) {
+                                    for ($c = 1; $c <= 6; $c++) {
                                         $cols[] = isset($row['col' . $c]) ? trim((string) $row['col' . $c]) : '';
                                     }
-                                    $num_cols = !empty($w_headers) ? count($w_headers) : 3;
-                                    if ($num_cols === 0) $num_cols = 3;
                                 ?>
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900"><?php echo esc_html(isset($row['date']) ? $row['date'] : ''); ?></td>
-                                    <?php for ($c = 0; $c < $num_cols && $c < 5; $c++) : ?><td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html($cols[$c])); ?></td><?php endfor; ?>
+                                    <?php for ($c = 0; $c < $num_cols; $c++) : ?><td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html(isset($cols[$c]) ? $cols[$c] : '')); ?></td><?php endfor; ?>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
-                    <?php if ($w_note !== '') : ?>
+                    <?php
+                    if (!empty($w_notes_list)) :
+                        foreach ($w_notes_list as $wnote) :
+                            $wnt = isset($wnote['note_text']) ? trim((string) $wnote['note_text']) : '';
+                            if ($wnt === '') continue;
+                            $wni = (isset($wnote['note_icon']) && trim((string) $wnote['note_icon']) !== '') ? trim($wnote['note_icon']) : 'alert-circle';
+                            $wns = isset($wnote['note_style']) ? $wnote['note_style'] : 'amber';
+                    ?>
+                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $wns === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
+                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
+                            <i data-lucide="<?php echo esc_attr($wni); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $wns === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
+                            <span><b>Note:</b> <?php echo esc_html($wnt); ?></span>
+                        </p>
+                    </div>
+                    <?php endforeach; elseif ($w_note !== '') : ?>
                     <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $w_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
                         <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
                             <i data-lucide="<?php echo esc_attr($w_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $w_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>

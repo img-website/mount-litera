@@ -207,60 +207,32 @@ if (!function_exists('mlzs_feed_img_url')) {
                                 </p>
                             </div>
 
-                            <form method="post" action="<?php echo esc_url($form_action); ?>" class="space-y-4 md:space-y-6">
-                                <!-- Name Field -->
+                            <form id="mlzs-alumni-contact-form" method="post" action="<?php echo esc_url(admin_url('admin-ajax.php')); ?>" class="space-y-4 md:space-y-6">
+                                <?php wp_nonce_field('mlzs_footer_contact', 'mlzs_contact_nonce', false); ?>
+                                <input type="hidden" name="action" value="mlzs_footer_contact" />
+                                <div id="mlzs-alumni-contact-form-message" class="hidden rounded-xl px-4 py-3 text-sm" role="alert" aria-live="polite"></div>
                                 <div class="relative group/input">
                                     <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                    <input type="text"
-                                           id="name"
-                                           name="name"
-                                           placeholder="Your Name..."
-                                           required
-                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
-                                           aria-required="true">
+                                    <input type="text" name="contact_name" placeholder="Your Name" required autocomplete="name" class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm" aria-required="true">
                                 </div>
-                                <!-- Email Field -->
                                 <div class="relative group/input">
                                     <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                    <input type="email"
-                                           id="email"
-                                           name="email"
-                                           placeholder="Your email..."
-                                           required
-                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
-                                           aria-required="true">
+                                    <input type="email" name="contact_email" placeholder="Your Email" required autocomplete="email" class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm" aria-required="true">
                                 </div>
-                                <!-- Class Field -->
                                 <div class="relative group/input">
-                                    <i data-lucide="graduation-cap" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                    <input type="text"
-                                           id="phone"
-                                           name="phone"
-                                           placeholder="Class..."
-                                           required
-                                           class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm"
-                                           aria-required="true">
+                                    <i data-lucide="phone" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
+                                    <input type="tel" name="contact_phone" placeholder="Phone Number (Optional)" autocomplete="tel" class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm">
                                 </div>
-                                <!-- Message Field -->
                                 <div class="relative group/input">
-                                    <i data-lucide="edit-3" class="absolute left-4 top-4 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
-                                    <textarea rows="4"
-                                              name="message"
-                                              placeholder="Your suggestions..."
-                                              required
-                                              class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm resize-none"
-                                              aria-required="true"></textarea>
+                                    <i data-lucide="message-square" class="absolute left-4 top-4 w-4 h-4 md:w-5 md:h-5 text-slate-400 group-focus-within/input:text-accent transition-colors z-10"></i>
+                                    <textarea rows="4" name="contact_message" placeholder="Your Message" required class="w-full bg-white/10 border border-white/20 rounded-xl pl-12 pr-4 py-3 md:py-3.5 text-white placeholder-gray-400 focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all duration-300 shadow-inner backdrop-blur-sm resize-none min-h-[120px]" aria-required="true"></textarea>
                                 </div>
-                                <!-- Submit Button -->
                                 <div class="pt-2">
-                                    <button type="submit"
-                                            name="submit"
-                                            class="w-full bg-gradient-to-r from-accent to-accent-dark text-white font-bold px-6 py-3 md:px-8 md:py-4 rounded-xl hover:shadow-[0_0_30px_rgba(247,184,1,0.4)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group/btn">
-                                        <span><?php echo esc_html($form_submit_text); ?></span>
-                                        <i data-lucide="<?php echo esc_attr($form_submit_icon); ?>" class="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform"></i>
+                                    <button id="mlzs-alumni-contact-submit-btn" type="submit" class="w-full bg-gradient-to-r from-accent to-accent-dark text-white font-bold px-6 py-3 md:px-8 md:py-4 rounded-xl hover:shadow-[0_0_30px_rgba(247,184,1,0.4)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group/btn disabled:opacity-70 disabled:cursor-not-allowed">
+                                        <span class="mlzs-alumni-btn-text"><?php echo esc_html($form_submit_text); ?></span>
+                                        <i data-lucide="<?php echo esc_attr($form_submit_icon); ?>" class="w-4 h-4 md:w-5 md:h-5 group-hover/btn:translate-x-1 transition-transform mlzs-alumni-btn-icon"></i>
                                     </button>
                                 </div>
-                                <!-- Privacy Note -->
                                 <p class="text-xs <?php echo esc_attr($form_privacy_color); ?> text-center mt-4">
                                     <?php echo esc_html($form_privacy); ?>
                                 </p>

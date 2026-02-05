@@ -170,9 +170,17 @@
     }
 
     function initFooterContactForm() {
-        var form = document.getElementById('mlzs-footer-contact-form');
-        var msgEl = document.getElementById('mlzs-contact-form-message');
-        var btn = document.getElementById('mlzs-contact-submit-btn');
+        initContactFormAjax('mlzs-footer-contact-form', 'mlzs-contact-form-message', 'mlzs-contact-submit-btn', '.mlzs-btn-text', '.mlzs-btn-icon', 'Send Message');
+    }
+
+    function initAlumniContactForm() {
+        initContactFormAjax('mlzs-alumni-contact-form', 'mlzs-alumni-contact-form-message', 'mlzs-alumni-contact-submit-btn', '.mlzs-alumni-btn-text', '.mlzs-alumni-btn-icon', 'Send Suggestion');
+    }
+
+    function initContactFormAjax(formId, messageElId, btnId, btnTextSel, btnIconSel, defaultBtnText) {
+        var form = document.getElementById(formId);
+        var msgEl = document.getElementById(messageElId);
+        var btn = document.getElementById(btnId);
         if (!form || !msgEl || !btn || typeof mlzsAjax === 'undefined') return;
 
         function showMessage(text, isError) {
@@ -196,8 +204,8 @@
             e.preventDefault();
             hideMessage();
             btn.disabled = true;
-            var btnText = btn.querySelector('.mlzs-btn-text');
-            var btnIcon = btn.querySelector('.mlzs-btn-icon');
+            var btnText = btn.querySelector(btnTextSel);
+            var btnIcon = btn.querySelector(btnIconSel);
             if (btnText) btnText.textContent = 'Sending...';
             if (btnIcon) btnIcon.style.display = 'none';
 
@@ -207,7 +215,7 @@
             req.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             req.onload = function() {
                 btn.disabled = false;
-                if (btnText) btnText.textContent = 'Send Message';
+                if (btnText) btnText.textContent = defaultBtnText;
                 if (btnIcon) btnIcon.style.display = '';
 
                 try {
@@ -226,7 +234,7 @@
             };
             req.onerror = function() {
                 btn.disabled = false;
-                if (btnText) btnText.textContent = 'Send Message';
+                if (btnText) btnText.textContent = defaultBtnText;
                 if (btnIcon) btnIcon.style.display = '';
                 showMessage('Unable to connect. Please check your connection and try again.', true);
                 if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
@@ -536,6 +544,7 @@
         initApproachSwipers();
         initAcademicsTabs();
         initFooterContactForm();
+        initAlumniContactForm();
         initEnquiryForm();
         initAdmissionForm();
         initRegistrationForm();

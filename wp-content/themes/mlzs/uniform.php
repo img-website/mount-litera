@@ -317,7 +317,7 @@ $fabric_cards = (is_array($fabric_cards) && !empty($fabric_cards)) ? $fabric_car
                         $badge_cl = (isset($item['badge_style']) && $item['badge_style'] === 'girls') ? 'bg-accent/10 text-accent' : 'bg-[#50C878]/10 text-[#50C878]';
                     ?>
                     <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-lg transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
-                        <div class="h-48 overflow-hidden relative">
+                        <div class="aspect-[16/9] overflow-hidden relative">
                             <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($item['title'] ?? ''); ?>" class="w-full h-full object-cover" loading="lazy">
                             <div class="absolute top-4 left-4">
                                 <span class="bg-gradient-to-br from-green-500 to-green-700 text-white px-3 py-1 rounded-full text-xs font-bold">SUMMER</span>
@@ -606,7 +606,7 @@ $fabric_cards = (is_array($fabric_cards) && !empty($fabric_cards)) ? $fabric_car
                     if (empty($a_url)) continue;
                 ?>
                 <div class="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm transition-all duration-300 ease-in-out hover:-translate-y-1 hover:shadow-xl">
-                    <div class="h-48 overflow-hidden relative">
+                    <div class="aspect-[16/9] overflow-hidden relative">
                         <img src="<?php echo esc_url($a_url); ?>" alt="<?php echo esc_attr($a['title'] ?? ''); ?>" class="w-full h-full object-cover" loading="lazy">
                         <div class="absolute top-4 left-4">
                             <span class="px-3 py-1 rounded-full bg-primary text-white text-xs font-bold">COMMON</span>

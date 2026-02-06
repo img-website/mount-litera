@@ -10,6 +10,10 @@ if (!defined('ABSPATH')) {
 /** Theme setup, WebP, enqueue */
 require_once get_template_directory() . '/inc/setup.php';
 
+/** Error code pages (403, 500, 503) and error logging + admin log viewer */
+require_once get_template_directory() . '/inc/error-pages.php';
+require_once get_template_directory() . '/inc/error-logger.php';
+
 /** Settings > Env – API keys (YouTube, Google Maps) */
 require_once get_template_directory() . '/inc/admin-env-settings.php';
 

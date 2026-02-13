@@ -230,11 +230,11 @@ if (empty($academics_tabs)) {
     </div>
     <div class="relative z-10 w-full max-w-7xl mx-auto pt-32 flex flex-col items-center text-center lg:items-start lg:text-left">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 animate-fade-in-up">
-            <span class="relative flex h-2.5 w-2.5">
+            <span class="relative flex size-3">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-secondary"></span>
+                <span class="relative inline-flex rounded-full size-3 bg-secondary"></span>
             </span>
-            <span class="text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html( (string) $hero_badge ); ?></span>
+            <span class="md:text-base text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html( (string) $hero_badge ); ?></span>
         </div>
         <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
             <?php echo esc_html( (string) $hero_line1 ); ?> <br class="hidden md:block"/>

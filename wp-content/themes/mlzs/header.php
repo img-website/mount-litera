@@ -141,7 +141,7 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
         <!-- LOGO -->
         <div class="lg:absolute lg:left-1/2 lg:top-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 lg:text-center lg:z-50">
             <a href="<?php echo esc_url($home_url); ?>" id="brand-logo" class="transition-all duration-500 flex items-center justify-center">
-                <img src="<?php echo esc_url( (string) $header_logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo('name') . ' - ' . get_bloginfo('description') ); ?>" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain transition-all duration-500 brightness-0 invert">
+                <img src="<?php echo esc_url( (string) $header_logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo('name') . ' - ' . get_bloginfo('description') ); ?>" class="h-12 sm:h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem] w-auto object-contain transition-all duration-500 brightness-0 invert">
             </a>
         </div>
 

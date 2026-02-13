@@ -16,6 +16,7 @@ $home_url  = home_url('/');
 // Header: ACF Options (site-wide)
 $opt = function_exists('get_field');
 $header_logo_url    = $opt ? get_field('header_logo', 'option') : null;
+$header_secondary_logo = $opt ? get_field('header_secondary_logo', 'option') : null;
 $header_left_menu  = $opt ? get_field('header_left_menu', 'option') : null;
 $header_right_menu = $opt ? get_field('header_right_menu', 'option') : null;
 $header_full_menu  = $opt ? get_field('header_full_menu', 'option') : null;
@@ -28,6 +29,7 @@ $header_social = $opt ? get_field('footer_social', 'option') : null;
 
 $header_logo_url = (is_array($header_logo_url) && !empty($header_logo_url['url'])) ? $header_logo_url['url'] : (is_string($header_logo_url) && $header_logo_url !== '' ? $header_logo_url : '');
 if ($header_logo_url === '') $header_logo_url = $theme_uri . '/assets/img/logo.webp';
+$header_secondary_logo = (is_array($header_secondary_logo) && !empty($header_secondary_logo['url'])) ? $header_secondary_logo['url'] : (is_string($header_secondary_logo) && $header_secondary_logo !== '' ? $header_secondary_logo : '');
 $header_left_menu  = is_array($header_left_menu) ? array_slice($header_left_menu, 0, 3) : array();
 $header_right_menu = is_array($header_right_menu) ? array_slice($header_right_menu, 0, 2) : array();
 $default_left  = array(
@@ -140,8 +142,12 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
 
         <!-- LOGO -->
         <div class="lg:absolute lg:left-1/2 lg:top-1/2 lg:transform lg:-translate-x-1/2 lg:-translate-y-1/2 lg:text-center lg:z-50">
-            <a href="<?php echo esc_url($home_url); ?>" id="brand-logo" class="transition-all duration-500 flex items-center justify-center">
+            <a href="<?php echo esc_url($home_url); ?>" id="brand-logo" class="transition-all duration-500 flex items-center justify-center gap-3 sm:gap-4">
                 <img src="<?php echo esc_url( (string) $header_logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo('name') . ' - ' . get_bloginfo('description') ); ?>" class="h-12 sm:h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem] w-auto object-contain transition-all duration-500 brightness-0 invert">
+                <?php if (!empty($header_secondary_logo)) : ?>
+                <div class="hidden sm:block w-px h-12 sm:h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem] bg-white/20"></div>
+                <img src="<?php echo esc_url( (string) $header_secondary_logo ); ?>" alt="<?php echo esc_attr( get_bloginfo('name') . ' Secondary Logo' ); ?>" class="h-12 sm:h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem] w-auto object-contain transition-all duration-500 brightness-0 invert">
+                <?php endif; ?>
             </a>
         </div>
 

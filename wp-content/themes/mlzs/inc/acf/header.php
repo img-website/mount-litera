@@ -23,6 +23,15 @@ function mlzs_acf_header_field_group() {
                 'instructions' => __('Leave empty to use theme logo.', 'mlzs'),
             ),
             array(
+                'key'   => 'field_header_secondary_logo',
+                'label' => __('Secondary Logo', 'mlzs'),
+                'name'  => 'header_secondary_logo',
+                'type'  => 'image',
+                'return_format' => 'url',
+                'preview_size' => 'medium',
+                'instructions' => __('Optional. Displays next to the main logo in the header.', 'mlzs'),
+            ),
+            array(
                 'key'   => 'field_header_left_menu',
                 'label' => __('Left Menu (max 3)', 'mlzs'),
                 'name'  => 'header_left_menu',

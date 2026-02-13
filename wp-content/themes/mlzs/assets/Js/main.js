@@ -16,22 +16,35 @@
         if (!header || !logo) return;
 
         window.addEventListener('scroll', function() {
-            var logoImg = logo.querySelector('img');
+            var logoImgs = logo.querySelectorAll('img');
+            var divider = logo.querySelector('.w-px');
             if (window.scrollY > 50) {
                 header.classList.remove('text-white', 'h-24', 'border-white/10');
                 header.classList.add('bg-white/95', 'backdrop-blur-[10px]', 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]', 'h-16', 'text-black', 'border-transparent');
-                if (logoImg) {
+                logoImgs.forEach(function(logoImg) {
                     logoImg.classList.remove('h-12', 'sm:h-[3.6rem]', 'md:h-[4.2rem]', 'lg:h-[4.8rem]');
                     logoImg.classList.add('h-10');
                     logoImg.classList.remove('brightness-0', 'invert');
+                });
+                if (divider) {
+                    divider.classList.remove('h-12', 'sm:h-[3.6rem]', 'md:h-[4.2rem]', 'lg:h-[4.8rem]');
+                    divider.classList.add('h-10');
+                    divider.classList.remove('bg-white/20');
+                    divider.classList.add('bg-slate-900/20');
                 }
             } else {
                 header.classList.add('text-white', 'h-24', 'border-white/10');
                 header.classList.remove('bg-white/95', 'backdrop-blur-[10px]', 'shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)]', 'h-16', 'text-black', 'border-transparent');
-                if (logoImg) {
+                logoImgs.forEach(function(logoImg) {
                     logoImg.classList.remove('h-10');
                     logoImg.classList.add('h-12', 'sm:h-[3.6rem]', 'md:h-[4.2rem]', 'lg:h-[4.8rem]');
                     logoImg.classList.add('brightness-0', 'invert');
+                });
+                if (divider) {
+                    divider.classList.remove('h-10');
+                    divider.classList.add('h-12', 'sm:h-[3.6rem]', 'md:h-[4.2rem]', 'lg:h-[4.8rem]');
+                    divider.classList.remove('bg-slate-900/20');
+                    divider.classList.add('bg-white/20');
                 }
             }
         });

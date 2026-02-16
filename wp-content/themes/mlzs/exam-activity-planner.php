@@ -131,26 +131,10 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                 $b_title = isset($block['title']) ? (string) $block['title'] : '';
                 $b_sub   = isset($block['subtitle']) ? (string) $block['subtitle'] : '';
                 $b_style = isset($block['icon_style']) ? $block['icon_style'] : 'primary';
-                $v_head  = isset($block['verbal_heading']) ? (string) $block['verbal_heading'] : 'Verbal Assessment Schedule';
-                $v_note  = isset($block['verbal_note']) ? (string) $block['verbal_note'] : '';
-                $v_note_icon = (isset($block['verbal_note_icon']) && trim((string) $block['verbal_note_icon']) !== '') ? trim($block['verbal_note_icon']) : 'info';
-                $v_note_style = isset($block['verbal_note_style']) ? $block['verbal_note_style'] : 'blue';
-                $w_head  = isset($block['written_heading']) ? (string) $block['written_heading'] : 'Written Assessment Schedule';
-                $w_note  = isset($block['written_note']) ? (string) $block['written_note'] : '';
-                $w_note_icon = (isset($block['written_note_icon']) && trim((string) $block['written_note_icon']) !== '') ? trim($block['written_note_icon']) : 'alert-circle';
-                $w_note_style = isset($block['written_note_style']) ? $block['written_note_style'] : 'amber';
-                $v_rows  = isset($block['verbal_rows']) && is_array($block['verbal_rows']) ? $block['verbal_rows'] : array();
-                $w_rows  = isset($block['written_rows']) && is_array($block['written_rows']) ? $block['written_rows'] : array();
-                $v_headers = isset($block['verbal_header_labels']) ? array_filter(array_map('trim', explode("\n", (string) $block['verbal_header_labels']))) : array();
-                $w_headers = isset($block['written_header_labels']) ? array_filter(array_map('trim', explode("\n", (string) $block['written_header_labels']))) : array();
-                $v_notes_list = isset($block['verbal_notes']) && is_array($block['verbal_notes']) ? $block['verbal_notes'] : array();
-                $w_notes_list = isset($block['written_notes']) && is_array($block['written_notes']) ? $block['written_notes'] : array();
+                $exam_pdfs = isset($block['exam_pdfs']) && is_array($block['exam_pdfs']) ? $block['exam_pdfs'] : array();
 
                 $box_bg = $b_style === 'primary' ? 'bg-primary/10' : ($b_style === 'primary-light' ? 'bg-primary-light/10' : 'bg-primary-dark/10');
                 $icon_color = $b_style === 'primary' ? 'text-primary' : ($b_style === 'primary-light' ? 'text-primary-light' : 'text-primary-dark');
-                $dot_color = $b_style === 'primary' ? 'bg-primary' : ($b_style === 'primary-light' ? 'bg-primary-light' : 'bg-primary-dark');
-                $verbal_th_bg = $b_style === 'primary' ? 'bg-primary' : ($b_style === 'primary-light' ? 'bg-primary-light' : 'bg-primary-dark');
-                $written_th_bg = $b_style === 'primary' ? 'bg-accent' : ($b_style === 'primary-light' ? 'bg-accent-dark' : 'bg-accent-light');
                 $scroll_id = isset($block_ids[$idx]) && $block_ids[$idx] !== '' ? $block_ids[$idx] : '';
                 if ($b_title === '') continue;
             ?>
@@ -165,131 +149,75 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                     </div>
                 </div>
 
-                <!-- Verbal Assessment -->
-                <?php if (!empty($v_rows)) :
-                    $v_has_columns = !empty($v_headers);
-                    $v_num_cols = $v_has_columns ? min(6, count($v_headers)) : 0;
-                ?>
-                <div class="mb-8 sm:mb-10 md:mb-12">
-                    <div class="inline-flex items-center gap-2 mb-3 sm:mb-4">
-                        <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full <?php echo esc_attr($dot_color); ?>"></div>
-                        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($v_head); ?></h3>
+                <!-- PDF Tabs Section -->
+                <?php if (!empty($exam_pdfs)) : ?>
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                    <!-- PDF Tabs -->
+                    <div class="mb-6 overflow-x-auto">
+                        <div class="flex space-x-2 pb-2">
+                            <?php foreach ($exam_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
+                                
+                                if (!$pdf_label || !$pdf_file) continue;
+                                
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+                                
+                                if (!$pdf_url) continue;
+                                
+                                $tab_id = 'pdf-tab-' . $idx . '-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                            ?>
+                            <button type="button" class="exam-pdf-tab px-3 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap <?php echo $is_active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>" data-pdf-tab="<?php echo esc_attr($tab_id); ?>" data-pdf-url="<?php echo $pdf_url; ?>">
+                                <?php echo esc_html($pdf_label); ?>
+                            </button>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
-                    <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-soft">
-                        <table class="w-full min-w-full">
-                            <thead>
-                                <tr class="<?php echo esc_attr($verbal_th_bg); ?> text-white">
-                                    <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Date</th>
-                                    <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Day</th>
-                                    <?php if ($v_has_columns) : foreach (array_slice($v_headers, 0, 6) as $vh) : ?><th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider"><?php echo esc_html($vh); ?></th><?php endforeach; else : ?>
-                                    <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Subject</th>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <?php foreach ($v_rows as $row) : ?>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900"><?php echo esc_html(isset($row['date']) ? $row['date'] : ''); ?></td>
-                                    <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo esc_html(isset($row['day']) ? $row['day'] : ''); ?></td>
-                                    <?php if ($v_has_columns) :
-                                        for ($vc = 0; $vc < $v_num_cols; $vc++) {
-                                            $val = isset($row['col' . ($vc + 1)]) ? trim((string) $row['col' . ($vc + 1)]) : '';
-                                            echo '<td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700">' . nl2br(esc_html($val)) . '</td>';
-                                        }
-                                    else : ?>
-                                    <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html(isset($row['subject']) ? $row['subject'] : '')); ?></td>
-                                    <?php endif; ?>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
+
+                    <!-- PDF Preview Container -->
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 relative w-full" style="min-height: 500px;">
+                        <a href="#" class="open-pdf-btn absolute top-4 right-4 z-10 px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors flex items-center gap-2 text-sm font-semibold" target="_blank" title="Open PDF in new tab">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Open PDF
+                        </a>
+                        <div id="pdf-preview-container-<?php echo $idx; ?>" class="w-full">
+                            <?php $first_pdf = true;
+                            foreach ($exam_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
+                                
+                                if (!$pdf_label || !$pdf_file) continue;
+                                
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+                                
+                                if (!$pdf_url) continue;
+                                
+                                $tab_id = 'pdf-tab-' . $idx . '-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                                $display_class = $is_active ? '' : 'hidden';
+                            ?>
+                            <div id="<?php echo esc_attr($tab_id); ?>" class="pdf-viewer <?php echo esc_attr($display_class); ?> w-full" data-pdf-url="<?php echo $pdf_url; ?>">
+                                <embed src="<?php echo $pdf_url; ?>?#toolbar=0" type="application/pdf" width="100%" style="min-height: 800px; height: auto; display: block;" />
+                            </div>
+                            <?php $first_pdf = false;
+                            endforeach; ?>
+                        </div>
                     </div>
-                    <?php
-                    if (!empty($v_notes_list)) :
-                        foreach ($v_notes_list as $vnote) :
-                            $vnt = isset($vnote['note_text']) ? trim((string) $vnote['note_text']) : '';
-                            if ($vnt === '') continue;
-                            $vni = (isset($vnote['note_icon']) && trim((string) $vnote['note_icon']) !== '') ? trim($vnote['note_icon']) : 'info';
-                            $vns = isset($vnote['note_style']) ? $vnote['note_style'] : 'blue';
-                    ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $vns === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
-                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
-                            <i data-lucide="<?php echo esc_attr($vni); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $vns === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
-                            <span><b>Note:</b> <?php echo esc_html($vnt); ?></span>
-                        </p>
-                    </div>
-                    <?php endforeach; elseif ($v_note !== '') : ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $v_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
-                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
-                            <i data-lucide="<?php echo esc_attr($v_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $v_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
-                            <span><b>Note:</b> <?php echo esc_html($v_note); ?></span>
-                        </p>
-                    </div>
-                    <?php endif; ?>
                 </div>
                 <?php endif; ?>
 
-                <!-- Written Assessment -->
-                <?php if (!empty($w_rows)) : ?>
-                <div class="mb-8 sm:mb-10 md:mb-12">
-                    <div class="inline-flex items-center gap-2 mb-3 sm:mb-4">
-                        <div class="w-2 h-2 sm:w-3 sm:h-3 rounded-full <?php echo $b_style === 'primary' ? 'bg-accent' : ($b_style === 'primary-light' ? 'bg-accent-dark' : 'bg-accent-light'); ?>"></div>
-                        <h3 class="text-base sm:text-lg md:text-xl font-bold text-gray-900"><?php echo esc_html($w_head); ?></h3>
-                    </div>
-                    <div class="overflow-x-auto rounded-2xl border border-gray-200 shadow-soft">
-                        <table class="w-full min-w-full">
-                            <thead>
-                                <tr class="<?php echo esc_attr($written_th_bg); ?> text-white">
-                                    <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Date</th>
-                                    <?php if (!empty($w_headers)) : foreach (array_slice($w_headers, 0, 6) as $wh) : ?><th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider"><?php echo esc_html($wh); ?></th><?php endforeach; else : ?>
-                                        <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 1</th>
-                                        <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 2</th>
-                                        <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider">Col 3</th>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <?php
-                                $num_cols = !empty($w_headers) ? min(8, count($w_headers)) : 3;
-                                if ($num_cols === 0) $num_cols = 3;
-                                foreach ($w_rows as $row) :
-                                    $cols = array();
-                                    for ($c = 1; $c <= 6; $c++) {
-                                        $cols[] = isset($row['col' . $c]) ? trim((string) $row['col' . $c]) : '';
-                                    }
-                                ?>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900"><?php echo esc_html(isset($row['date']) ? $row['date'] : ''); ?></td>
-                                    <?php for ($c = 0; $c < $num_cols; $c++) : ?><td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html(isset($cols[$c]) ? $cols[$c] : '')); ?></td><?php endfor; ?>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <?php
-                    if (!empty($w_notes_list)) :
-                        foreach ($w_notes_list as $wnote) :
-                            $wnt = isset($wnote['note_text']) ? trim((string) $wnote['note_text']) : '';
-                            if ($wnt === '') continue;
-                            $wni = (isset($wnote['note_icon']) && trim((string) $wnote['note_icon']) !== '') ? trim($wnote['note_icon']) : 'alert-circle';
-                            $wns = isset($wnote['note_style']) ? $wnote['note_style'] : 'amber';
-                    ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $wns === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
-                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
-                            <i data-lucide="<?php echo esc_attr($wni); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $wns === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
-                            <span><b>Note:</b> <?php echo esc_html($wnt); ?></span>
-                        </p>
-                    </div>
-                    <?php endforeach; elseif ($w_note !== '') : ?>
-                    <div class="mt-3 sm:mt-4 p-3 sm:p-4 rounded-xl border <?php echo $w_note_style === 'amber' ? 'bg-amber-50 border-amber-100' : 'bg-blue-50 border-blue-100'; ?>">
-                        <p class="text-xs sm:text-sm text-gray-700 flex items-start gap-2">
-                            <i data-lucide="<?php echo esc_attr($w_note_icon); ?>" class="w-3 h-3 sm:w-4 sm:h-4 <?php echo $w_note_style === 'amber' ? 'text-amber-500' : 'text-blue-500'; ?> mt-0.5 flex-shrink-0"></i>
-                            <span><b>Note:</b> <?php echo esc_html($w_note); ?></span>
-                        </p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
+
             </div>
             <?php endforeach; ?>
 
@@ -389,17 +317,74 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
     (function() {
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
-            var tabs = document.querySelectorAll('.activity-month-tab');
-            var tables = document.querySelectorAll('.activity-table');
-            tabs.forEach(function(tab) {
+            
+            // Activity Planner Month Tabs
+            var activity_tabs = document.querySelectorAll('.activity-month-tab');
+            var activity_tables = document.querySelectorAll('.activity-table');
+            activity_tabs.forEach(function(tab) {
                 tab.addEventListener('click', function() {
                     var month = this.getAttribute('data-month');
-                    tabs.forEach(function(t) { t.classList.remove('bg-primary', 'text-white'); t.classList.add('bg-gray-100', 'text-gray-700'); });
+                    activity_tabs.forEach(function(t) { t.classList.remove('bg-primary', 'text-white'); t.classList.add('bg-gray-100', 'text-gray-700'); });
                     this.classList.remove('bg-gray-100', 'text-gray-700'); this.classList.add('bg-primary', 'text-white');
-                    tables.forEach(function(tbl) {
+                    activity_tables.forEach(function(tbl) {
                         tbl.classList.toggle('hidden', tbl.getAttribute('data-month') !== month);
                     });
                 });
+            });
+            
+            // Exam PDF Tabs
+            var pdf_tabs = document.querySelectorAll('.exam-pdf-tab');
+            pdf_tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    var tab_id = this.getAttribute('data-pdf-tab');
+                    var parts = tab_id.split('-');
+                    var container_num = parts[2];
+                    
+                    var all_tabs_in_group = document.querySelectorAll('.exam-pdf-tab[data-pdf-tab^="pdf-tab-' + container_num + '-"]');
+                    var all_viewers = document.querySelectorAll('#pdf-preview-container-' + container_num + ' .pdf-viewer');
+                    var container = document.getElementById('pdf-preview-container-' + container_num);
+                    var open_btn = container ? container.closest('.relative').querySelector('.open-pdf-btn') : null;
+                    
+                    // Update active tab
+                    all_tabs_in_group.forEach(function(t) {
+                        t.classList.remove('bg-primary', 'text-white');
+                        t.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary', 'text-white');
+                    
+                    // Show corresponding PDF viewer
+                    all_viewers.forEach(function(viewer) {
+                        viewer.classList.add('hidden');
+                    });
+                    var active_viewer = document.getElementById(tab_id);
+                    if (active_viewer) {
+                        active_viewer.classList.remove('hidden');
+                        // Update the "Open PDF" button with the new PDF URL
+                        var pdf_url = active_viewer.getAttribute('data-pdf-url');
+                        if (open_btn && pdf_url) {
+                            open_btn.setAttribute('href', pdf_url);
+                        }
+                    }
+                });
+            });
+            
+            // Initialize Open PDF button with first PDF URL on load
+            var initial_open_btns = document.querySelectorAll('.open-pdf-btn');
+            initial_open_btns.forEach(function(btn) {
+                var container = btn.closest('.relative').querySelector('[id^="pdf-preview-container-"]');
+                if (container) {
+                    var first_viewer = container.querySelector('.pdf-viewer:not(.hidden)');
+                    if (!first_viewer) {
+                        first_viewer = container.querySelector('.pdf-viewer');
+                    }
+                    if (first_viewer) {
+                        var pdf_url = first_viewer.getAttribute('data-pdf-url');
+                        if (pdf_url) {
+                            btn.setAttribute('href', pdf_url);
+                        }
+                    }
+                }
             });
         });
     })();

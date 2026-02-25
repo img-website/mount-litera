@@ -223,7 +223,7 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
                             $s_label = isset($s_link['title']) && (string) $s_link['title'] !== '' ? (string) $s_link['title'] : $s_icon;
                             $s_target = isset($s_link['target']) && (string) $s_link['target'] !== '' ? ' target="' . esc_attr((string) $s_link['target']) . '"' : '';
                         ?>
-                        <a href="<?php echo esc_url($s_url); ?>" class="w-9 h-9 sm:w-10 sm:h-10 border border-primary/40 rounded-full flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all"<?php echo $s_target; ?> aria-label="<?php echo esc_attr($s_label); ?>"><i data-lucide="<?php echo esc_attr($s_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5"></i></a>
+                        <a href="<?php echo esc_url($s_url); ?>" class="w-9 h-9 sm:w-10 sm:h-10 border border-primary/40 rounded-full flex items-center justify-center hover:bg-accent hover:text-white hover:border-accent transition-all"<?php echo $s_target; ?> aria-label="<?php echo esc_attr($s_label); ?>"><?php mlzs_social_icon_svg( $s_icon, 'w-4 h-4 sm:w-5 sm:h-5' ); ?></a>
                         <?php endforeach; ?>
                     </div>
                 </div>

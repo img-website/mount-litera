@@ -243,7 +243,7 @@ if (!is_array($footer_social) || empty($footer_social)) $footer_social = $defaul
                     $s_label = isset($s_link['title']) && (string) $s_link['title'] !== '' ? (string) $s_link['title'] : $s_icon;
                     $s_target = isset($s_link['target']) && (string) $s_link['target'] !== '' ? (string) $s_link['target'] : '';
                 ?>
-                <a class="w-10 h-10 rounded-full border border-primary/40 bg-primary/20 flex items-center justify-center text-gray-300 hover:bg-accent hover:text-white hover:border-accent hover:-translate-y-1 transition-all duration-300" href="<?php echo esc_url( $s_url ); ?>"<?php echo $s_target !== '' ? ' target="' . esc_attr( $s_target ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $s_label ); ?>"><i data-lucide="<?php echo esc_attr( $s_icon ); ?>" class="size-5"></i></a>
+                <a class="w-10 h-10 rounded-full border border-primary/40 bg-primary/20 flex items-center justify-center text-gray-300 hover:bg-accent hover:text-white hover:border-accent hover:-translate-y-1 transition-all duration-300" href="<?php echo esc_url( $s_url ); ?>"<?php echo $s_target !== '' ? ' target="' . esc_attr( $s_target ) . '"' : ''; ?> aria-label="<?php echo esc_attr( $s_label ); ?>"><?php mlzs_social_icon_svg( $s_icon, 'size-5' ); ?></a>
                 <?php endforeach; ?>
             </div>
         </div>

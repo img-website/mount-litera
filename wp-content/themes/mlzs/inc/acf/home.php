@@ -23,19 +23,228 @@ function mlzs_acf_hero_field_group() {
                 'label' => __('Hero Slides', 'mlzs'),
                 'name'  => 'hero_slides',
                 'type'  => 'repeater',
-                'instructions' => __('Background images for the hero carousel. Add at least one.', 'mlzs'),
+                'instructions' => __('Add image or video slides. Videos play for full duration; image slides use delay from CMS.', 'mlzs'),
                 'min'   => 1,
                 'layout' => 'block',
                 'button_label' => __('Add Slide', 'mlzs'),
                 'sub_fields' => array(
                     array(
+                        'key'   => 'field_hero_slide_type',
+                        'label' => __('Slide Type', 'mlzs'),
+                        'name'  => 'slide_type',
+                        'type'  => 'select',
+                        'choices' => array(
+                            'image' => __('Image', 'mlzs'),
+                            'video' => __('Video', 'mlzs'),
+                        ),
+                        'default_value' => 'image',
+                        'ui' => 1,
+                    ),
+                    array(
                         'key'   => 'field_hero_slide_image',
                         'label' => __('Slide Image', 'mlzs'),
                         'name'  => 'slide_image',
                         'type'  => 'image',
-                        'required' => 1,
+                        'required' => 0,
                         'return_format' => 'url',
                         'preview_size' => 'medium',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_video',
+                        'label' => __('Slide Video (local upload)', 'mlzs'),
+                        'name'  => 'slide_video',
+                        'type'  => 'file',
+                        'required' => 0,
+                        'return_format' => 'url',
+                        'mime_types' => 'mp4,webm,ogg',
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'video',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_image_delay',
+                        'label' => __('Image Slide Delay (seconds)', 'mlzs'),
+                        'name'  => 'slide_delay_seconds',
+                        'type'  => 'number',
+                        'default_value' => 5,
+                        'min' => 1,
+                        'max' => 30,
+                        'step' => 1,
+                        'instructions' => __('Used only for image slides.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_show_content',
+                        'label' => __('Show Hero Content On This Image Slide', 'mlzs'),
+                        'name'  => 'show_content',
+                        'type'  => 'true_false',
+                        'message' => __('Show badge/heading/buttons/stats overlay on this slide', 'mlzs'),
+                        'ui' => 1,
+                        'default_value' => 0,
+                        'instructions' => __('Enable this on one image slide if you want the current hero text only once.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_badge_text',
+                        'label' => __('Slide Badge Text (optional)', 'mlzs'),
+                        'name'  => 'slide_badge_text',
+                        'type'  => 'text',
+                        'instructions' => __('Leave empty to use default hero badge.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_headline_line1',
+                        'label' => __('Slide Headline (First Line, optional)', 'mlzs'),
+                        'name'  => 'slide_headline_line1',
+                        'type'  => 'text',
+                        'instructions' => __('Leave empty to use default hero headline first line.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_headline_highlight',
+                        'label' => __('Slide Headline Highlight (optional)', 'mlzs'),
+                        'name'  => 'slide_headline_highlight',
+                        'type'  => 'text',
+                        'instructions' => __('Leave empty to use default hero highlight text.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_subheadline',
+                        'label' => __('Slide Subheadline (optional)', 'mlzs'),
+                        'name'  => 'slide_subheadline',
+                        'type'  => 'textarea',
+                        'rows'  => 3,
+                        'instructions' => __('Leave empty to use default hero subheadline.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_cta_primary',
+                        'label' => __('Slide Primary Button Link (optional)', 'mlzs'),
+                        'name'  => 'slide_cta_primary',
+                        'type'  => 'link',
+                        'return_format' => 'array',
+                        'instructions' => __('Leave empty to use default primary button.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_cta_primary_icon',
+                        'label' => __('Slide Primary Button Icon (optional)', 'mlzs'),
+                        'name'  => 'slide_cta_primary_icon',
+                        'type'  => 'text',
+                        'instructions' => __('Leave empty to use default primary icon.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_cta_secondary',
+                        'label' => __('Slide Secondary Button Link (optional)', 'mlzs'),
+                        'name'  => 'slide_cta_secondary',
+                        'type'  => 'link',
+                        'return_format' => 'array',
+                        'instructions' => __('Leave empty to use default secondary button.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'key'   => 'field_hero_slide_cta_secondary_icon',
+                        'label' => __('Slide Secondary Button Icon (optional)', 'mlzs'),
+                        'name'  => 'slide_cta_secondary_icon',
+                        'type'  => 'text',
+                        'instructions' => __('Leave empty to use default secondary icon.', 'mlzs'),
+                        'conditional_logic' => array(
+                            array(
+                                array(
+                                    'field' => 'field_hero_slide_type',
+                                    'operator' => '==',
+                                    'value' => 'image',
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),

@@ -191,97 +191,192 @@ if (empty($academics_tabs)) {
 }
 ?>
 
+<?php
+$stats = $default_stats;
+$stats_id = get_queried_object_id() ?: 'option';
+if (function_exists('have_rows') && have_rows('hero_stats', $stats_id)) {
+    $stats = array();
+    while (have_rows('hero_stats', $stats_id)) {
+        the_row();
+        $num = get_sub_field('stat_number');
+        $lbl = get_sub_field('stat_label');
+        if ($num !== '' || $lbl !== '') {
+            $stats[] = array('stat_number' => $num, 'stat_label' => $lbl);
+        }
+    }
+}
+if (empty($stats)) {
+    $stats = $default_stats;
+}
+
+$hero_slides_data = array();
+$hero_id = get_queried_object_id() ?: 'option';
+if (function_exists('have_rows') && have_rows('hero_slides', $hero_id)) {
+    while (have_rows('hero_slides', $hero_id)) {
+        the_row();
+        $type = strtolower(trim((string) get_sub_field('slide_type')));
+        if ($type !== 'video') {
+            $type = 'image';
+        }
+
+        $img_url = '';
+        $img = get_sub_field('slide_image');
+        if (!empty($img)) {
+            $img_url = is_array($img) ? (string) ($img['url'] ?? '') : (string) $img;
+        }
+
+        $video_url = '';
+        $video = get_sub_field('slide_video');
+        if (!empty($video)) {
+            $video_url = is_array($video) ? (string) ($video['url'] ?? '') : (string) $video;
+        }
+
+        $delay_seconds = (int) get_sub_field('slide_delay_seconds');
+        if ($delay_seconds < 1) $delay_seconds = 5;
+        if ($delay_seconds > 30) $delay_seconds = 30;
+
+        $show_content = (bool) get_sub_field('show_content');
+        $slide_badge = trim((string) get_sub_field('slide_badge_text'));
+        $slide_line1 = trim((string) get_sub_field('slide_headline_line1'));
+        $slide_highlight = trim((string) get_sub_field('slide_headline_highlight'));
+        $slide_subheadline = trim((string) get_sub_field('slide_subheadline'));
+        $slide_cta_primary = get_sub_field('slide_cta_primary');
+        $slide_cta_secondary = get_sub_field('slide_cta_secondary');
+        $slide_cta_primary_icon = trim((string) get_sub_field('slide_cta_primary_icon'));
+        $slide_cta_secondary_icon = trim((string) get_sub_field('slide_cta_secondary_icon'));
+
+        if ($type === 'video' && $video_url !== '') {
+            $hero_slides_data[] = array(
+                'type' => 'video',
+                'video_url' => $video_url,
+                'show_content' => false,
+                'delay_ms' => 0,
+            );
+        } elseif ($img_url !== '') {
+            $hero_slides_data[] = array(
+                'type' => 'image',
+                'image_url' => $img_url,
+                'show_content' => $show_content,
+                'delay_ms' => $delay_seconds * 1000,
+                'badge' => $slide_badge !== '' ? $slide_badge : (string) $hero_badge,
+                'line1' => $slide_line1 !== '' ? $slide_line1 : (string) $hero_line1,
+                'highlight' => $slide_highlight !== '' ? $slide_highlight : (string) $hero_highlight,
+                'subheadline' => $slide_subheadline !== '' ? $slide_subheadline : (string) $hero_subheadline,
+                'cta_primary' => (is_array($slide_cta_primary) && !empty($slide_cta_primary['url'])) ? $slide_cta_primary : $cta_primary_link,
+                'cta_secondary' => (is_array($slide_cta_secondary) && !empty($slide_cta_secondary['url'])) ? $slide_cta_secondary : $cta_secondary_link,
+                'cta_primary_icon' => $slide_cta_primary_icon !== '' ? $slide_cta_primary_icon : (string) $cta_primary_icon,
+                'cta_secondary_icon' => $slide_cta_secondary_icon !== '' ? $slide_cta_secondary_icon : (string) $cta_secondary_icon,
+            );
+        }
+    }
+}
+
+if (empty($hero_slides_data)) {
+    $hero_slides_data[] = array(
+        'type' => 'image',
+        'image_url' => $default_slide_url,
+        'show_content' => true,
+        'delay_ms' => 5000,
+        'badge' => (string) $hero_badge,
+        'line1' => (string) $hero_line1,
+        'highlight' => (string) $hero_highlight,
+        'subheadline' => (string) $hero_subheadline,
+        'cta_primary' => $cta_primary_link,
+        'cta_secondary' => $cta_secondary_link,
+        'cta_primary_icon' => (string) $cta_primary_icon,
+        'cta_secondary_icon' => (string) $cta_secondary_icon,
+    );
+}
+
+$content_image_index = -1;
+foreach ($hero_slides_data as $idx => $slide) {
+    if ($slide['type'] === 'image' && !empty($slide['show_content'])) {
+        $content_image_index = $idx;
+        break;
+    }
+}
+if ($content_image_index === -1) {
+    foreach ($hero_slides_data as $idx => $slide) {
+        if ($slide['type'] === 'image') {
+            $hero_slides_data[$idx]['show_content'] = true;
+            $content_image_index = $idx;
+            break;
+        }
+    }
+}
+?>
 <!-- Hero Section (dynamic via ACF) -->
-<div class="relative flex-grow flex items-center justify-center min-h-[100svh] w-full overflow-hidden px-4 sm:px-6 lg:px-8">
-    <div class="absolute inset-0 z-0 hero-swiper-container">
-        <div class="swiper w-full h-full">
-            <div class="swiper-wrapper">
-                <?php
-                $hero_id = get_queried_object_id() ?: 'option';
-                $has_slides = function_exists('have_rows') && have_rows('hero_slides', $hero_id);
-                if ($has_slides) {
-                    while (have_rows('hero_slides', $hero_id)) {
-                        the_row();
-                        $img = get_sub_field('slide_image');
-                        if ($img) {
-                            $img_url = is_array($img) ? ($img['url'] ?? '') : $img;
-                            if ($img_url) {
-                                ?>
-                                <div class="swiper-slide">
-                                    <div class="w-full h-full bg-cover bg-center scale-110 animate-hero-zoom" style="background-image: url('<?php echo esc_url( (string) $img_url ); ?>');"></div>
-                                </div>
-                                <?php
-                            }
-                        }
-                    }
-                }
-                if (!$has_slides || !function_exists('have_rows')) {
-                    ?>
-                    <div class="swiper-slide">
-                        <div class="w-full h-full bg-cover bg-center scale-110 animate-hero-zoom" style="background-image: url('<?php echo esc_url($default_slide_url); ?>');"></div>
+<div class="relative flex-grow flex items-center justify-center min-h-[100svh] w-full overflow-hidden hero-swiper-container">
+    <div class="absolute inset-0 z-0">
+    <div class="swiper w-full h-full">
+        <div class="swiper-wrapper">
+            <?php foreach ($hero_slides_data as $slide) : ?>
+                <?php if ($slide['type'] === 'video') : ?>
+                    <div class="swiper-slide relative min-h-[100svh] w-full overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-32 before:bg-gradient-to-b before:from-indigo-950 before:to-transparent before:z-10" data-slide-type="video">
+                        <video class="hero-slide-video w-full h-full object-cover md:scale-110 scale-150" playsinline muted preload="metadata">
+                            <source class="object-cover" src="<?php echo esc_url((string) $slide['video_url']); ?>">
+                        </video>
                     </div>
-                    <?php
-                }
-                ?>
-            </div>
-        </div>
-        <div class="absolute inset-0 bg-indigo-velvet/40 mix-blend-multiply z-10"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-indigo-velvet/90 via-indigo-velvet/50 to-indigo-velvet/10 z-10"></div>
-    </div>
-    <div class="relative z-10 w-full max-w-7xl mx-auto pt-32 flex flex-col items-center text-center lg:items-start lg:text-left">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 animate-fade-in-up">
-            <span class="relative flex size-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                <span class="relative inline-flex rounded-full size-3 bg-secondary"></span>
-            </span>
-            <span class="md:text-base text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html( (string) $hero_badge ); ?></span>
-        </div>
-        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
-            <?php echo esc_html( (string) $hero_line1 ); ?> <br class="hidden md:block"/>
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame via-tiger-orange to-cayenne-red"><?php echo esc_html( (string) $hero_highlight ); ?></span>
-        </h1>
-        <p class="text-lg md:text-xl text-slate-200 mb-4 max-w-2xl leading-relaxed font-light opacity-95">
-            <?php echo esc_html( (string) $hero_subheadline ); ?>
-        </p>
-        <div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <a href="<?php echo esc_url( (string) ( $cta_primary_link['url'] ?? '#' ) ); ?>"<?php echo !empty($cta_primary_link['target']) ? ' target="' . esc_attr( (string) $cta_primary_link['target'] ) . '"' : ''; ?> class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-primary to-primary-dark text-white rounded-full font-bold text-lg hover:shadow-[0_0_20px_rgba(61,52,139,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group ring-1 ring-white/20">
-                <?php echo esc_html( (string) ( $cta_primary_link['title'] ?? 'Start Application' ) ); ?>
-                <i data-lucide="<?php echo esc_attr( (string) $cta_primary_icon ); ?>" class="size-5 group-hover:translate-x-1 transition-transform"></i>
-            </a>
-            <a href="<?php echo esc_url( (string) ( $cta_secondary_link['url'] ?? '#' ) ); ?>"<?php echo !empty($cta_secondary_link['target']) ? ' target="' . esc_attr( (string) $cta_secondary_link['target'] ) . '"' : ''; ?> class="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-bold text-lg hover:bg-white/20 transition-all flex items-center justify-center gap-2 group">
-                <i data-lucide="<?php echo esc_attr( (string) $cta_secondary_icon ); ?>" class="size-5"></i>
-                <?php echo esc_html( (string) ( $cta_secondary_link['title'] ?? 'Virtual Tour' ) ); ?>
-            </a>
-        </div>
-        <div class="mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 border-t border-white/10 py-4 w-full">
-            <?php
-            $stats = $default_stats;
-            $stats_id = get_queried_object_id() ?: 'option';
-            if (function_exists('have_rows') && have_rows('hero_stats', $stats_id)) {
-                $stats = array();
-                while (have_rows('hero_stats', $stats_id)) {
-                    the_row();
-                    $num = get_sub_field('stat_number');
-                    $lbl = get_sub_field('stat_label');
-                    if ($num !== '' || $lbl !== '') {
-                        $stats[] = array('stat_number' => $num, 'stat_label' => $lbl);
-                    }
-                }
-            }
-            if (empty($stats)) {
-                $stats = $default_stats;
-            }
-            foreach ($stats as $stat) {
-                ?>
-                <div class="flex flex-col gap-1">
-                    <span class="text-3xl font-bold text-white"><?php echo esc_html( (string) ( $stat['stat_number'] ?? '' ) ); ?></span>
-                    <span class="text-sm text-slate-300 font-medium uppercase tracking-wide"><?php echo esc_html( (string) ( $stat['stat_label'] ?? '' ) ); ?></span>
-                </div>
-                <?php
-            }
-            ?>
+                <?php else : ?>
+                    <div class="swiper-slide relative min-h-[100svh] w-full overflow-hidden" data-slide-type="image" data-swiper-autoplay="<?php echo esc_attr((string) $slide['delay_ms']); ?>">
+                        <div class="absolute inset-0 bg-cover bg-center scale-110 animate-hero-zoom" style="background-image: url('<?php echo esc_url((string) $slide['image_url']); ?>');"></div>
+                        <div class="hero-slide-overlays absolute inset-0 z-10">
+                            <div class="absolute inset-0 bg-indigo-velvet/40 mix-blend-multiply"></div>
+                            <div class="absolute inset-0 bg-gradient-to-b from-indigo-velvet/90 via-indigo-velvet/50 to-indigo-velvet/10"></div>
+                        </div>
+                        <?php if (!empty($slide['show_content'])) : ?>
+                            <div class="relative z-20 min-h-[100svh] w-full px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+                                <div class="w-full max-w-7xl mx-auto pt-32 flex flex-col items-center text-center lg:items-start lg:text-left">
+                                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-4 animate-fade-in-up">
+                                        <span class="relative flex size-3">
+                                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                                            <span class="relative inline-flex rounded-full size-3 bg-secondary"></span>
+                                        </span>
+                                        <span class="md:text-base text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html((string) ($slide['badge'] ?? $hero_badge)); ?></span>
+                                    </div>
+                                    <h1 class="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
+                                        <?php echo esc_html((string) ($slide['line1'] ?? $hero_line1)); ?> <br class="hidden md:block"/>
+                                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame via-tiger-orange to-cayenne-red"><?php echo esc_html((string) ($slide['highlight'] ?? $hero_highlight)); ?></span>
+                                    </h1>
+                                    <p class="text-sm md:text-xl text-slate-200 mb-4 max-w-2xl font-light opacity-95">
+                                        <?php echo esc_html((string) ($slide['subheadline'] ?? $hero_subheadline)); ?>
+                                    </p>
+                                    <?php $slide_primary = (isset($slide['cta_primary']) && is_array($slide['cta_primary'])) ? $slide['cta_primary'] : $cta_primary_link; ?>
+                                    <?php $slide_secondary = (isset($slide['cta_secondary']) && is_array($slide['cta_secondary'])) ? $slide['cta_secondary'] : $cta_secondary_link; ?>
+                                    <div class="flex flex-row items-center gap-4 w-full sm:w-auto">
+                                        <a href="<?php echo esc_url((string) ($slide_primary['url'] ?? '#')); ?>"<?php echo !empty($slide_primary['target']) ? ' target="' . esc_attr((string) $slide_primary['target']) . '"' : ''; ?> class="max-sm:flex-auto sm:w-auto md:px-8 px-2 md:py-4 py-2 bg-gradient-to-r from-primary to-primary-dark text-white rounded-full font-bold md:text-lg sm:text-base text-sm hover:shadow-[0_0_20px_rgba(61,52,139,0.5)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 group ring-1 ring-white/20">
+                                            <?php echo esc_html((string) ($slide_primary['title'] ?? 'Start Application')); ?>
+                                            <i data-lucide="<?php echo esc_attr((string) ($slide['cta_primary_icon'] ?? $cta_primary_icon)); ?>" class="md:size-5 size-4 group-hover:translate-x-1 transition-transform"></i>
+                                        </a>
+                                        <a href="<?php echo esc_url((string) ($slide_secondary['url'] ?? '#')); ?>"<?php echo !empty($slide_secondary['target']) ? ' target="' . esc_attr((string) $slide_secondary['target']) . '"' : ''; ?> class="max-sm:flex-auto sm:w-auto md:px-8 px-2 md:py-4 py-2 bg-white/10 backdrop-blur-sm border border-white/30 text-white rounded-full font-bold md:text-lg sm:text-base text-sm hover:bg-white/20 transition-all flex items-center justify-center gap-2 group">
+                                            <i data-lucide="<?php echo esc_attr((string) ($slide['cta_secondary_icon'] ?? $cta_secondary_icon)); ?>" class="md:size-5 size-4"></i>
+                                            <?php echo esc_html((string) ($slide_secondary['title'] ?? 'Virtual Tour')); ?>
+                                        </a>
+                                    </div>
+                                    <div class="mt-8 md:mt-16 lg:mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 md:gap-16 border-t border-white/10 py-4 w-full">
+                                        <?php foreach ($stats as $stat) : ?>
+                                            <div class="flex flex-col gap-1">
+                                                <span class="lg:text-3xl md:text-2xl text-xl font-bold text-white"><?php echo esc_html((string) ($stat['stat_number'] ?? '')); ?></span>
+                                                <span class="lg:text-base md:text-sm text-xs text-slate-300 font-medium uppercase tracking-wide"><?php echo esc_html((string) ($stat['stat_label'] ?? '')); ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
         </div>
     </div>
+    </div>
+    <div class="hero-nav hero-nav-prev absolute left-3 md:left-5 top-1/2 -translate-y-1/2 z-30 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-black/35 border border-white/30 text-white hover:bg-accent hover:border-accent transition-all cursor-pointer">
+        <i data-lucide="chevron-left" class="size-5"></i>
+    </div>
+    <div class="hero-nav hero-nav-next absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-30 hidden lg:flex items-center justify-center w-11 h-11 rounded-full bg-black/35 border border-white/30 text-white hover:bg-accent hover:border-accent transition-all cursor-pointer">
+        <i data-lucide="chevron-right" class="size-5"></i>
+    </div>
+    <div class="hero-pagination swiper-pagination absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center gap-2 lg:hidden [&_.swiper-pagination-bullet]:bg-white [&_.swiper-pagination-bullet]:!m-0 !overflow-visible [&_.swiper-pagination-bullet]:shrink-0"></div>
 </div>
 
 <!-- Welcome Section (dynamic via ACF) -->

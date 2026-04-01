@@ -356,6 +356,245 @@ function mlzs_enqueue_assets() {
 add_action('wp_enqueue_scripts', 'mlzs_enqueue_assets');
 
 /**
+ * Add popup controls in Appearance > Customize.
+ */
+function mlzs_register_popup_customizer_settings($wp_customize) {
+    $wp_customize->add_section('mlzs_popup_settings', array(
+        'title'       => __('Site Popup', 'mlzs'),
+        'priority'    => 160,
+        'description' => __('Configure delayed image popup.', 'mlzs'),
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_enabled', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup_enabled', array(
+        'label'   => __('Enable popup', 'mlzs'),
+        'section' => 'mlzs_popup_settings',
+        'type'    => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_image_id', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'mlzs_popup_image_id', array(
+        'label'       => __('Popup image', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'mime_type'   => 'image',
+        'button_labels' => array(
+            'select'       => __('Select Image', 'mlzs'),
+            'change'       => __('Change Image', 'mlzs'),
+            'default'      => __('Default', 'mlzs'),
+            'remove'       => __('Remove', 'mlzs'),
+            'placeholder'  => __('No image selected', 'mlzs'),
+            'frame_title'  => __('Select popup image', 'mlzs'),
+            'frame_button' => __('Use this image', 'mlzs'),
+        ),
+    )));
+
+    $wp_customize->add_setting('mlzs_popup_open_delay', array(
+        'default'           => 2000,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup_open_delay', array(
+        'label'       => __('Open delay (milliseconds)', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'number',
+        'input_attrs' => array(
+            'min'  => 0,
+            'max'  => 30000,
+            'step' => 100,
+        ),
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_display_scope', array(
+        'default'           => 'home',
+        'sanitize_callback' => 'mlzs_sanitize_popup_scope',
+    ));
+    $wp_customize->add_control('mlzs_popup_display_scope', array(
+        'label'   => __('Show popup on', 'mlzs'),
+        'section' => 'mlzs_popup_settings',
+        'type'    => 'select',
+        'choices' => array(
+            'home'     => __('Only home page', 'mlzs'),
+            'all'      => __('All pages', 'mlzs'),
+            'specific' => __('Specific pages', 'mlzs'),
+        ),
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_specific_pages', array(
+        'default'           => '',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('mlzs_popup_specific_pages', array(
+        'label'       => __('Specific page IDs or slugs', 'mlzs'),
+        'description' => __('Use comma separated values. Example: 12, 45, about-us, contact', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'text',
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_click_page_id', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup_click_page_id', array(
+        'label'       => __('Popup click destination page', 'mlzs'),
+        'description' => __('When user clicks popup image, it will open selected page.', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'dropdown-pages',
+    ));
+}
+add_action('customize_register', 'mlzs_register_popup_customizer_settings');
+
+/**
+ * Sanitize popup scope option.
+ */
+function mlzs_sanitize_popup_scope($value) {
+    $allowed = array('home', 'all', 'specific');
+    return in_array($value, $allowed, true) ? $value : 'home';
+}
+
+/**
+ * Resolve whether popup should be shown on current request.
+ */
+function mlzs_should_show_popup() {
+    $scope = get_theme_mod('mlzs_popup_display_scope', 'home');
+
+    if ($scope === 'all') {
+        return true;
+    }
+    if ($scope === 'home') {
+        return is_front_page() || is_home();
+    }
+
+    $raw_values = (string) get_theme_mod('mlzs_popup_specific_pages', '');
+    if ($raw_values === '' || (!is_page() && !is_front_page() && !is_home())) {
+        return false;
+    }
+
+    $parts = array_filter(array_map('trim', explode(',', $raw_values)));
+    if (empty($parts)) {
+        return false;
+    }
+
+    $page_ids = array();
+    $slugs = array();
+    foreach ($parts as $part) {
+        if (is_numeric($part)) {
+            $page_ids[] = (int) $part;
+        } else {
+            $slugs[] = sanitize_title($part);
+        }
+    }
+
+    $matches_id = !empty($page_ids) && is_page($page_ids);
+    if ($matches_id) {
+        return true;
+    }
+
+    if (!empty($slugs)) {
+        $queried = get_queried_object();
+        if ($queried && !empty($queried->post_name) && in_array((string) $queried->post_name, $slugs, true)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Render delayed image popup in footer.
+ */
+function mlzs_render_site_popup() {
+    if (is_admin() || wp_doing_ajax() || !get_theme_mod('mlzs_popup_enabled', 0)) {
+        return;
+    }
+
+    $image_id = (int) get_theme_mod('mlzs_popup_image_id', 0);
+    if ($image_id <= 0 || !mlzs_should_show_popup()) {
+        return;
+    }
+
+    $image_url = wp_get_attachment_image_url($image_id, 'full');
+    if (!$image_url) {
+        return;
+    }
+
+    $click_page_id = (int) get_theme_mod('mlzs_popup_click_page_id', 0);
+    $click_url = $click_page_id > 0 ? get_permalink($click_page_id) : '';
+
+    $delay = (int) get_theme_mod('mlzs_popup_open_delay', 2000);
+    $delay = max(0, min(30000, $delay));
+    ?>
+    <div class="mlzs-site-popup-backdrop" data-mlzs-popup data-delay="<?php echo esc_attr((string) $delay); ?>" aria-hidden="true">
+        <div class="mlzs-site-popup-modal" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Promotional popup', 'mlzs'); ?>">
+            <button type="button" class="mlzs-site-popup-close" data-mlzs-popup-close aria-label="<?php esc_attr_e('Close popup', 'mlzs'); ?>">
+                &times;
+            </button>
+            <?php if (!empty($click_url)) : ?>
+                <a href="<?php echo esc_url($click_url); ?>" class="mlzs-site-popup-link">
+                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
+                </a>
+            <?php else : ?>
+                <img src="<?php echo esc_url($image_url); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
+            <?php endif; ?>
+        </div>
+    </div>
+    <script>
+        (function () {
+            var popup = document.querySelector('[data-mlzs-popup]');
+            if (!popup) return;
+
+            var modal = popup.querySelector('.mlzs-site-popup-modal');
+            var closeBtn = popup.querySelector('[data-mlzs-popup-close]');
+            var delay = Number(popup.getAttribute('data-delay') || 0);
+
+            function closePopup() {
+                if (!popup.classList.contains('is-visible')) return;
+                popup.classList.add('is-hiding');
+                popup.classList.remove('is-visible');
+                window.setTimeout(function () {
+                    popup.style.display = 'none';
+                    popup.setAttribute('aria-hidden', 'true');
+                }, 320);
+            }
+
+            window.setTimeout(function () {
+                popup.style.display = 'flex';
+                popup.setAttribute('aria-hidden', 'false');
+                window.requestAnimationFrame(function () {
+                    popup.classList.add('is-visible');
+                });
+            }, Math.max(0, delay));
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closePopup);
+            }
+            popup.addEventListener('click', function (event) {
+                if (event.target === popup) {
+                    closePopup();
+                }
+            });
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closePopup();
+                }
+            });
+
+            if (modal) {
+                modal.addEventListener('click', function (event) {
+                    event.stopPropagation();
+                });
+            }
+        })();
+    </script>
+    <?php
+}
+add_action('wp_footer', 'mlzs_render_site_popup');
+
+/**
  * Output social icon markup: Lucide by default, or custom WhatsApp SVG when icon is "whatsapp".
  * Use same $class as other social icons (e.g. size-5 or w-4 h-4 sm:w-5 sm:h-5).
  *

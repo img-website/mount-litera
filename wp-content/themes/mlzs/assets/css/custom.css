@@ -109,7 +109,7 @@
 
 .mlzs-site-popup-modal {
     position: relative;
-    width: min(92vw, 700px);
+    width: min(92vw, 920px);
     max-height: 88vh;
     border-radius: 16px;
     overflow: auto;

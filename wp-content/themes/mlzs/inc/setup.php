@@ -167,16 +167,10 @@ function mlzs_enqueue_assets() {
     $theme_uri = get_template_directory_uri();
     $theme_version = wp_get_theme()->get('Version') ?: '1.0.0';
 
-    // Google Fonts
+    // Google Fonts - Google Sans (site-wide)
     wp_enqueue_style(
         'mlzs-google-fonts',
-        'https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&family=Noto+Sans:wght@400;500;700&display=swap',
-        array(),
-        null
-    );
-    wp_enqueue_style(
-        'mlzs-google-fonts-2',
-        'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap',
+        'https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap',
         array(),
         null
     );
@@ -254,8 +248,8 @@ function mlzs_enqueue_assets() {
                         'card-dark': '#1e293b',
                     },
                     fontFamily: {
-                        'display': ['Spline Sans', 'sans-serif'],
-                        'body': ['Noto Sans', 'sans-serif'],
+                        'display': ['Google Sans', 'sans-serif'],
+                        'body': ['Google Sans', 'sans-serif'],
                     },
                     borderRadius: {
                         'DEFAULT': '1rem',

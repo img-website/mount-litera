@@ -84,9 +84,9 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
     if (empty($items) || !is_array($items)) return;
     $depth = (int) $depth;
     $text_class = array(
-        0 => 'font-[\'Playfair_Display\',serif] text-3xl sm:text-4xl md:text-5xl',
-        1 => 'font-[\'Playfair_Display\',serif] text-xl sm:text-2xl md:text-3xl text-gray-300',
-        2 => 'font-[\'Playfair_Display\',serif] text-xl sm:text-2xl md:text-3xl text-gray-300',
+        0 => 'font-display text-3xl sm:text-4xl md:text-5xl',
+        1 => 'font-display text-xl sm:text-2xl md:text-3xl text-gray-300',
+        2 => 'font-display text-xl sm:text-2xl md:text-3xl text-gray-300',
         3 => 'text-base sm:text-lg text-gray-500',
         4 => 'text-base sm:text-lg text-gray-500',
     );
@@ -181,7 +181,7 @@ function mlzs_header_menu_level( $items, $depth = 0 ) {
 <!-- Full Page Sidebar / Overlay -->
 <div id="full-menu" class="fixed inset-0 bg-slate-900 text-white z-50 transform -translate-y-full transition-transform duration-700 ease-[cubic-bezier(0.77,0,0.175,1)] flex flex-col overflow-y-auto">
     <div class="sticky top-0 w-full py-5 flex items-center justify-between px-4 sm:px-6 container mx-auto bg-slate-900 z-10 border-b border-primary/30">
-        <span class="font-['Playfair_Display',serif] text-xl sm:text-2xl italic text-gray-300">Navigation</span>
+        <span class="font-display text-xl sm:text-2xl italic text-gray-300">Navigation</span>
         <button type="button" onclick="toggleMenu()" class="group flex items-center gap-2 sm:gap-3 hover:text-accent transition-colors" aria-label="Close menu">
             <span class="text-xs font-bold tracking-[0.2em] uppercase hidden sm:inline">Close</span>
             <div class="relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center border border-primary/40 rounded-full group-hover:border-accent group-hover:rotate-90 transition-all duration-500">

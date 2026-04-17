@@ -56,6 +56,17 @@ $default_exam_blocks = array(
 );
 $exam_blocks = (is_array($exam_blocks_raw) && !empty($exam_blocks_raw)) ? $exam_blocks_raw : $default_exam_blocks;
 
+// ——— Academic planner ———
+$academic_icon     = $opt ? get_field('eap_academic_icon', $page_id) : null;
+$academic_title    = $opt ? get_field('eap_academic_title', $page_id) : null;
+$academic_subtitle = $opt ? get_field('eap_academic_subtitle', $page_id) : null;
+$academic_pdfs_raw = $opt ? get_field('eap_academic_pdfs', $page_id) : null;
+
+$academic_icon     = (is_string($academic_icon) && trim($academic_icon) !== '') ? trim($academic_icon) : 'file-text';
+$academic_title    = ($academic_title !== '' && $academic_title !== null) ? (string) $academic_title : 'Academic Planner';
+$academic_subtitle = ($academic_subtitle !== '' && $academic_subtitle !== null) ? (string) $academic_subtitle : 'Academic Planner PDF Documents';
+$academic_pdfs     = is_array($academic_pdfs_raw) ? $academic_pdfs_raw : array();
+
 // ——— Activity planner ———
 $activity_icon    = $opt ? get_field('eap_activity_icon', $page_id) : null;
 $activity_title   = $opt ? get_field('eap_activity_title', $page_id) : null;
@@ -221,6 +232,88 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
             </div>
             <?php endforeach; ?>
 
+            <!-- Academic Planner Section -->
+            <div id="academic-planner" class="mb-12 sm:mb-16 md:mb-20 scroll-mt-24">
+                <div class="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <i data-lucide="<?php echo esc_attr($academic_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900"><?php echo esc_html($academic_title); ?></h2>
+                        <p class="text-sm sm:text-base md:text-lg text-primary font-semibold"><?php echo esc_html($academic_subtitle); ?></p>
+                    </div>
+                </div>
+
+                <?php if (!empty($academic_pdfs)) : ?>
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                    <div class="mb-6 overflow-x-auto">
+                        <div class="flex space-x-2 pb-2">
+                            <?php foreach ($academic_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
+
+                                if (!$pdf_label || !$pdf_file) continue;
+
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+
+                                if (!$pdf_url) continue;
+
+                                $tab_id = 'academic-pdf-tab-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                            ?>
+                            <button type="button" class="academic-pdf-tab px-3 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap <?php echo $is_active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>" data-pdf-tab="<?php echo esc_attr($tab_id); ?>">
+                                <?php echo esc_html($pdf_label); ?>
+                            </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 relative w-full" style="min-height: 500px;">
+                        <a href="#" class="academic-open-pdf-btn absolute top-4 right-4 z-10 px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors flex items-center gap-2 text-sm font-semibold" target="_blank" title="Open PDF in new tab">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Open PDF
+                        </a>
+                        <div id="academic-pdf-preview-container" class="w-full">
+                            <?php foreach ($academic_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
+
+                                if (!$pdf_label || !$pdf_file) continue;
+
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+
+                                if (!$pdf_url) continue;
+
+                                $tab_id = 'academic-pdf-tab-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                                $display_class = $is_active ? '' : 'hidden';
+                            ?>
+                            <div id="<?php echo esc_attr($tab_id); ?>" class="academic-pdf-viewer <?php echo esc_attr($display_class); ?> w-full" data-pdf-url="<?php echo $pdf_url; ?>">
+                                <embed src="<?php echo $pdf_url; ?>?#toolbar=0" type="application/pdf" width="100%" style="min-height: 800px; height: auto; display: block;" />
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+                <?php else : ?>
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                    <p class="text-sm sm:text-base text-gray-600">
+                        <?php esc_html_e('Academic planner PDF abhi upload nahi hai. CMS se add karne ke baad yahan preview show hoga.', 'mlzs'); ?>
+                    </p>
+                </div>
+                <?php endif; ?>
+            </div>
+
             <!-- Activity Planner Section -->
             <div id="activity-planner" class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 scroll-mt-24">
                 <div class="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
@@ -368,6 +461,35 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                     }
                 });
             });
+
+            // Academic Planner PDF Tabs
+            var academic_tabs = document.querySelectorAll('.academic-pdf-tab');
+            var academic_viewers = document.querySelectorAll('#academic-pdf-preview-container .academic-pdf-viewer');
+            var academic_open_btn = document.querySelector('.academic-open-pdf-btn');
+            academic_tabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    var tab_id = this.getAttribute('data-pdf-tab');
+
+                    academic_tabs.forEach(function(t) {
+                        t.classList.remove('bg-primary', 'text-white');
+                        t.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary', 'text-white');
+
+                    academic_viewers.forEach(function(viewer) {
+                        viewer.classList.add('hidden');
+                    });
+                    var active_viewer = document.getElementById(tab_id);
+                    if (active_viewer) {
+                        active_viewer.classList.remove('hidden');
+                        var pdf_url = active_viewer.getAttribute('data-pdf-url');
+                        if (academic_open_btn && pdf_url) {
+                            academic_open_btn.setAttribute('href', pdf_url);
+                        }
+                    }
+                });
+            });
             
             // Initialize Open PDF button with first PDF URL on load
             var initial_open_btns = document.querySelectorAll('.open-pdf-btn');
@@ -386,6 +508,20 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                     }
                 }
             });
+
+            // Initialize Academic Planner open button
+            if (academic_open_btn) {
+                var academic_first_viewer = document.querySelector('#academic-pdf-preview-container .academic-pdf-viewer:not(.hidden)');
+                if (!academic_first_viewer) {
+                    academic_first_viewer = document.querySelector('#academic-pdf-preview-container .academic-pdf-viewer');
+                }
+                if (academic_first_viewer) {
+                    var academic_pdf_url = academic_first_viewer.getAttribute('data-pdf-url');
+                    if (academic_pdf_url) {
+                        academic_open_btn.setAttribute('href', academic_pdf_url);
+                    }
+                }
+            }
         });
     })();
     </script>

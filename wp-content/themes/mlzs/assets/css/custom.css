@@ -92,6 +92,14 @@
     line-height: normal !important;
 }
 
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Google Sans", sans-serif !important;
+}
+
 /* Site popup */
 .mlzs-site-popup-backdrop {
     position: fixed;

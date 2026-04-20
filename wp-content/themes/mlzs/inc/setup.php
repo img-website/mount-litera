@@ -439,6 +439,63 @@ function mlzs_register_popup_customizer_settings($wp_customize) {
         'section'     => 'mlzs_popup_settings',
         'type'        => 'dropdown-pages',
     ));
+
+    $wp_customize->add_setting('mlzs_popup2_enabled', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup2_enabled', array(
+        'label'       => __('Enable second popup', 'mlzs'),
+        'description' => __('Shows after first popup is closed.', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('mlzs_popup2_image_id', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control(new WP_Customize_Media_Control($wp_customize, 'mlzs_popup2_image_id', array(
+        'label'       => __('Second popup image', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'mime_type'   => 'image',
+        'button_labels' => array(
+            'select'       => __('Select Image', 'mlzs'),
+            'change'       => __('Change Image', 'mlzs'),
+            'default'      => __('Default', 'mlzs'),
+            'remove'       => __('Remove', 'mlzs'),
+            'placeholder'  => __('No image selected', 'mlzs'),
+            'frame_title'  => __('Select second popup image', 'mlzs'),
+            'frame_button' => __('Use this image', 'mlzs'),
+        ),
+    )));
+
+    $wp_customize->add_setting('mlzs_popup2_open_delay', array(
+        'default'           => 500,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup2_open_delay', array(
+        'label'       => __('Second popup delay (milliseconds)', 'mlzs'),
+        'description' => __('Applied after first popup is closed.', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'number',
+        'input_attrs' => array(
+            'min'  => 0,
+            'max'  => 30000,
+            'step' => 100,
+        ),
+    ));
+
+    $wp_customize->add_setting('mlzs_popup2_click_page_id', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup2_click_page_id', array(
+        'label'       => __('Second popup click destination page', 'mlzs'),
+        'description' => __('Optional. When user clicks second popup image, it will open selected page.', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'dropdown-pages',
+    ));
 }
 add_action('customize_register', 'mlzs_register_popup_customizer_settings');
 
@@ -502,86 +559,129 @@ function mlzs_should_show_popup() {
  * Render delayed image popup in footer.
  */
 function mlzs_render_site_popup() {
-    if (is_admin() || wp_doing_ajax() || !get_theme_mod('mlzs_popup_enabled', 0)) {
+    if (is_admin() || wp_doing_ajax()) {
+        return;
+    }
+    if (!mlzs_should_show_popup()) {
         return;
     }
 
-    $image_id = (int) get_theme_mod('mlzs_popup_image_id', 0);
-    if ($image_id <= 0 || !mlzs_should_show_popup()) {
-        return;
+    $popups = array();
+
+    $popup1_enabled = (int) get_theme_mod('mlzs_popup_enabled', 0);
+    $popup1_image_id = (int) get_theme_mod('mlzs_popup_image_id', 0);
+    if ($popup1_enabled && $popup1_image_id > 0) {
+        $popup1_image_url = wp_get_attachment_image_url($popup1_image_id, 'full');
+        if ($popup1_image_url) {
+            $popup1_click_page_id = (int) get_theme_mod('mlzs_popup_click_page_id', 0);
+            $popup1_delay = (int) get_theme_mod('mlzs_popup_open_delay', 2000);
+            $popups[] = array(
+                'image_url' => $popup1_image_url,
+                'click_url' => $popup1_click_page_id > 0 ? get_permalink($popup1_click_page_id) : '',
+                'delay' => max(0, min(30000, $popup1_delay)),
+            );
+        }
     }
 
-    $image_url = wp_get_attachment_image_url($image_id, 'full');
-    if (!$image_url) {
-        return;
+    $popup2_enabled = (int) get_theme_mod('mlzs_popup2_enabled', 0);
+    $popup2_image_id = (int) get_theme_mod('mlzs_popup2_image_id', 0);
+    if ($popup2_enabled && $popup2_image_id > 0) {
+        $popup2_image_url = wp_get_attachment_image_url($popup2_image_id, 'full');
+        if ($popup2_image_url) {
+            $popup2_click_page_id = (int) get_theme_mod('mlzs_popup2_click_page_id', 0);
+            $popup2_delay = (int) get_theme_mod('mlzs_popup2_open_delay', 500);
+            $popups[] = array(
+                'image_url' => $popup2_image_url,
+                'click_url' => $popup2_click_page_id > 0 ? get_permalink($popup2_click_page_id) : '',
+                'delay' => max(0, min(30000, $popup2_delay)),
+            );
+        }
     }
 
-    $click_page_id = (int) get_theme_mod('mlzs_popup_click_page_id', 0);
-    $click_url = $click_page_id > 0 ? get_permalink($click_page_id) : '';
-
-    $delay = (int) get_theme_mod('mlzs_popup_open_delay', 2000);
-    $delay = max(0, min(30000, $delay));
+    if (empty($popups)) {
+        return;
+    }
     ?>
-    <div class="mlzs-site-popup-backdrop" data-mlzs-popup data-delay="<?php echo esc_attr((string) $delay); ?>" aria-hidden="true">
+    <?php foreach ($popups as $popup_idx => $popup) : ?>
+    <div class="mlzs-site-popup-backdrop" data-mlzs-popup-seq="<?php echo esc_attr((string) $popup_idx); ?>" data-delay="<?php echo esc_attr((string) $popup['delay']); ?>" aria-hidden="true">
         <div class="mlzs-site-popup-modal" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e('Promotional popup', 'mlzs'); ?>">
             <button type="button" class="mlzs-site-popup-close" data-mlzs-popup-close aria-label="<?php esc_attr_e('Close popup', 'mlzs'); ?>">
                 &times;
             </button>
-            <?php if (!empty($click_url)) : ?>
-                <a href="<?php echo esc_url($click_url); ?>" class="mlzs-site-popup-link">
-                    <img src="<?php echo esc_url($image_url); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
+            <?php if (!empty($popup['click_url'])) : ?>
+                <a href="<?php echo esc_url($popup['click_url']); ?>" class="mlzs-site-popup-link">
+                    <img src="<?php echo esc_url($popup['image_url']); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
                 </a>
             <?php else : ?>
-                <img src="<?php echo esc_url($image_url); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
+                <img src="<?php echo esc_url($popup['image_url']); ?>" alt="<?php esc_attr_e('Popup image', 'mlzs'); ?>" class="mlzs-site-popup-image" />
             <?php endif; ?>
         </div>
     </div>
+    <?php endforeach; ?>
     <script>
         (function () {
-            var popup = document.querySelector('[data-mlzs-popup]');
-            if (!popup) return;
+            var popups = Array.prototype.slice.call(document.querySelectorAll('[data-mlzs-popup-seq]'));
+            if (!popups.length) return;
 
-            var modal = popup.querySelector('.mlzs-site-popup-modal');
-            var closeBtn = popup.querySelector('[data-mlzs-popup-close]');
-            var delay = Number(popup.getAttribute('data-delay') || 0);
+            var currentIndex = -1;
 
-            function closePopup() {
-                if (!popup.classList.contains('is-visible')) return;
+            function showPopup(index) {
+                if (!popups[index]) return;
+                var popup = popups[index];
+                var delay = Number(popup.getAttribute('data-delay') || 0);
+                currentIndex = index;
+
+                window.setTimeout(function () {
+                    popup.style.display = 'flex';
+                    popup.setAttribute('aria-hidden', 'false');
+                    window.requestAnimationFrame(function () {
+                        popup.classList.add('is-visible');
+                    });
+                }, Math.max(0, delay));
+            }
+
+            function closePopupAndContinue(popup) {
+                if (!popup || !popup.classList.contains('is-visible')) return;
                 popup.classList.add('is-hiding');
                 popup.classList.remove('is-visible');
                 window.setTimeout(function () {
                     popup.style.display = 'none';
                     popup.setAttribute('aria-hidden', 'true');
+                    popup.classList.remove('is-hiding');
+                    showPopup(currentIndex + 1);
                 }, 320);
             }
 
-            window.setTimeout(function () {
-                popup.style.display = 'flex';
-                popup.setAttribute('aria-hidden', 'false');
-                window.requestAnimationFrame(function () {
-                    popup.classList.add('is-visible');
-                });
-            }, Math.max(0, delay));
+            popups.forEach(function (popup) {
+                var modal = popup.querySelector('.mlzs-site-popup-modal');
+                var closeBtn = popup.querySelector('[data-mlzs-popup-close]');
 
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closePopup);
-            }
-            popup.addEventListener('click', function (event) {
-                if (event.target === popup) {
-                    closePopup();
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function () {
+                        closePopupAndContinue(popup);
+                    });
+                }
+                popup.addEventListener('click', function (event) {
+                    if (event.target === popup) {
+                        closePopupAndContinue(popup);
+                    }
+                });
+                if (modal) {
+                    modal.addEventListener('click', function (event) {
+                        event.stopPropagation();
+                    });
                 }
             });
+
             document.addEventListener('keydown', function (event) {
                 if (event.key === 'Escape') {
-                    closePopup();
+                    if (currentIndex >= 0 && popups[currentIndex]) {
+                        closePopupAndContinue(popups[currentIndex]);
+                    }
                 }
             });
 
-            if (modal) {
-                modal.addEventListener('click', function (event) {
-                    event.stopPropagation();
-                });
-            }
+            showPopup(0);
         })();
     </script>
     <?php

@@ -46,23 +46,10 @@ function mlzs_acf_exam_activity_planner_field_group() {
             array('key' => 'field_eap_tab_activity', 'label' => __('Activity Planner', 'mlzs'), 'name' => '', 'type' => 'tab'),
             array('key' => 'field_eap_activity_icon', 'label' => __('Section Icon', 'mlzs'), 'name' => 'eap_activity_icon', 'type' => 'text', 'default_value' => 'calendar'),
             array('key' => 'field_eap_activity_title', 'label' => __('Section Title', 'mlzs'), 'name' => 'eap_activity_title', 'type' => 'text', 'default_value' => 'Activity Planner 2025-2026'),
-            array('key' => 'field_eap_activity_subtitle', 'label' => __('Section Subtitle', 'mlzs'), 'name' => 'eap_activity_subtitle', 'type' => 'text', 'default_value' => 'Annual Schedule of Events and Activities'),
-            array('key' => 'field_eap_activity_tabs', 'label' => __('Month Tabs & Tables', 'mlzs'), 'name' => 'eap_activity_tabs', 'type' => 'repeater', 'layout' => 'block', 'button_label' => __('Add Tab', 'mlzs'), 'sub_fields' => array(
-                array('key' => 'field_eap_atab_label', 'label' => __('Tab Label', 'mlzs'), 'name' => 'tab_label', 'type' => 'text', 'placeholder' => 'e.g. APRIL - OCTOBER'),
-                array('key' => 'field_eap_atab_slug', 'label' => __('Tab Slug (no spaces)', 'mlzs'), 'name' => 'tab_slug', 'type' => 'text', 'placeholder' => 'apr-oct'),
-                array('key' => 'field_eap_atab_month1', 'label' => __('Month 1 Header', 'mlzs'), 'name' => 'month1_heading', 'type' => 'text', 'placeholder' => 'APRIL'),
-                array('key' => 'field_eap_atab_month2', 'label' => __('Month 2 Header', 'mlzs'), 'name' => 'month2_heading', 'type' => 'text', 'placeholder' => 'OCTOBER'),
-                array('key' => 'field_eap_atab_rows', 'label' => __('Table Rows', 'mlzs'), 'name' => 'table_rows', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add Row', 'mlzs'), 'sub_fields' => array(
-                    array('key' => 'field_eap_atab_date1', 'label' => __('Date 1', 'mlzs'), 'name' => 'date1', 'type' => 'text'),
-                    array('key' => 'field_eap_atab_desc1', 'label' => __('Description 1', 'mlzs'), 'name' => 'desc1', 'type' => 'textarea', 'rows' => 1),
-                    array('key' => 'field_eap_atab_date2', 'label' => __('Date 2', 'mlzs'), 'name' => 'date2', 'type' => 'text'),
-                    array('key' => 'field_eap_atab_desc2', 'label' => __('Description 2', 'mlzs'), 'name' => 'desc2', 'type' => 'textarea', 'rows' => 1),
-                )),
-            )),
-            array('key' => 'field_eap_tab_legend', 'label' => __('Legend', 'mlzs'), 'name' => '', 'type' => 'tab'),
-            array('key' => 'field_eap_legend_items', 'label' => __('Legend Items', 'mlzs'), 'name' => 'eap_legend_items', 'type' => 'repeater', 'layout' => 'table', 'button_label' => __('Add', 'mlzs'), 'sub_fields' => array(
-                array('key' => 'field_eap_legend_abbrev', 'label' => __('Abbreviation', 'mlzs'), 'name' => 'abbrev', 'type' => 'text'),
-                array('key' => 'field_eap_legend_full', 'label' => __('Full Text', 'mlzs'), 'name' => 'full_text', 'type' => 'text'),
+            array('key' => 'field_eap_activity_subtitle', 'label' => __('Section Subtitle', 'mlzs'), 'name' => 'eap_activity_subtitle', 'type' => 'text', 'default_value' => 'Activity Planner PDF Documents'),
+            array('key' => 'field_eap_activity_pdfs', 'label' => __('Activity PDFs (Tabs)', 'mlzs'), 'name' => 'eap_activity_pdfs', 'type' => 'repeater', 'layout' => 'block', 'button_label' => __('Add PDF', 'mlzs'), 'sub_fields' => array(
+                array('key' => 'field_eap_activity_pdf_label', 'label' => __('PDF Label', 'mlzs'), 'name' => 'pdf_label', 'type' => 'text', 'placeholder' => 'e.g., Activity Planner 2025-26'),
+                array('key' => 'field_eap_activity_pdf_file', 'label' => __('PDF File', 'mlzs'), 'name' => 'pdf_file', 'type' => 'file', 'return_format' => 'array', 'library' => 'all', 'max_file_size' => 50, 'mime_types' => 'pdf', 'instructions' => __('Upload PDF file only (Max 50MB)', 'mlzs')),
             )),
         ),
         'location' => array(

@@ -68,22 +68,15 @@ $academic_subtitle = ($academic_subtitle !== '' && $academic_subtitle !== null) 
 $academic_pdfs     = is_array($academic_pdfs_raw) ? $academic_pdfs_raw : array();
 
 // ——— Activity planner ———
-$activity_icon    = $opt ? get_field('eap_activity_icon', $page_id) : null;
-$activity_title   = $opt ? get_field('eap_activity_title', $page_id) : null;
+$activity_icon     = $opt ? get_field('eap_activity_icon', $page_id) : null;
+$activity_title    = $opt ? get_field('eap_activity_title', $page_id) : null;
 $activity_subtitle = $opt ? get_field('eap_activity_subtitle', $page_id) : null;
-$activity_tabs_raw = $opt ? get_field('eap_activity_tabs', $page_id) : null;
+$activity_pdfs_raw = $opt ? get_field('eap_activity_pdfs', $page_id) : null;
 
 $activity_icon     = (is_string($activity_icon) && trim($activity_icon) !== '') ? trim($activity_icon) : 'calendar';
 $activity_title    = ($activity_title !== '' && $activity_title !== null) ? (string) $activity_title : 'Activity Planner 2025-2026';
-$activity_subtitle = ($activity_subtitle !== '' && $activity_subtitle !== null) ? (string) $activity_subtitle : 'Annual Schedule of Events and Activities';
-
-$default_activity_tabs = array(
-    array('tab_label' => 'APRIL - OCTOBER', 'tab_slug' => 'apr-oct', 'month1_heading' => 'APRIL', 'month2_heading' => 'OCTOBER', 'table_rows' => array(
-        array('date1' => '2', 'desc1' => 'New Session Begins (I-VIII)', 'date2' => '1', 'desc2' => 'Maha Navami'),
-        array('date1' => '5', 'desc1' => 'Fun with Sports (I-V)', 'date2' => '2', 'desc2' => 'Dussehra Gandhi Jayanti'),
-    )),
-);
-$activity_tabs = (is_array($activity_tabs_raw) && !empty($activity_tabs_raw)) ? $activity_tabs_raw : $default_activity_tabs;
+$activity_subtitle = ($activity_subtitle !== '' && $activity_subtitle !== null) ? (string) $activity_subtitle : 'Activity Planner PDF Documents';
+$activity_pdfs = is_array($activity_pdfs_raw) ? $activity_pdfs_raw : array();
 
 // ——— Legend ———
 $legend_raw = $opt ? get_field('eap_legend_items', $page_id) : null;
@@ -315,91 +308,83 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
             </div>
 
             <!-- Activity Planner Section -->
-            <div id="activity-planner" class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 scroll-mt-24">
+            <div id="activity-planner" class="mb-12 sm:mb-16 md:mb-20 scroll-mt-24">
                 <div class="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <i data-lucide="<?php echo esc_attr($activity_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-white"></i>
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <i data-lucide="<?php echo esc_attr($activity_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary"></i>
                     </div>
                     <div>
                         <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900"><?php echo esc_html($activity_title); ?></h2>
-                        <p class="text-sm sm:text-base md:text-lg text-gray-600"><?php echo esc_html($activity_subtitle); ?></p>
+                        <p class="text-sm sm:text-base md:text-lg text-primary font-semibold"><?php echo esc_html($activity_subtitle); ?></p>
                     </div>
                 </div>
 
-                <!-- Month Tabs -->
-                <?php if (!empty($activity_tabs)) : ?>
-                <div class="mb-6 sm:mb-8 overflow-x-auto">
-                    <div class="flex space-x-2 pb-2">
-                        <?php foreach ($activity_tabs as $at_idx => $atab) :
-                            $tab_label = isset($atab['tab_label']) ? (string) $atab['tab_label'] : '';
-                            $tab_slug  = isset($atab['tab_slug']) ? sanitize_title($atab['tab_slug']) : 'tab-' . $at_idx;
-                            if ($tab_label === '') continue;
-                            $active = $at_idx === 0;
-                        ?>
-                        <button type="button" class="activity-month-tab px-3 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap <?php echo $active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>" data-month="<?php echo esc_attr($tab_slug); ?>">
-                            <?php echo esc_html($tab_label); ?>
-                        </button>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+                <?php if (!empty($activity_pdfs)) : ?>
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                    <div class="mb-6 overflow-x-auto">
+                        <div class="flex space-x-2 pb-2">
+                            <?php foreach ($activity_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
 
-                <!-- Activity Tables -->
-                <div class="space-y-8">
-                    <?php foreach ($activity_tabs as $at_idx => $atab) :
-                        $tab_slug = isset($atab['tab_slug']) ? sanitize_title($atab['tab_slug']) : 'tab-' . $at_idx;
-                        $m1 = isset($atab['month1_heading']) ? (string) $atab['month1_heading'] : 'Month 1';
-                        $m2 = isset($atab['month2_heading']) ? (string) $atab['month2_heading'] : 'Month 2';
-                        $rows = isset($atab['table_rows']) && is_array($atab['table_rows']) ? $atab['table_rows'] : array();
-                        $hidden = $at_idx !== 0;
-                    ?>
-                    <div class="activity-table <?php echo $hidden ? 'hidden' : ''; ?>" data-month="<?php echo esc_attr($tab_slug); ?>">
-                        <div class="overflow-x-auto rounded-xl border border-gray-200">
-                            <table class="w-full">
-                                <thead>
-                                    <tr class="bg-gradient-to-r from-primary to-primary-light text-white">
-                                        <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider" colspan="2"><?php echo esc_html($m1); ?></th>
-                                        <th class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-left font-bold text-xs sm:text-sm uppercase tracking-wider" colspan="2"><?php echo esc_html($m2); ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-100">
-                                    <?php foreach ($rows as $r) : ?>
-                                    <tr class="hover:bg-gray-50 transition-colors">
-                                        <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900 border-r border-gray-200"><?php echo esc_html(isset($r['date1']) ? $r['date1'] : ''); ?></td>
-                                        <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700 border-r border-gray-200"><?php echo nl2br(esc_html(isset($r['desc1']) ? $r['desc1'] : '')); ?></td>
-                                        <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm font-medium text-gray-900 border-r border-gray-200"><?php echo esc_html(isset($r['date2']) ? $r['date2'] : ''); ?></td>
-                                        <td class="py-2 px-3 sm:py-3 sm:px-4 md:py-4 md:px-6 text-xs sm:text-sm text-gray-700"><?php echo nl2br(esc_html(isset($r['desc2']) ? $r['desc2'] : '')); ?></td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
+                                if (!$pdf_label || !$pdf_file) continue;
+
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+
+                                if (!$pdf_url) continue;
+
+                                $tab_id = 'activity-pdf-tab-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                            ?>
+                            <button type="button" class="activity-pdf-tab px-3 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 rounded-full font-bold text-xs sm:text-sm transition-all whitespace-nowrap <?php echo $is_active ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>" data-pdf-tab="<?php echo esc_attr($tab_id); ?>">
+                                <?php echo esc_html($pdf_label); ?>
+                            </button>
+                            <?php endforeach; ?>
                         </div>
                     </div>
-                    <?php endforeach; ?>
-                </div>
-                <?php endif; ?>
 
-                <!-- Legend -->
-                <?php if (!empty($legend_items)) : ?>
-                <div class="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                    <h4 class="text-sm font-bold text-gray-900 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i data-lucide="info" class="w-4 h-4"></i>
-                        <?php esc_html_e('Legend & Abbreviations', 'mlzs'); ?>
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <?php
-                        $legend_dots = array('bg-primary', 'bg-accent', 'bg-primary-light');
-                        foreach ($legend_items as $lidx => $leg) :
-                            $abbrev = isset($leg['abbrev']) ? (string) $leg['abbrev'] : '';
-                            $full  = isset($leg['full_text']) ? (string) $leg['full_text'] : '';
-                            if ($abbrev === '' && $full === '') continue;
-                            $dot_class = isset($legend_dots[$lidx]) ? $legend_dots[$lidx] : 'bg-primary';
-                        ?>
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full <?php echo esc_attr($dot_class); ?>"></div>
-                            <span class="text-gray-700"><?php echo esc_html($abbrev); ?> = <?php echo esc_html($full); ?></span>
+                    <div class="bg-gray-50 rounded-xl border border-gray-200 relative w-full" style="min-height: 500px;">
+                        <a href="#" class="activity-open-pdf-btn absolute top-4 right-4 z-10 px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors flex items-center gap-2 text-sm font-semibold" target="_blank" title="Open PDF in new tab">
+                            <i data-lucide="external-link" class="w-4 h-4"></i>
+                            Open PDF
+                        </a>
+                        <div id="activity-pdf-preview-container" class="w-full">
+                            <?php foreach ($activity_pdfs as $pdf_idx => $pdf) :
+                                $pdf_label = isset($pdf['pdf_label']) ? (string) $pdf['pdf_label'] : '';
+                                $pdf_file = isset($pdf['pdf_file']) ? $pdf['pdf_file'] : null;
+
+                                if (!$pdf_label || !$pdf_file) continue;
+
+                                $pdf_url = '';
+                                if (is_array($pdf_file) && isset($pdf_file['url'])) {
+                                    $pdf_url = esc_url($pdf_file['url']);
+                                } elseif (is_string($pdf_file)) {
+                                    $pdf_url = esc_url($pdf_file);
+                                }
+
+                                if (!$pdf_url) continue;
+
+                                $tab_id = 'activity-pdf-tab-' . $pdf_idx;
+                                $is_active = $pdf_idx === 0;
+                                $display_class = $is_active ? '' : 'hidden';
+                            ?>
+                            <div id="<?php echo esc_attr($tab_id); ?>" class="activity-pdf-viewer <?php echo esc_attr($display_class); ?> w-full" data-pdf-url="<?php echo $pdf_url; ?>">
+                                <embed src="<?php echo $pdf_url; ?>?#toolbar=0" type="application/pdf" width="100%" style="min-height: 800px; height: auto; display: block;" />
+                            </div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
                     </div>
+                </div>
+                <?php else : ?>
+                <div class="bg-white rounded-2xl p-6 shadow-soft border border-gray-100">
+                    <p class="text-sm sm:text-base text-gray-600">
+                        <?php esc_html_e('Activity planner PDF abhi upload nahi hai. CMS se add karne ke baad yahan preview show hoga.', 'mlzs'); ?>
+                    </p>
                 </div>
                 <?php endif; ?>
             </div>
@@ -411,17 +396,28 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
             
-            // Activity Planner Month Tabs
-            var activity_tabs = document.querySelectorAll('.activity-month-tab');
-            var activity_tables = document.querySelectorAll('.activity-table');
+            // Activity Planner PDF Tabs
+            var activity_tabs = document.querySelectorAll('.activity-pdf-tab');
+            var activity_viewers = document.querySelectorAll('#activity-pdf-preview-container .activity-pdf-viewer');
+            var activity_open_btn = document.querySelector('.activity-open-pdf-btn');
             activity_tabs.forEach(function(tab) {
                 tab.addEventListener('click', function() {
-                    var month = this.getAttribute('data-month');
+                    var tab_id = this.getAttribute('data-pdf-tab');
+
                     activity_tabs.forEach(function(t) { t.classList.remove('bg-primary', 'text-white'); t.classList.add('bg-gray-100', 'text-gray-700'); });
                     this.classList.remove('bg-gray-100', 'text-gray-700'); this.classList.add('bg-primary', 'text-white');
-                    activity_tables.forEach(function(tbl) {
-                        tbl.classList.toggle('hidden', tbl.getAttribute('data-month') !== month);
+
+                    activity_viewers.forEach(function(viewer) {
+                        viewer.classList.add('hidden');
                     });
+                    var active_viewer = document.getElementById(tab_id);
+                    if (active_viewer) {
+                        active_viewer.classList.remove('hidden');
+                        var pdf_url = active_viewer.getAttribute('data-pdf-url');
+                        if (activity_open_btn && pdf_url) {
+                            activity_open_btn.setAttribute('href', pdf_url);
+                        }
+                    }
                 });
             });
             
@@ -519,6 +515,20 @@ $written_header_bg = array('primary' => 'accent', 'primary-light' => 'accent-dar
                     var academic_pdf_url = academic_first_viewer.getAttribute('data-pdf-url');
                     if (academic_pdf_url) {
                         academic_open_btn.setAttribute('href', academic_pdf_url);
+                    }
+                }
+            }
+
+            // Initialize Activity Planner open button
+            if (activity_open_btn) {
+                var activity_first_viewer = document.querySelector('#activity-pdf-preview-container .activity-pdf-viewer:not(.hidden)');
+                if (!activity_first_viewer) {
+                    activity_first_viewer = document.querySelector('#activity-pdf-preview-container .activity-pdf-viewer');
+                }
+                if (activity_first_viewer) {
+                    var activity_pdf_url = activity_first_viewer.getAttribute('data-pdf-url');
+                    if (activity_pdf_url) {
+                        activity_open_btn.setAttribute('href', activity_pdf_url);
                     }
                 }
             }

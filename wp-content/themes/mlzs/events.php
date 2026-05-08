@@ -143,7 +143,7 @@ if (!function_exists('mlzs_events_date_label')) {
                             if ($title === '' || $img_url === '') continue;
                         ?>
                         <article class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-soft hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                            <div class="aspect-[9/12.7] overflow-hidden bg-gray-100">
+                            <div class="overflow-hidden bg-gray-100">
                                 <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($title); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                             </div>
                             <div class="p-4 sm:p-5">

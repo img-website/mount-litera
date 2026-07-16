@@ -60,6 +60,9 @@ function mlzs_acf_google_maps_api_key() {
 }
 add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);
 
+/** Blog module: templates helpers, smart search (AJAX), related posts, breadcrumb */
+require_once get_template_directory() . '/inc/blog.php';
+
 /** Page-wise ACF field groups */
 require_once get_template_directory() . '/inc/acf-load.php';
 

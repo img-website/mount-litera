@@ -225,3 +225,19 @@ add_filter('excerpt_length', function ($len) {
 add_filter('excerpt_more', function ($more) {
     return '…';
 });
+
+/**
+ * Repair responsive-image srcset when an attachment's metadata "file" lost its
+ * date-folder path (a common artifact of migrated / WebP-converted media).
+ * Without this, srcset URLs drop the /YYYY/MM/ folder and 404, so inserted
+ * content images fail to load even though the main src is correct.
+ */
+add_filter('wp_calculate_image_srcset_meta', function ($image_meta, $size_array, $image_src, $attachment_id) {
+    if (!empty($image_meta['file']) && dirname($image_meta['file']) === '.') {
+        $attached = get_post_meta($attachment_id, '_wp_attached_file', true);
+        if ($attached && dirname($attached) !== '.') {
+            $image_meta['file'] = $attached;
+        }
+    }
+    return $image_meta;
+}, 10, 4);

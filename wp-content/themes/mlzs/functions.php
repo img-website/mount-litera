@@ -60,6 +60,9 @@ function mlzs_acf_google_maps_api_key() {
 }
 add_action('acf/init', 'mlzs_acf_google_maps_api_key', 5);
 
+/** Security hardening: comments disabled, XML-RPC off, upload restrictions */
+require_once get_template_directory() . '/inc/security.php';
+
 /** Blog module: templates helpers, smart search (AJAX), related posts, breadcrumb */
 require_once get_template_directory() . '/inc/blog.php';
 

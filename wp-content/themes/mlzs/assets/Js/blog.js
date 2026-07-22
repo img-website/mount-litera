@@ -131,3 +131,103 @@
         initCopyLink();
     });
 })();
+
+(function () {
+    'use strict';
+
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Reading progress bar */
+    function initProgress() {
+        var bar = document.querySelector('.mlzs-progress__bar');
+        var article = document.querySelector('.mlzs-article');
+        if (!bar || !article) { return; }
+        function update() {
+            var rect = article.getBoundingClientRect();
+            var total = rect.height - window.innerHeight;
+            var passed = -rect.top;
+            var pct = total > 0 ? (passed / total) * 100 : (rect.top <= 0 ? 100 : 0);
+            bar.style.width = Math.max(0, Math.min(100, pct)) + '%';
+        }
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+    }
+
+    /* Highlight the current section in the table of contents */
+    function initTocHighlight() {
+        var links = document.querySelectorAll('[data-toc-link]');
+        if (!links.length) { return; }
+        var map = {};
+        links.forEach(function (l) {
+            var id = l.getAttribute('data-toc-link');
+            (map[id] = map[id] || []).push(l);
+        });
+        var headings = [];
+        Object.keys(map).forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) { headings.push(el); }
+        });
+        if (!headings.length) { return; }
+
+        function setActive(id) {
+            links.forEach(function (l) {
+                l.classList.toggle('is-active', l.getAttribute('data-toc-link') === id);
+            });
+        }
+
+        if ('IntersectionObserver' in window) {
+            var visible = {};
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting; });
+                for (var i = 0; i < headings.length; i++) {
+                    if (visible[headings[i].id]) { setActive(headings[i].id); return; }
+                }
+            }, { rootMargin: '-120px 0px -70% 0px', threshold: 0 });
+            headings.forEach(function (h) { io.observe(h); });
+        }
+
+        // Smooth scroll (respects reduced-motion)
+        links.forEach(function (l) {
+            l.addEventListener('click', function (e) {
+                var target = document.getElementById(l.getAttribute('data-toc-link'));
+                if (!target) { return; }
+                e.preventDefault();
+                target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+                if (history.replaceState) { history.replaceState(null, '', '#' + target.id); }
+                setActive(target.id);
+                var det = l.closest('details');
+                if (det) { det.open = false; }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initProgress();
+        initTocHighlight();
+    });
+})();
+
+/* FAQ accordion — enforces one-open-at-a-time. The markup also uses the native
+   exclusive <details name="..."> grouping; this simply guarantees the same
+   behaviour in browsers that don't implement it yet. */
+(function () {
+    'use strict';
+    function initFaqAccordion() {
+        document.querySelectorAll('[data-mlzs-accordion]').forEach(function (group) {
+            var items = Array.prototype.slice.call(group.querySelectorAll('details'));
+            if (items.length < 2) { return; }
+            // Runs regardless of native <details name=""> support, so the
+            // one-open-at-a-time rule is guaranteed in every browser.
+            items.forEach(function (item) {
+                item.addEventListener('toggle', function () {
+                    if (!item.open) { return; }
+                    items.forEach(function (other) {
+                        if (other !== item && other.open) { other.open = false; }
+                    });
+                });
+            });
+        });
+    }
+    document.addEventListener('DOMContentLoaded', initFaqAccordion);
+})();

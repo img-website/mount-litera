@@ -71,6 +71,7 @@ function mlzs_blog_assets() {
         return;
     }
     $ver = wp_get_theme()->get('Version') ?: '1.0.0';
+    wp_enqueue_style('mlzs-blog', get_template_directory_uri() . '/assets/css/blog.css', array('mlzs-custom'), $ver);
     wp_enqueue_script('mlzs-blog', get_template_directory_uri() . '/assets/Js/blog.js', array('mlzs-main', 'lucide-icons'), $ver, true);
     wp_localize_script('mlzs-blog', 'mlzsBlog', array(
         'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -225,6 +226,328 @@ add_filter('excerpt_length', function ($len) {
 add_filter('excerpt_more', function ($more) {
     return '…';
 });
+
+/* ---------------------------------------------------------------------------
+ * Article content processing: heading anchors (for the Table of Contents)
+ * and internal / external link marking.
+ * ------------------------------------------------------------------------- */
+
+$GLOBALS['mlzs_toc_items']   = array();
+$GLOBALS['mlzs_faq_items']   = array();
+$GLOBALS['mlzs_faq_heading'] = '';
+$GLOBALS['mlzs_faq_id']      = '';
+
+/**
+ * Adds ids to h2/h3, collects the TOC, and tags links as internal/external.
+ * Call via apply_filters('the_content', ...) once, then read mlzs_get_toc().
+ */
+function mlzs_process_article_content($content) {
+    if (!is_singular('post') || trim((string) $content) === '') {
+        return $content;
+    }
+
+    $GLOBALS['mlzs_toc_items'] = array();
+    $home_host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
+
+    $prev = libxml_use_internal_errors(true);
+    $dom  = new DOMDocument('1.0', 'UTF-8');
+    $ok   = $dom->loadHTML(
+        '<?xml encoding="utf-8" ?><div id="mlzs-root">' . $content . '</div>',
+        LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+    );
+    libxml_clear_errors();
+    libxml_use_internal_errors($prev);
+    if (!$ok) {
+        return $content;
+    }
+
+    $xpath = new DOMXPath($dom);
+
+    // Heading anchors + TOC
+    $used = array();
+    foreach ($xpath->query('//h2|//h3') as $h) {
+        $text = trim(preg_replace('/\s+/', ' ', $h->textContent));
+        if ($text === '') {
+            continue;
+        }
+        $id = $h->getAttribute('id');
+        if ($id === '') {
+            $base = sanitize_title($text);
+            if ($base === '') {
+                $base = 'section';
+            }
+            $id = $base;
+            $n  = 2;
+            while (isset($used[$id])) {
+                $id = $base . '-' . $n;
+                $n++;
+            }
+            $h->setAttribute('id', $id);
+        }
+        $used[$id] = true;
+        $GLOBALS['mlzs_toc_items'][] = array(
+            'id'    => $id,
+            'text'  => $text,
+            'level' => (int) substr($h->nodeName, 1),
+        );
+    }
+
+    // Internal vs external links
+    foreach ($xpath->query('//a[@href]') as $a) {
+        $href = trim($a->getAttribute('href'));
+        if ($href === '' || $href[0] === '#'
+            || stripos($href, 'mailto:') === 0
+            || stripos($href, 'tel:') === 0) {
+            continue;
+        }
+        $host     = strtolower((string) wp_parse_url($href, PHP_URL_HOST));
+        $external = ($host !== '' && $host !== $home_host);
+        $class    = trim($a->getAttribute('class') . ' ' . ($external ? 'mlzs-link mlzs-link--ext' : 'mlzs-link'));
+        $a->setAttribute('class', $class);
+        if ($external) {
+            $a->setAttribute('target', '_blank');
+            $a->setAttribute('rel', 'noopener noreferrer');
+        }
+    }
+
+    // Wrap tables so they scroll horizontally on small screens
+    foreach (iterator_to_array($xpath->query('//table')) as $table) {
+        $parent = $table->parentNode;
+        if (!$parent) {
+            continue;
+        }
+        if ($parent->nodeName === 'div' && strpos((string) $parent->getAttribute('class'), 'mlzs-table-wrap') !== false) {
+            continue;
+        }
+        $wrap = $dom->createElement('div');
+        $wrap->setAttribute('class', 'mlzs-table-wrap');
+        $parent->replaceChild($wrap, $table);
+        $wrap->appendChild($table);
+    }
+
+    // Pull an "FAQs" section out of the content so it can render as an accordion.
+    // Runs before the conclusion wrap so the conclusion never swallows the FAQs.
+    $faq_h = null;
+    foreach ($xpath->query('//h2') as $h) {
+        if (preg_match('/^\s*(faq\'?s?|frequently asked questions)\b/i', trim($h->textContent))) {
+            $faq_h = $h;
+            break;
+        }
+    }
+    if ($faq_h) {
+        $items  = array();
+        $cur    = null;
+        $remove = array($faq_h);
+        $node   = $faq_h->nextSibling;
+        while ($node) {
+            if ($node->nodeType === XML_ELEMENT_NODE) {
+                $name = strtolower($node->nodeName);
+                if ($name === 'h2') {
+                    break; // next section starts
+                }
+                $text = trim(preg_replace('/\s+/', ' ', $node->textContent));
+                if ($name === 'h3' || $name === 'h4') {
+                    if ($cur) { $items[] = $cur; }
+                    $cur = array('q' => $text, 'a' => '');
+                } elseif ($name === 'ol' || $name === 'ul') {
+                    $lis = $node->getElementsByTagName('li');
+                    if ($lis->length) {
+                        if ($cur) { $items[] = $cur; }
+                        $cur = array('q' => trim(preg_replace('/\s+/', ' ', $lis->item(0)->textContent)), 'a' => '');
+                    }
+                } elseif ($cur !== null && $text !== '') {
+                    $inner = '';
+                    foreach ($node->childNodes as $ch) {
+                        $inner .= $dom->saveHTML($ch);
+                    }
+                    $cur['a'] .= ($name === 'p') ? '<p>' . $inner . '</p>' : $dom->saveHTML($node);
+                }
+            }
+            $remove[] = $node;
+            $node = $node->nextSibling;
+        }
+        if ($cur) { $items[] = $cur; }
+
+        if (!empty($items)) {
+            $GLOBALS['mlzs_faq_items']   = $items;
+            $GLOBALS['mlzs_faq_heading'] = trim(preg_replace('/\s+/', ' ', $faq_h->textContent));
+            $GLOBALS['mlzs_faq_id']      = $faq_h->getAttribute('id');
+            foreach ($remove as $n) {
+                if ($n->parentNode) {
+                    $n->parentNode->removeChild($n);
+                }
+            }
+        }
+    }
+
+    // Give the closing section ("Conclusion", "Key takeaways"…) its own designed block
+    $conclusion = null;
+    foreach ($xpath->query('//h2') as $h) {
+        if (preg_match('/\b(conclusion|final thoughts?|in summary|summary|key takeaways?|wrapping up|bottom line|to sum up)\b/i', $h->textContent)) {
+            $conclusion = $h;
+            break;
+        }
+    }
+    if ($conclusion && $conclusion->parentNode) {
+        $wrap = $dom->createElement('div');
+        $wrap->setAttribute('class', 'mlzs-conclusion');
+        $conclusion->parentNode->insertBefore($wrap, $conclusion);
+        $node = $conclusion;
+        while ($node) {
+            $next = $node->nextSibling;
+            $wrap->appendChild($node);
+            $node = $next;
+        }
+    }
+
+    $roots = $xpath->query('//div[@id="mlzs-root"]');
+    if (!$roots->length) {
+        return $content;
+    }
+    $html = '';
+    foreach ($roots->item(0)->childNodes as $child) {
+        $html .= $dom->saveHTML($child);
+    }
+    return $html !== '' ? $html : $content;
+}
+add_filter('the_content', 'mlzs_process_article_content', 12);
+
+/** TOC items collected from the last processed article. */
+function mlzs_get_toc() {
+    return isset($GLOBALS['mlzs_toc_items']) ? $GLOBALS['mlzs_toc_items'] : array();
+}
+
+/** Render the Table of Contents (returns '' when there aren't enough sections). */
+function mlzs_render_toc($class = '') {
+    $items = mlzs_get_toc();
+    if (count($items) < 2) {
+        return '';
+    }
+    ob_start(); ?>
+    <nav class="mlzs-toc <?php echo esc_attr($class); ?>" aria-label="<?php esc_attr_e('Table of contents', 'mlzs'); ?>">
+        <p class="mlzs-toc__title"><i data-lucide="list" class="w-4 h-4"></i><?php esc_html_e('On this page', 'mlzs'); ?></p>
+        <ol class="mlzs-toc__list">
+            <?php foreach ($items as $item) : ?>
+            <li class="mlzs-toc__item mlzs-toc__item--h<?php echo (int) $item['level']; ?>">
+                <a href="#<?php echo esc_attr($item['id']); ?>" data-toc-link="<?php echo esc_attr($item['id']); ?>"><?php echo esc_html($item['text']); ?></a>
+            </li>
+            <?php endforeach; ?>
+        </ol>
+    </nav>
+    <?php
+    return trim(ob_get_clean());
+}
+
+/* ---------------------------------------------------------------------------
+ * FAQs — from ACF fields, or auto-detected from an "FAQs" section in the content.
+ * ------------------------------------------------------------------------- */
+
+/**
+ * FAQ list for the current post: ACF repeater first, otherwise the section
+ * extracted from the post content. Each item is array('q' => ..., 'a' => html).
+ */
+function mlzs_get_faqs() {
+    if (function_exists('get_field')) {
+        $rows = get_field('blog_faqs', get_the_ID());
+        if (is_array($rows) && !empty($rows)) {
+            $out = array();
+            foreach ($rows as $row) {
+                $q = isset($row['faq_question']) ? trim((string) $row['faq_question']) : '';
+                $a = isset($row['faq_answer']) ? trim((string) $row['faq_answer']) : '';
+                if ($q !== '') {
+                    $out[] = array('q' => $q, 'a' => $a);
+                }
+            }
+            if (!empty($out)) {
+                return $out;
+            }
+        }
+    }
+    return !empty($GLOBALS['mlzs_faq_items']) ? $GLOBALS['mlzs_faq_items'] : array();
+}
+
+/** Heading shown above the FAQ accordion. */
+function mlzs_faq_heading() {
+    if (function_exists('get_field')) {
+        $h = trim((string) get_field('faq_heading', get_the_ID()));
+        if ($h !== '') {
+            return $h;
+        }
+    }
+    if (!empty($GLOBALS['mlzs_faq_heading'])) {
+        return $GLOBALS['mlzs_faq_heading'];
+    }
+    return __('Frequently Asked Questions', 'mlzs');
+}
+
+/** Anchor id used by the FAQ section (and the TOC link). */
+function mlzs_faq_anchor() {
+    return !empty($GLOBALS['mlzs_faq_id']) ? $GLOBALS['mlzs_faq_id'] : 'faqs';
+}
+
+/** Make sure the FAQ section appears in the Table of Contents. */
+function mlzs_register_faq_toc() {
+    if (!mlzs_get_faqs()) {
+        return;
+    }
+    $id = mlzs_faq_anchor();
+    foreach ($GLOBALS['mlzs_toc_items'] as $item) {
+        if ($item['id'] === $id) {
+            return; // already there (came from the content)
+        }
+    }
+    $GLOBALS['mlzs_toc_items'][] = array('id' => $id, 'text' => mlzs_faq_heading(), 'level' => 2);
+}
+
+/**
+ * Render the FAQ accordion + FAQPage structured data.
+ * Note: Google restricts FAQ *rich results* to government/health sites, but the
+ * markup still helps AI search engines understand the Q&A.
+ */
+function mlzs_render_faqs() {
+    $items = mlzs_get_faqs();
+    if (empty($items)) {
+        return '';
+    }
+    $id      = mlzs_faq_anchor();
+    $heading = mlzs_faq_heading();
+
+    $schema = array('@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => array());
+    foreach ($items as $item) {
+        $schema['mainEntity'][] = array(
+            '@type'          => 'Question',
+            'name'           => wp_strip_all_tags($item['q']),
+            'acceptedAnswer' => array(
+                '@type' => 'Answer',
+                'text'  => trim(wp_strip_all_tags($item['a'])),
+            ),
+        );
+    }
+
+    ob_start(); ?>
+    <section class="mlzs-faq" id="<?php echo esc_attr($id); ?>" aria-labelledby="<?php echo esc_attr($id); ?>-title">
+        <div class="mlzs-faq__head">
+            <span class="mlzs-faq__badge"><i data-lucide="help-circle" class="w-4 h-4"></i><?php esc_html_e('FAQ', 'mlzs'); ?></span>
+            <h2 class="mlzs-faq__title" id="<?php echo esc_attr($id); ?>-title"><?php echo esc_html($heading); ?></h2>
+        </div>
+        <div class="mlzs-faq__list" data-mlzs-accordion>
+            <?php foreach ($items as $i => $item) : ?>
+            <?php // name="" makes browsers treat these as one exclusive accordion; JS below covers older browsers ?>
+            <details class="mlzs-faq__item" name="mlzs-faq-<?php echo esc_attr($id); ?>"<?php echo $i === 0 ? ' open' : ''; ?>>
+                <summary class="mlzs-faq__q">
+                    <span class="mlzs-faq__num"><?php echo esc_html($i + 1); ?></span>
+                    <span class="mlzs-faq__qtext"><?php echo esc_html($item['q']); ?></span>
+                    <i data-lucide="chevron-down" class="mlzs-faq__chev w-5 h-5"></i>
+                </summary>
+                <div class="mlzs-faq__a"><?php echo wp_kses_post($item['a']); ?></div>
+            </details>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <script type="application/ld+json"><?php echo wp_json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?></script>
+    <?php
+    return trim(ob_get_clean());
+}
 
 /**
  * Repair responsive-image srcset when an attachment's metadata "file" lost its

@@ -114,7 +114,7 @@ $form_submit = ($form_submit !== '' && $form_submit !== null) ? (string) $form_s
                             <img src="<?php echo esc_url($logo_school); ?>" alt="School Logo" class="h-10 sm:h-12 w-auto bg-white p-1 rounded-md">
                         </div>
                         <div class="text-center sm:text-right">
-                            <h4 class="text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider">REGISTRATION FORM - SESSION</h4>
+                            <h2 class="text-xs sm:text-sm md:text-base font-bold uppercase tracking-wider">REGISTRATION FORM - SESSION</h2>
                             <div class="flex items-center justify-center sm:justify-end gap-2 mt-2">
                                 <select name="startyear" id="reg_startyear" class="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-white/50 cursor-pointer appearance-none pr-6 sm:pr-8">
                                     <?php foreach ($years_start as $y) : ?>
@@ -137,7 +137,7 @@ $form_submit = ($form_submit !== '' && $form_submit !== null) ? (string) $form_s
                     <div class="mb-8">
                         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                             <div class="flex-1">
-                                <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary leading-tight">MOUNT LITERA ZEE SCHOOL</h1>
+                                <div class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary leading-tight">MOUNT LITERA ZEE SCHOOL</div>
                                 <p class="text-xs sm:text-sm text-text-secondary-light mt-2">Alwar, Rajasthan</p>
                             </div>
                             <div class="w-full md:w-48">

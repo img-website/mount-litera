@@ -196,7 +196,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                                 ?>
                                 <div class="bg-white/20 rounded-xl p-6 text-center backdrop-blur-sm border border-white/10">
                                     <i data-lucide="<?php echo esc_attr($c_icon); ?>" class="w-12 h-12 text-secondary mx-auto mb-4"></i>
-                                    <h3 class="text-white font-bold text-lg mb-2"><?php echo esc_html($c_title); ?></h3>
+                                    <h2 class="text-white font-bold text-lg mb-2"><?php echo esc_html($c_title); ?></h2>
                                     <p class="text-slate-200 text-sm"><?php echo esc_html($c_sub); ?></p>
                                 </div>
                                 <?php endforeach; ?>

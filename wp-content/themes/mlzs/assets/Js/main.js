@@ -616,12 +616,32 @@
         setAcademicsTab(defaultTab ? defaultTab.getAttribute('data-academics-tab') : 'fun');
     }
 
+    /**
+     * Safety net: the hero must expose exactly one <h1>. Swiper's loop mode
+     * clones slides, so if the slide carrying the H1 is cloned we demote the
+     * extra copies to <p> (identical classes, so nothing changes visually).
+     */
+    function dedupeHeroH1() {
+        var hero = document.querySelector('.hero-swiper-container');
+        if (!hero) return;
+        var h1s = hero.querySelectorAll('h1');
+        for (var i = 1; i < h1s.length; i++) {
+            var el = h1s[i];
+            var p = document.createElement('p');
+            p.className = el.className;
+            p.innerHTML = el.innerHTML;
+            if (el.parentNode) el.parentNode.replaceChild(p, el);
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         initLucide();
         initHeaderScroll();
         initMenuToggle();
         initSubmenuToggle();
         initHeroSwiper();
+        dedupeHeroH1();
+        setTimeout(dedupeHeroH1, 600); // catch clones Swiper adds after init
         initApproachSwipers();
         initAcademicsTabs();
         initFooterContactForm();

@@ -310,7 +310,7 @@ if ($content_image_index === -1) {
     <div class="absolute inset-0 z-0">
     <div class="swiper w-full h-full">
         <div class="swiper-wrapper">
-            <?php foreach ($hero_slides_data as $slide) : ?>
+            <?php foreach ($hero_slides_data as $slide_idx => $slide) : ?>
                 <?php if ($slide['type'] === 'video') : ?>
                     <div class="swiper-slide relative min-h-[100svh] w-full overflow-hidden before:absolute before:inset-x-0 before:top-0 before:h-32 before:bg-gradient-to-b before:from-indigo-950 before:to-transparent before:z-10" data-slide-type="video">
                         <video class="hero-slide-video w-full h-full object-cover md:scale-110 scale-150" playsinline muted preload="metadata">
@@ -334,10 +334,16 @@ if ($content_image_index === -1) {
                                         </span>
                                         <span class="md:text-base text-xs font-semibold text-white uppercase tracking-wider"><?php echo esc_html((string) ($slide['badge'] ?? $hero_badge)); ?></span>
                                     </div>
-                                    <h1 class="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
+                                    <?php
+                                    // Only the first content slide carries the page <h1>; the other
+                                    // slides use <p> with identical classes so the design is unchanged
+                                    // and the page keeps exactly one H1.
+                                    $hero_tag = ((int) $slide_idx === (int) $content_image_index) ? 'h1' : 'p';
+                                    ?>
+                                    <<?php echo $hero_tag; ?> class="text-3xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6 max-w-4xl drop-shadow-lg">
                                         <?php echo esc_html((string) ($slide['line1'] ?? $hero_line1)); ?> <br class="hidden md:block"/>
                                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-flame via-tiger-orange to-cayenne-red"><?php echo esc_html((string) ($slide['highlight'] ?? $hero_highlight)); ?></span>
-                                    </h1>
+                                    </<?php echo $hero_tag; ?>>
                                     <p class="text-sm md:text-xl text-slate-200 mb-4 max-w-2xl font-light opacity-95">
                                         <?php echo esc_html((string) ($slide['subheadline'] ?? $hero_subheadline)); ?>
                                     </p>

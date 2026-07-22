@@ -160,12 +160,12 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
             <!-- First Row -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-10 sm:mb-12 md:mb-16">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <h3 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+                    <h2 class="text-xl sm:text-2xl font-bold text-primary mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
                         <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg bg-primary/10 flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($student_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></i>
                         </div>
                         <?php echo esc_html($student_title); ?>
-                    </h3>
+                    </h2>
                     <div class="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-600 leading-relaxed">
                         <?php echo wp_kses_post($student_content); ?>
                     </div>
@@ -174,17 +174,17 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                     <img src="<?php echo esc_url($center_image_url); ?>" alt="<?php echo esc_attr($center_caption); ?>" class="size-full object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-4 sm:p-6">
                         <div class="text-white">
-                            <h4 class="text-base sm:text-lg font-bold"><?php echo esc_html($center_caption); ?></h4>
+                            <h3 class="text-base sm:text-lg font-bold"><?php echo esc_html($center_caption); ?></h3>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <h3 class="text-xl sm:text-2xl font-bold text-primary-light mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
+                    <h2 class="text-xl sm:text-2xl font-bold text-primary-light mb-3 sm:mb-4 flex items-center gap-2 sm:gap-3">
                         <div class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-lg bg-primary-light/10 flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($academic_icon); ?>" class="w-4 h-4 sm:w-5 sm:h-5 text-primary-light"></i>
                         </div>
                         <?php echo esc_html($academic_title); ?>
-                    </h3>
+                    </h2>
                     <div class="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-600 leading-relaxed">
                         <?php echo wp_kses_post($academic_content); ?>
                         <div class="text-xs text-gray-500 italic mt-3 sm:mt-4"><?php echo esc_html($academic_note); ?></div>
@@ -196,7 +196,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                 <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4 sm:mb-6">
-                        <h3 class="text-xl sm:text-2xl font-bold text-accent"><?php echo esc_html($talents_title); ?></h3>
+                        <h2 class="text-xl sm:text-2xl font-bold text-accent"><?php echo esc_html($talents_title); ?></h2>
                         <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                             <i data-lucide="<?php echo esc_attr($talents_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-accent"></i>
                         </div>
@@ -207,7 +207,7 @@ $cta_btn2_text = (is_array($cta_btn2_link) && !empty(trim((string) $cta_btn2_lin
                 </div>
                 <div class="bg-white rounded-2xl p-4 sm:p-6 md:p-8 shadow-soft border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                     <div class="flex items-center justify-between mb-4 sm:mb-6">
-                        <h3 class="text-xl sm:text-2xl font-bold text-accent-dark"><?php echo esc_html($leadership_title); ?></h3>
+                        <h2 class="text-xl sm:text-2xl font-bold text-accent-dark"><?php echo esc_html($leadership_title); ?></h2>
                         <div class="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-full bg-accent-dark/10 flex items-center justify-center shrink-0">
                             <i data-lucide="<?php echo esc_attr($leadership_icon); ?>" class="w-5 h-5 sm:w-6 sm:h-6 text-accent-dark"></i>
                         </div>

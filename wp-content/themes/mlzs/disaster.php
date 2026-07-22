@@ -261,7 +261,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                                     <i data-lucide="<?php echo esc_attr($aim_icon); ?>" class="w-5 h-5 text-primary"></i>
                                 </div>
-                                <h3 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($aim_heading); ?></h3>
+                                <h2 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($aim_heading); ?></h2>
                             </div>
                             <p class="text-sm text-text-secondary-light"><?php echo esc_html($aim_text); ?></p>
                         </div>
@@ -270,7 +270,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                 <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
                                     <i data-lucide="<?php echo esc_attr($need_icon); ?>" class="w-5 h-5 text-accent"></i>
                                 </div>
-                                <h3 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($need_heading); ?></h3>
+                                <h2 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($need_heading); ?></h2>
                             </div>
                             <p class="text-sm text-text-secondary-light"><?php echo esc_html($need_text); ?></p>
                         </div>
@@ -287,7 +287,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                                 <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                                     <i data-lucide="<?php echo esc_attr($committee_icon); ?>" class="w-5 h-5 text-primary"></i>
                                 </div>
-                                <h3 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($committee_heading); ?></h3>
+                                <h2 class="text-base sm:text-lg font-bold text-text-main-light"><?php echo esc_html($committee_heading); ?></h2>
                             </div>
                             <p class="text-sm text-text-secondary-light mb-3"><?php echo esc_html($committee_intro); ?></p>
                             <div class="text-sm text-text-secondary-light space-y-1">
@@ -307,7 +307,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
             <div class="mb-8 sm:mb-12">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                     <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl sm:rounded-2xl p-6 border border-primary/10">
-                        <h4 class="text-base sm:text-lg font-bold text-text-main-light mb-4"><?php echo esc_html($sdmp_heading); ?></h4>
+                        <h2 class="text-base sm:text-lg font-bold text-text-main-light mb-4"><?php echo esc_html($sdmp_heading); ?></h2>
                         <p class="text-sm text-text-secondary-light mb-4"><?php echo esc_html($sdmp_intro); ?></p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <?php
@@ -363,7 +363,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-accent/5 to-accent/10 rounded-xl sm:rounded-2xl p-6 border border-accent/10">
-                        <h4 class="text-base sm:text-lg font-bold text-text-main-light mb-4"><?php echo esc_html($dissem_heading); ?></h4>
+                        <h2 class="text-base sm:text-lg font-bold text-text-main-light mb-4"><?php echo esc_html($dissem_heading); ?></h2>
                         <p class="text-sm text-text-secondary-light mb-4"><?php echo esc_html($dissem_intro); ?></p>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
                             <?php foreach ($dissem_activities as $act) :
@@ -388,7 +388,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($drills_heading_icon); ?>" class="w-6 h-6 text-primary"></i>
                         </div>
-                        <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-text-main-light"><?php echo esc_html($drills_heading); ?></h3>
+                        <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-text-main-light"><?php echo esc_html($drills_heading); ?></h2>
                     </div>
                     <p class="text-sm text-text-secondary-light leading-relaxed"><?php echo esc_html($drills_intro); ?></p>
                 </div>
@@ -412,7 +412,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                             <div class="w-10 h-10 rounded-lg <?php echo esc_attr($st['box']); ?> flex items-center justify-center">
                                 <i data-lucide="<?php echo esc_attr($d_icon); ?>" class="w-5 h-5 <?php echo esc_attr($st['icon']); ?>"></i>
                             </div>
-                            <h4 class="font-bold text-text-main-light"><?php echo esc_html($d_title); ?></h4>
+                            <h3 class="font-bold text-text-main-light"><?php echo esc_html($d_title); ?></h3>
                         </div>
                         <ul class="space-y-2">
                             <?php foreach ($d_items as $item) :
@@ -436,7 +436,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                     <div class="lg:col-span-2">
                         <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl sm:rounded-2xl p-6 border border-primary/10">
-                            <h4 class="font-bold text-text-main-light mb-3"><?php echo esc_html($safety_cyclones_heading); ?></h4>
+                            <h2 class="font-bold text-text-main-light mb-3"><?php echo esc_html($safety_cyclones_heading); ?></h2>
                             <p class="text-sm text-text-secondary-light mb-4"><?php echo esc_html($safety_cyclones_para); ?></p>
                             <ul class="space-y-2">
                                 <?php foreach ($safety_cyclones_list as $c) :
@@ -453,7 +453,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-accent/5 to-accent/10 rounded-xl sm:rounded-2xl p-6 border border-accent/10">
-                        <h4 class="font-bold text-text-main-light mb-3"><?php echo esc_html($safety_general_heading); ?></h4>
+                        <h2 class="font-bold text-text-main-light mb-3"><?php echo esc_html($safety_general_heading); ?></h2>
                         <ul class="space-y-2">
                             <?php foreach ($safety_general_list as $g) :
                                 $gi = (isset($g['icon']) && trim((string) $g['icon']) !== '') ? trim($g['icon']) : $default_list_icon;
@@ -475,7 +475,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                     <div class="space-y-6">
                         <div class="bg-white rounded-xl sm:rounded-2xl p-6 shadow-soft border border-border-light">
-                            <h4 class="font-bold text-text-main-light mb-4"><?php echo esc_html($health_norms_heading); ?></h4>
+                            <h2 class="font-bold text-text-main-light mb-4"><?php echo esc_html($health_norms_heading); ?></h2>
                             <div class="grid grid-cols-2 gap-3">
                                 <?php foreach ($health_norms_items as $n) :
                                     $ni = (isset($n['icon']) && trim((string) $n['icon']) !== '') ? trim($n['icon']) : $default_list_icon;
@@ -490,7 +490,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                             </div>
                         </div>
                         <div class="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-6 border border-primary/10">
-                            <h4 class="font-bold text-text-main-light mb-3"><?php echo esc_html($health_hygiene_heading); ?></h4>
+                            <h2 class="font-bold text-text-main-light mb-3"><?php echo esc_html($health_hygiene_heading); ?></h2>
                             <ul class="space-y-2">
                                 <?php foreach ($health_hygiene_list as $h) :
                                     $hi = (isset($h['icon']) && trim((string) $h['icon']) !== '') ? trim($h['icon']) : $default_list_icon;
@@ -506,7 +506,7 @@ $cta_stats = (is_array($cta_stats) && count($cta_stats) >= 4) ? $cta_stats : $de
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-accent/5 to-accent/10 rounded-xl sm:rounded-2xl p-6 border border-accent/10">
-                        <h4 class="font-bold text-text-main-light mb-4"><?php echo esc_html($guidelines_heading); ?></h4>
+                        <h2 class="font-bold text-text-main-light mb-4"><?php echo esc_html($guidelines_heading); ?></h2>
                         <div class="space-y-3">
                             <?php foreach ($guidelines_list as $gl) :
                                 $gli = (isset($gl['icon']) && trim((string) $gl['icon']) !== '') ? trim($gl['icon']) : $default_list_icon;

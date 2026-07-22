@@ -150,7 +150,7 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                         <div class="w-10 h-10 rounded-lg <?php echo esc_attr($box_cls); ?> flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($c_icon); ?>" class="w-5 h-5"></i>
                         </div>
-                        <h3 class="text-lg sm:text-xl font-bold text-text-main-light"><?php echo esc_html($c_title); ?></h3>
+                        <h2 class="text-lg sm:text-xl font-bold text-text-main-light"><?php echo esc_html($c_title); ?></h2>
                     </div>
                     <p class="text-sm text-text-secondary-light leading-relaxed"><?php echo esc_html($c_desc); ?></p>
                 </div>
@@ -163,22 +163,22 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                     <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
                         <i data-lucide="<?php echo esc_attr($smoking_icon); ?>" class="w-6 h-6 text-red-600"></i>
                     </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-text-main-light"><?php echo esc_html($smoking_title); ?></h3>
+                    <h2 class="text-xl sm:text-2xl font-bold text-text-main-light"><?php echo esc_html($smoking_title); ?></h2>
                 </div>
                 <p class="text-sm text-text-secondary-light leading-relaxed mb-4"><?php echo esc_html($smoking_text); ?></p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     <div class="space-y-3">
-                        <h4 class="font-bold text-text-main-light flex items-center gap-2">
+                        <h3 class="font-bold text-text-main-light flex items-center gap-2">
                             <i data-lucide="<?php echo esc_attr($smoking_b1_icon); ?>" class="w-4 h-4 text-primary"></i>
                             <?php echo esc_html($smoking_b1_title); ?>
-                        </h4>
+                        </h3>
                         <p class="text-sm text-text-secondary-light"><?php echo esc_html($smoking_b1_text); ?></p>
                     </div>
                     <div class="space-y-3">
-                        <h4 class="font-bold text-text-main-light flex items-center gap-2">
+                        <h3 class="font-bold text-text-main-light flex items-center gap-2">
                             <i data-lucide="<?php echo esc_attr($smoking_b2_icon); ?>" class="w-4 h-4 text-primary"></i>
                             <?php echo esc_html($smoking_b2_title); ?>
-                        </h4>
+                        </h3>
                         <p class="text-sm text-text-secondary-light"><?php echo esc_html($smoking_b2_text); ?></p>
                     </div>
                 </div>
@@ -201,7 +201,7 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                         <div class="w-10 h-10 rounded-lg <?php echo esc_attr($st['box']); ?> flex items-center justify-center">
                             <i data-lucide="<?php echo esc_attr($tc_icon); ?>" class="w-5 h-5 <?php echo esc_attr($st['icon']); ?>"></i>
                         </div>
-                        <h3 class="text-lg sm:text-xl font-bold text-text-main-light"><?php echo esc_html($tc_title); ?></h3>
+                        <h2 class="text-lg sm:text-xl font-bold text-text-main-light"><?php echo esc_html($tc_title); ?></h2>
                     </div>
                     <p class="text-sm text-text-secondary-light leading-relaxed"><?php echo esc_html($tc_desc); ?></p>
                     <?php if (!empty($tc_sub)) : ?>
@@ -212,10 +212,10 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                             $stext  = isset($sub['text']) ? (string) $sub['text'] : '';
                             if ($stitle === '' && $stext === '') continue;
                         ?>
-                        <h4 class="font-bold text-text-main-light flex items-center gap-2">
+                        <h3 class="font-bold text-text-main-light flex items-center gap-2">
                             <i data-lucide="<?php echo esc_attr($si); ?>" class="w-4 h-4 text-accent flex-shrink-0"></i>
                             <?php echo esc_html($stitle); ?>
-                        </h4>
+                        </h3>
                         <?php if ($stext !== '') : ?><p class="text-sm text-text-secondary-light"><?php echo esc_html($stext); ?></p><?php endif; ?>
                         <?php endforeach; ?>
                     </div>
@@ -244,7 +244,7 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                     <div class="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center">
                         <i data-lucide="<?php echo esc_attr($world_icon); ?>" class="w-6 h-6 text-accent"></i>
                     </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-text-main-light"><?php echo esc_html($world_title); ?></h3>
+                    <h2 class="text-xl sm:text-2xl font-bold text-text-main-light"><?php echo esc_html($world_title); ?></h2>
                 </div>
                 <p class="text-sm text-text-secondary-light leading-relaxed mb-6"><?php echo esc_html($world_text); ?></p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -254,10 +254,10 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
                         $wb_text  = isset($wb['text']) ? (string) $wb['text'] : '';
                     ?>
                     <div class="space-y-4">
-                        <h4 class="font-bold text-text-main-light flex items-center gap-2">
+                        <h3 class="font-bold text-text-main-light flex items-center gap-2">
                             <i data-lucide="<?php echo esc_attr($wb_icon); ?>" class="w-4 h-4 text-primary"></i>
                             <?php echo esc_html($wb_title); ?>
-                        </h4>
+                        </h3>
                         <p class="text-sm text-text-secondary-light"><?php echo esc_html($wb_text); ?></p>
                     </div>
                     <?php endforeach; ?>
@@ -266,10 +266,10 @@ $community_boxes = (is_array($community_boxes) && count($community_boxes) >= 3) 
 
             <!-- Community Involvement -->
             <div class="bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-soft border border-border-light">
-                <h3 class="text-lg sm:text-xl font-bold text-text-main-light mb-4 flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-bold text-text-main-light mb-4 flex items-center gap-2">
                     <i data-lucide="<?php echo esc_attr($community_icon); ?>" class="w-5 h-5 text-primary"></i>
                     <?php echo esc_html($community_title); ?>
-                </h3>
+                </h2>
                 <p class="text-sm text-text-secondary-light leading-relaxed mb-6"><?php echo esc_html($community_text); ?></p>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                     <?php

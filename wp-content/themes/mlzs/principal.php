@@ -185,7 +185,7 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                         <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 shadow-2xl">
                             <div class="text-center mb-6">
                                 <div class="w-32 h-32 rounded-full bg-gradient-to-br from-primary-light to-secondary mx-auto mb-4 flex items-center justify-center text-white text-4xl font-bold"><?php echo esc_html($principal_initials); ?></div>
-                                <h3 class="text-2xl font-bold text-white"><?php echo esc_html($principal_name); ?></h3>
+                                <h2 class="text-2xl font-bold text-white"><?php echo esc_html($principal_name); ?></h2>
                                 <p class="text-secondary font-medium"><?php echo esc_html($principal_title); ?></p>
                                 <p class="text-slate-300 text-sm mt-2"><?php echo esc_html($principal_school); ?></p>
                             </div>
@@ -232,13 +232,13 @@ if (!empty($cta_btn2_link) && is_array($cta_btn2_link)) {
                             <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-accent/20 blur-xl"></div>
                         </div>
                         <div class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-6 border border-slate-200 shadow-soft">
-                            <h4 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                                 <i data-lucide="target" class="w-5 h-5 text-primary"></i>
                                 <?php echo esc_html($leadership_heading); ?>
-                            </h4>
+                            </h3>
                             <p class="text-slate-600 text-sm mb-4"><?php echo esc_html($leadership_para); ?></p>
                             <div class="pt-4 border-t border-slate-200">
-                                <h5 class="text-sm font-bold text-slate-900 mb-2">Core Beliefs:</h5>
+                                <h4 class="text-sm font-bold text-slate-900 mb-2">Core Beliefs:</h4>
                                 <ul class="space-y-2">
                                     <?php foreach ($core_beliefs as $b) :
                                         $b_text = isset($b['text']) ? (string) $b['text'] : '';

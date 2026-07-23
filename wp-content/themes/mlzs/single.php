@@ -55,8 +55,8 @@ while (have_posts()) :
         <div class="max-w-7xl mx-auto w-full">
 
             <?php if (has_post_thumbnail()) : ?>
-            <figure class="mb-12 lg:mb-16 -mt-24 sm:-mt-28 relative z-20 rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-video bg-gray-100">
-                <img src="<?php echo esc_url(mlzs_post_image_url(get_the_ID(), 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover" loading="eager" width="1280" height="720" />
+            <figure class="mb-12 lg:mb-16 -mt-24 sm:-mt-28 relative z-20 rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[40/21] bg-gray-100">
+                <img src="<?php echo esc_url(mlzs_post_image_url(get_the_ID(), 'full')); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover" loading="eager" width="1200" height="630" />
             </figure>
             <?php endif; ?>
 

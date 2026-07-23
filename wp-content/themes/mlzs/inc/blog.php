@@ -8,6 +8,14 @@ if (!defined('ABSPATH')) {
 }
 
 /**
+ * Blog thumbnail size — 1200x630 (40:21, the standard social/OG ratio).
+ * Hard-cropped so every card and featured image lines up perfectly.
+ */
+add_action('after_setup_theme', function () {
+    add_image_size('mlzs-blog-thumb', 1200, 630, true);
+}, 20);
+
+/**
  * Estimated reading time (minutes) from post content.
  */
 function mlzs_reading_time($post = null) {

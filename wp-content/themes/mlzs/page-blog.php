@@ -35,7 +35,7 @@ $blog_query = new WP_Query($args);
     <!-- Hero -->
     <section class="relative bg-cover bg-center px-4 sm:px-6 lg:px-8 overflow-hidden" style="background-image: linear-gradient(135deg, rgba(61,52,139,0.94) 0%, rgba(118,120,237,0.86) 55%, rgba(247,184,1,0.72) 100%), url('<?php echo esc_url($hero_bg); ?>');">
         <div class="relative z-10 w-full max-w-5xl mx-auto text-center pt-32 sm:pt-36 pb-14 sm:pb-16">
-            <div class="mb-5"><?php mlzs_breadcrumb(); ?></div>
+            <div class="mb-5 flex justify-center"><?php mlzs_breadcrumb(); ?></div>
             <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold uppercase tracking-wider text-white mb-5">
                 <i data-lucide="book-open" class="w-4 h-4"></i><?php esc_html_e('School Blog', 'mlzs'); ?>
             </span>

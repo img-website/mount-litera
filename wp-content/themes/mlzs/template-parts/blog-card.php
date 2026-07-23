@@ -8,12 +8,12 @@ if (!defined('ABSPATH')) {
 }
 
 $cat  = mlzs_primary_category(get_the_ID());
-$img  = mlzs_post_image_url(get_the_ID(), 'large');
+$img  = mlzs_post_image_url(get_the_ID(), 'mlzs-blog-thumb');
 $read = mlzs_reading_time();
 ?>
 <article class="group bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-soft hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
-    <a href="<?php the_permalink(); ?>" class="block overflow-hidden aspect-[16/10] bg-gray-100" tabindex="-1" aria-hidden="true">
-        <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width="640" height="400" />
+    <a href="<?php the_permalink(); ?>" class="block overflow-hidden aspect-[40/21] bg-gray-100" tabindex="-1" aria-hidden="true">
+        <img src="<?php echo esc_url($img); ?>" alt="<?php echo esc_attr(get_the_title()); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width="1200" height="630" />
     </a>
     <div class="p-5 sm:p-6 flex flex-col flex-1">
         <?php if ($cat) : ?>

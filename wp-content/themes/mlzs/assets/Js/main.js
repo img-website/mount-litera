@@ -651,3 +651,65 @@
         initRegistrationForm();
     });
 })();
+
+/* Home sections: video-testimonial modal + single-open FAQ accordion. */
+(function () {
+    'use strict';
+
+    function initHomeVideoModal() {
+        var modal = document.getElementById('mlzs-video-modal');
+        var triggers = document.querySelectorAll('[data-mlzs-video]');
+        if (!modal || !triggers.length) return;
+        var frame = modal.querySelector('.mlzs-vm__frame');
+        var lastFocus = null;
+
+        function open(id) {
+            lastFocus = document.activeElement;
+            frame.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id +
+                '?autoplay=1&rel=0" title="Video testimonial" allow="accelerated-download; autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            var closeBtn = modal.querySelector('.mlzs-vm__close');
+            if (closeBtn) closeBtn.focus();
+        }
+        function close() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            frame.innerHTML = '';
+            document.body.style.overflow = '';
+            if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        triggers.forEach(function (t) {
+            t.addEventListener('click', function () {
+                var id = t.getAttribute('data-mlzs-video');
+                if (id) open(id);
+            });
+        });
+        modal.querySelectorAll('[data-mlzs-vm-close]').forEach(function (el) {
+            el.addEventListener('click', close);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('is-open')) close();
+        });
+    }
+
+    function initAccordions() {
+        document.querySelectorAll('[data-mlzs-accordion]').forEach(function (group) {
+            var items = Array.prototype.slice.call(group.querySelectorAll('details'));
+            if (items.length < 2) return;
+            items.forEach(function (item) {
+                item.addEventListener('toggle', function () {
+                    if (!item.open) return;
+                    items.forEach(function (o) { if (o !== item && o.open) o.open = false; });
+                });
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        initHomeVideoModal();
+        initAccordions();
+    });
+})();

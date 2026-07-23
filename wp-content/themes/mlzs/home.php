@@ -623,4 +623,5 @@ if ($content_image_index === -1) {
     </div>
 </section>
 
+<?php get_template_part('template-parts/home-sections'); ?>
 <?php get_footer(); ?>

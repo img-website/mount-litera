@@ -369,6 +369,28 @@ function mlzs_register_popup_customizer_settings($wp_customize) {
         'type'    => 'checkbox',
     ));
 
+    // Behaviour: show a small corner launcher instead of a full-screen takeover.
+    $wp_customize->add_setting('mlzs_popup_autoopen', array(
+        'default'           => 0,
+        'sanitize_callback' => 'absint',
+    ));
+    $wp_customize->add_control('mlzs_popup_autoopen', array(
+        'label'       => __('Auto-open once on first visit', 'mlzs'),
+        'description' => __('Off (recommended): visitors see a small clickable button in the corner. On: the popup opens by itself the first time, then stays as the corner button.', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'checkbox',
+    ));
+
+    $wp_customize->add_setting('mlzs_popup_launcher_label', array(
+        'default'           => 'Admissions Open',
+        'sanitize_callback' => 'sanitize_text_field',
+    ));
+    $wp_customize->add_control('mlzs_popup_launcher_label', array(
+        'label'       => __('Corner button label', 'mlzs'),
+        'section'     => 'mlzs_popup_settings',
+        'type'        => 'text',
+    ));
+
     $wp_customize->add_setting('mlzs_popup_image_id', array(
         'default'           => 0,
         'sanitize_callback' => 'absint',
@@ -601,6 +623,13 @@ function mlzs_render_site_popup() {
     if (empty($popups)) {
         return;
     }
+
+    $autoopen       = (int) get_theme_mod('mlzs_popup_autoopen', 0);
+    $launcher_label = trim((string) get_theme_mod('mlzs_popup_launcher_label', 'Admissions Open'));
+    if ($launcher_label === '') {
+        $launcher_label = __('Announcement', 'mlzs');
+    }
+    $launcher_thumb = $popups[0]['image_url'];
     ?>
     <?php foreach ($popups as $popup_idx => $popup) : ?>
     <div class="mlzs-site-popup-backdrop" data-mlzs-popup-seq="<?php echo esc_attr((string) $popup_idx); ?>" data-delay="<?php echo esc_attr((string) $popup['delay']); ?>" aria-hidden="true">
@@ -618,70 +647,86 @@ function mlzs_render_site_popup() {
         </div>
     </div>
     <?php endforeach; ?>
+
+    <!-- Non-intrusive corner launcher: opens the popup(s) only when clicked -->
+    <div id="mlzs-popup-launcher" class="mlzs-popup-launcher" hidden>
+        <button type="button" class="mlzs-popup-launcher__btn" data-mlzs-popup-open aria-label="<?php echo esc_attr(sprintf(__('Open: %s', 'mlzs'), $launcher_label)); ?>">
+            <span class="mlzs-popup-launcher__pulse" aria-hidden="true"></span>
+            <span class="mlzs-popup-launcher__thumb"><img src="<?php echo esc_url($launcher_thumb); ?>" alt="" loading="lazy" /></span>
+            <span class="mlzs-popup-launcher__text">
+                <span class="mlzs-popup-launcher__label"><?php echo esc_html($launcher_label); ?></span>
+                <span class="mlzs-popup-launcher__sub"><?php esc_html_e('Tap to view', 'mlzs'); ?></span>
+            </span>
+        </button>
+        <button type="button" class="mlzs-popup-launcher__x" data-mlzs-popup-dismiss aria-label="<?php esc_attr_e('Hide', 'mlzs'); ?>">&times;</button>
+    </div>
+
     <script>
         (function () {
-            var popups = Array.prototype.slice.call(document.querySelectorAll('[data-mlzs-popup-seq]'));
+            var popups   = Array.prototype.slice.call(document.querySelectorAll('[data-mlzs-popup-seq]'));
+            var launcher = document.getElementById('mlzs-popup-launcher');
             if (!popups.length) return;
 
+            var AUTO_OPEN = <?php echo $autoopen ? 'true' : 'false'; ?>;
             var currentIndex = -1;
 
-            function showPopup(index) {
-                if (!popups[index]) return;
-                var popup = popups[index];
-                var delay = Number(popup.getAttribute('data-delay') || 0);
-                currentIndex = index;
+            function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+            function has(k)      { try { return localStorage.getItem(k) === '1'; } catch (e) { return false; } }
+            function sess(k, v)  { try { if (v === undefined) return sessionStorage.getItem(k) === '1'; sessionStorage.setItem(k, v); } catch (e) { return false; } }
 
-                window.setTimeout(function () {
-                    popup.style.display = 'flex';
-                    popup.setAttribute('aria-hidden', 'false');
-                    window.requestAnimationFrame(function () {
-                        popup.classList.add('is-visible');
-                    });
-                }, Math.max(0, delay));
+            function reveal(popup) {
+                popup.style.display = 'flex';
+                popup.setAttribute('aria-hidden', 'false');
+                window.requestAnimationFrame(function () { popup.classList.add('is-visible'); });
             }
-
+            function showPopup(index, immediate) {
+                var popup = popups[index];
+                if (!popup) return;
+                currentIndex = index;
+                var delay = immediate ? 0 : Number(popup.getAttribute('data-delay') || 0);
+                window.setTimeout(function () { reveal(popup); }, Math.max(0, delay));
+            }
             function closePopupAndContinue(popup) {
                 if (!popup || !popup.classList.contains('is-visible')) return;
+                store('mlzsPopupSeen', '1'); // never auto-open again for this visitor
                 popup.classList.add('is-hiding');
                 popup.classList.remove('is-visible');
                 window.setTimeout(function () {
                     popup.style.display = 'none';
                     popup.setAttribute('aria-hidden', 'true');
                     popup.classList.remove('is-hiding');
-                    showPopup(currentIndex + 1);
+                    if (popups[currentIndex + 1]) { showPopup(currentIndex + 1, true); }
                 }, 320);
             }
 
             popups.forEach(function (popup) {
                 var modal = popup.querySelector('.mlzs-site-popup-modal');
                 var closeBtn = popup.querySelector('[data-mlzs-popup-close]');
-
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', function () {
-                        closePopupAndContinue(popup);
-                    });
-                }
-                popup.addEventListener('click', function (event) {
-                    if (event.target === popup) {
-                        closePopupAndContinue(popup);
-                    }
-                });
-                if (modal) {
-                    modal.addEventListener('click', function (event) {
-                        event.stopPropagation();
-                    });
-                }
+                if (closeBtn) { closeBtn.addEventListener('click', function () { closePopupAndContinue(popup); }); }
+                popup.addEventListener('click', function (e) { if (e.target === popup) { closePopupAndContinue(popup); } });
+                if (modal) { modal.addEventListener('click', function (e) { e.stopPropagation(); }); }
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && currentIndex >= 0 && popups[currentIndex]) { closePopupAndContinue(popups[currentIndex]); }
             });
 
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape') {
-                    if (currentIndex >= 0 && popups[currentIndex]) {
-                        closePopupAndContinue(popups[currentIndex]);
-                    }
+            if (launcher && !sess('mlzsLauncherHidden')) {
+                launcher.hidden = false;
+                window.requestAnimationFrame(function () { launcher.classList.add('is-in'); });
+                var openBtn = launcher.querySelector('[data-mlzs-popup-open]');
+                var xBtn    = launcher.querySelector('[data-mlzs-popup-dismiss]');
+                if (openBtn) { openBtn.addEventListener('click', function () { showPopup(0, true); }); }
+                if (xBtn) {
+                    xBtn.addEventListener('click', function () {
+                        launcher.classList.remove('is-in');
+                        window.setTimeout(function () { launcher.hidden = true; }, 300);
+                        sess('mlzsLauncherHidden', '1');
+                    });
                 }
-            });
+            }
 
-            showPopup(0);
+            // Gentle first-visit auto-open (only if the admin turned it on and the visitor hasn't seen it).
+            if (AUTO_OPEN && !has('mlzsPopupSeen')) { showPopup(0, false); }
         })();
     </script>
     <?php

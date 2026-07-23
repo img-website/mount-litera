@@ -16,6 +16,23 @@ add_action('after_setup_theme', function () {
 }, 20);
 
 /**
+ * Extract a YouTube video ID from a URL or raw ID.
+ */
+function mlzs_youtube_id($url) {
+    $url = trim((string) $url);
+    if ($url === '') {
+        return '';
+    }
+    if (preg_match('~(?:youtu\.be/|youtube\.com/(?:watch\?v=|embed/|shorts/|live/)|v=)([A-Za-z0-9_-]{11})~', $url, $m)) {
+        return $m[1];
+    }
+    if (preg_match('~^[A-Za-z0-9_-]{11}$~', $url)) {
+        return $url; // already an ID
+    }
+    return '';
+}
+
+/**
  * Estimated reading time (minutes) from post content.
  */
 function mlzs_reading_time($post = null) {

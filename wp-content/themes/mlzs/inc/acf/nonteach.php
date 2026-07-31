@@ -47,6 +47,8 @@ function mlzs_acf_nonteach_field_group() {
                     'STORE INCHARGE' => 'STORE INCHARGE',
                     'IT EXEC.' => 'IT EXEC.',
                     'NURSING STAFF' => 'NURSING STAFF',
+                    'Relationship Manager' => 'Relationship Manager',
+                    'Administrator' => 'Administrator',
                 ), 'default_value' => '', 'allow_null' => 0, 'return_format' => 'value'),
             )),
             array('key' => 'field_nt_tab_cta', 'label' => __('CTA Section', 'mlzs'), 'name' => '', 'type' => 'tab'),

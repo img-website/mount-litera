@@ -83,7 +83,7 @@ $staff_rows = is_array($staff_rows) && !empty($staff_rows) ? $staff_rows : $defa
 
 // Stat numbers calculated from staff table (no separate CMS fields needed)
 $table_stat_total = count($staff_rows);
-$admin_designations = array('PRINCIPAL', 'Executive Head', 'ADMIN INCHARGE', 'INCHARGE', 'CONTROLLER', 'ACCOUNTANT', 'TRANSPORT INCHARGE', 'EXAMINATION CONTROLLER', 'STORE INCHARGE');
+$admin_designations = array('PRINCIPAL', 'Executive Head', 'ADMIN', 'INCHARGE', 'CONTROLLER', 'ACCOUNTANT', 'TRANSPORT INCHARGE', 'EXAMINATION CONTROLLER', 'STORE INCHARGE');
 $table_stat_admin = 0;
 foreach ($staff_rows as $row) {
     $d = isset($row['designation']) ? (string) $row['designation'] : '';
